@@ -1,0 +1,2309 @@
+[
+  {
+    "pdfRef": 1,
+    "pdfRow": "Aldar + DP World | Grade A park, phase 1 | NIP | 67,000 | Q3, completed [Grade A]",
+    "name": "Aldar Logistics Centres - NIP (Grade A Logistics Centre at National Industries Park), Phase 1",
+    "developer": "Aldar Properties",
+    "investor": "Aldar Properties (funds and develops)",
+    "owner": "Aldar (develop-to-hold asset in Aldar Investment)",
+    "operator": null,
+    "location": "National Industries Park, Jebel Ali, Dubai",
+    "zone": "National Industries Park (DP World zone)",
+    "originalAnnouncement": {
+      "date": "2024-07-15",
+      "sourceUrl": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513"
+    },
+    "events": [
+      {
+        "date": "2024-07-15",
+        "datePrecision": "day",
+        "type": "agreement_signed",
+        "summary": "Aldar signs agreement with DP World to fund and develop a 1.55m sq ft (144,000 sqm) Grade A logistics park at NIP; construction to begin Q4 2024, first tenants Q4 2025.",
+        "sourceUrl": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513",
+        "sourcePublishedDate": "2024-07-15",
+        "sourceType": "secondary",
+        "verification": "direct"
+      },
+      {
+        "date": "2025-11",
+        "datePrecision": "month",
+        "type": "construction_milestone",
+        "summary": "Phased-delivery update: first building (over 67,000 sqm) scheduled for handover Q2 2026; whole park Q1 2027; phase two groundbreaking held (search snippets only).",
+        "sourceUrl": "https://www.tradingview.com/news/reuters.com,2025-11-24:newsml_Zaw5Xxgcf:0-pressr-aldar-advances-phased-delivery-of-grade-a-logistics-park-at-national-industries-park-in-dubai/",
+        "sourcePublishedDate": "2025-11-24",
+        "sourceType": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "date": "2026-Q3",
+        "datePrecision": "quarter",
+        "type": "construction_completed",
+        "summary": "Aldar Q3/9M 2026 results: 'Phase 1 of the National Industries Park ... following its completion in Q3'; added to AUM as a completed project.",
+        "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026",
+        "sourcePublishedDate": "2026-10-27",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 144000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "fund and develop a 1.55 million square feet (144,000 square metres) Grade A logistics park"
+      },
+      {
+        "value": 220000,
+        "unit": "sqm",
+        "basis": "site_land_area",
+        "asWorded": "will sit on a 2.36 million sqft (220,000 sqm) plot"
+      },
+      {
+        "value": 148500,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "Aldar Logistics Centres - NIP ... National Industries Park, Dubai 148,500 sqm"
+      },
+      {
+        "value": 67000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "first building, over 67,000 sqm (search-snippet paraphrase of Nov 2025 release; exact wording not seen)"
+      }
+    ],
+    "pdfConvention": "PDF counts 67,000 m2 as 'floor space' for phase 1; source basis for 67,000 not stated in material read directly.",
+    "investment": null,
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "'Phase 1 of the Grade A logistics centre at National Industries Park in Dubai' (Aldar Q3 2026 release)"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Aldar reports construction completion in Q3 2026; original first-tenant target Q4 2025 slipped. Occupancy not confirmed."
+    },
+    "forecastCompletion": "Phase 1 handover Q2 2026 (Nov 2025 update, indexed); originally first tenants Q4 2025",
+    "actualCompletion": {
+      "date": "2026-Q3",
+      "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026"
+    },
+    "sources": [
+      {
+        "url": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026",
+        "title": "Aldar delivers robust Q3 performance with net profit rising 19% to AED 7.1 billion in first nine months of 2026",
+        "publisher": "Aldar Properties",
+        "publishedDate": "2026-10-27",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.aldar.com/en/industrial-and-logistics",
+        "title": "Industrial and Logistics (portfolio page)",
+        "publisher": "Aldar Properties",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.aldar.com/properties/en/logistics-centres",
+        "title": "Aldar Logistics Centres (NIP leasing page)",
+        "publisher": "Aldar Properties",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513",
+        "title": "UAE master developer Aldar inks pact with DP World to build logistics park in Dubai",
+        "publisher": "Gulf News",
+        "publishedDate": "2024-07-15",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.wam.ae/en/article/140mm3q-aldar-world-sign-agreement-develop-grade-logistics",
+        "title": "Aldar, DP World sign agreement to develop Grade A logistics park in Dubai",
+        "publisher": "WAM",
+        "publishedDate": "2024-07-15",
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.wam.ae/en/article/bmvnenj-aldar-advances-phased-delivery-grade-logistics",
+        "title": "Aldar advances phased delivery of Grade A logistics park at National Industries Park in Dubai",
+        "publisher": "WAM",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.tradingview.com/news/reuters.com,2025-11-24:newsml_Zaw5Xxgcf:0-pressr-aldar-advances-phased-delivery-of-grade-a-logistics-park-at-national-industries-park-in-dubai/",
+        "title": "PRESSR: Aldar advances phased delivery of grade a logistics park at national industries park in Dubai",
+        "publisher": "TradingView / Reuters (Zawya PRESSR)",
+        "publishedDate": "2025-11-24",
+        "type": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "Total park size differs by source: 144,000 sqm (Jul 2024 announcement) vs 148,500 sqm (Aldar portfolio page); PDF uses 148,500 to derive phase 2.",
+      "Completion slipped vs announced targets (first tenants Q4 2025; Nov 2025 update Q2 2026) - PDF's Q3 matches Aldar's Q3 2026 results."
+    ],
+    "unresolvedQuestions": [
+      "67,000 sqm phase-1 figure seen only in search snippets of the Nov 2025 release (WAM page is JS-rendered and its API refused the request); measurement basis (GLA vs GFA) not confirmed.",
+      "No tenant/occupancy announcement found."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 2,
+    "pdfRow": "dnata Logistics | Automated warehouse, AED 100 m | Dubai South | 57,000 | Apr to Sep [other modern]",
+    "name": "dnata Logistics warehouse, Dubai South",
+    "developer": null,
+    "investor": "dnata (Emirates Group)",
+    "owner": null,
+    "operator": "dnata Logistics",
+    "location": "Dubai South, near DWC - Al Maktoum International Airport",
+    "zone": "Dubai South",
+    "originalAnnouncement": {
+      "date": "2024-12-05",
+      "sourceUrl": "https://www.dnata.com/media-centre/dnata-logistics-to-expand-uae-footprint-with-new-57000-m-facility-in-dubai-south/"
+    },
+    "events": [
+      {
+        "date": "2024-12-05",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "dnata Logistics broke ground on a 57,000 m2 warehouse in Dubai South; AED 100m; ASRS automation; completion scheduled November 2025.",
+        "sourceUrl": "https://www.dnata.com/media-centre/dnata-logistics-to-expand-uae-footprint-with-new-57000-m-facility-in-dubai-south/",
+        "sourcePublishedDate": "2024-12-05",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-04/2026-09",
+        "datePrecision": "quarter",
+        "type": "commissioned",
+        "summary": "Emirates Group H1 2026-27 results (period Apr-Sep 2026): dnata 'commissioning its new AED 100 million (US$ 27 million) logistics facility in Dubai South'. Exact date not given.",
+        "sourceUrl": "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+        "sourcePublishedDate": "2026-11-05",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 57000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "has broken ground on a new, 57,000m² warehouse in Dubai South"
+      }
+    ],
+    "pdfConvention": "PDF counts 57,000 as floor space.",
+    "investment": {
+      "amount": 100000000,
+      "currency": "AED",
+      "asWorded": "an investment of AED 100 million (US$ 27 million)"
+    },
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording in dnata release."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "Commissioned within Apr-Sep 2026 but building completion was targeted Nov 2025; actual building completion date not found."
+    },
+    "forecastCompletion": "November 2025 (as of Dec 2024)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.dnata.com/media-centre/dnata-logistics-to-expand-uae-footprint-with-new-57000-m-facility-in-dubai-south/",
+        "title": "dnata Logistics to expand UAE footprint with new, 57,000 m² facility in Dubai South",
+        "publisher": "dnata",
+        "publishedDate": "2024-12-05",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+        "title": "Emirates Group announces half-year profit for 2026-27",
+        "publisher": "Emirates Group",
+        "publishedDate": "2026-11-05",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [
+      "Exact commissioning date within Apr-Sep 2026.",
+      "Whether 57,000 m2 is building GFA or plot (release says '57,000m² warehouse'). Note: another worker covers dnata in seed-research.*; only light checks here."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 3,
+    "pdfRow": "DSV + Arcapita Lintara | Multiuser warehouse | Jafza | 30,000 | 20 May [Grade A colour]",
+    "name": "DSV build-to-suit logistics warehouse, Jafza",
+    "developer": "Lintara Properties (Arcapita); main contractor Group AMANA",
+    "investor": "Arcapita Group Holdings",
+    "owner": "Arcapita / Lintara (not explicitly stated)",
+    "operator": "DSV (occupier; build-to-suit)",
+    "location": "Jebel Ali Free Zone, on the same plot as DSV's local HQ",
+    "zone": "Jafza",
+    "originalAnnouncement": {
+      "date": "2025-01-29",
+      "sourceUrl": "https://www.thenationalnews.com/advertorial/2025/01/29/arcapita-and-dsv-partner-to-build-state-of-the-art-sustainable-warehouse-in-dubais-jebel-ali-free-zone/"
+    },
+    "events": [
+      {
+        "date": "2025-01-29",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "Arcapita and DSV announce 30,000 sqm build-to-suit warehouse in Jafza; Group AMANA began construction after groundbreaking; delivery targeted within 11 months.",
+        "sourceUrl": "https://www.thenationalnews.com/advertorial/2025/01/29/arcapita-and-dsv-partner-to-build-state-of-the-art-sustainable-warehouse-in-dubais-jebel-ali-free-zone/",
+        "sourcePublishedDate": "2025-01-29",
+        "sourceType": "secondary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-05-21",
+        "datePrecision": "day",
+        "type": "construction_completed",
+        "summary": "DSV and Arcapita/Lintara 'announce the completion' of the 30,000 sqm build-to-suit warehouse; Grade A; ~75,000 pallet positions.",
+        "sourceUrl": "https://gulfnews.com/gn-focus/dsv-expands-in-dubai-with-new-30000-sqm-logistics-warehouse-in-jebel-ali-free-zone-developed-by-arcapitas-lintara-1.500548335",
+        "sourcePublishedDate": "2026-05-21",
+        "sourceType": "secondary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 30000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "a new, state-of-the-art 30,000-square-metre build-to-suit logistics warehouse"
+      }
+    ],
+    "pdfConvention": "PDF counts 30,000 as floor space and labels it 'Multiuser warehouse'.",
+    "investment": null,
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "'the Grade A facility expands DSV's capacity' (DSV/Arcapita release, May 2026)"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Completion announced 21 May 2026; 11-month build from Jan 2025 implies the building may have been finished around end-2025 - medium confidence."
+    },
+    "forecastCompletion": "within 11 months of Jan 2025 groundbreaking",
+    "actualCompletion": {
+      "date": "2026-05-21",
+      "sourceUrl": "https://gulfnews.com/gn-focus/dsv-expands-in-dubai-with-new-30000-sqm-logistics-warehouse-in-jebel-ali-free-zone-developed-by-arcapitas-lintara-1.500548335"
+    },
+    "sources": [
+      {
+        "url": "https://gulfnews.com/gn-focus/dsv-expands-in-dubai-with-new-30000-sqm-logistics-warehouse-in-jebel-ali-free-zone-developed-by-arcapitas-lintara-1.500548335",
+        "title": "DSV expands in Dubai with new 30,000 sqm logistics warehouse in Jebel Ali Free Zone developed by Arcapita's Lintara",
+        "publisher": "Gulf News (GN Focus, sponsored press-release content)",
+        "publishedDate": "2026-05-21",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://arcapita.com/insights/dsv-expands-in-dubai-with-new-30-000-sqm-logistics-warehouse-in-jebel-ali-free-zone-developed-by-arcapita-s-lintara/",
+        "title": "DSV expands in Dubai with new 30,000 sqm logistics warehouse in Jebel Ali Free Zone developed by Arcapita's Lintara",
+        "publisher": "Arcapita",
+        "publishedDate": "2026-05-21",
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.thenationalnews.com/advertorial/2025/01/29/arcapita-and-dsv-partner-to-build-state-of-the-art-sustainable-warehouse-in-dubais-jebel-ali-free-zone/",
+        "title": "Arcapita and DSV partner to build state-of-the-art sustainable warehouse in Dubai's Jebel Ali Free Zone (advertorial)",
+        "publisher": "The National (advertorial)",
+        "publishedDate": "2025-01-29",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://arcapita.com/insights/arcapita-and-dsv-partner-to-build-state-of-the-art-sustainable-warehouse-in-dubai-s-jebel-ali-free-zone/",
+        "title": "Arcapita and DSV partner to build state-of-the-art sustainable warehouse in Dubai's Jebel Ali Free Zone",
+        "publisher": "Arcapita",
+        "publishedDate": "2025-01-28",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF calls it a 'Multiuser warehouse'; sources describe a turnkey build-to-suit facility for DSV on DSV's HQ plot.",
+      "PDF date 20 May; completion announcement seen is dated 21 May 2026 (Gulf News GN Focus / Arcapita)."
+    ],
+    "unresolvedQuestions": [
+      "Whether 20 May was an event date (no 20 May source found).",
+      "Investment amount not disclosed."
+    ],
+    "confidence": "high",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 4,
+    "pdfRow": "Al Sharqi Shipping | Cold and dry hub, AED 70 m | DIC | 26,000 | 15 Oct [other modern]",
+    "name": "Al Sharqi Shipping multi-temperature integrated logistics and distribution hub",
+    "developer": null,
+    "investor": "Al Sharqi Shipping",
+    "owner": null,
+    "operator": "Al Sharqi Shipping",
+    "location": "Dubai Industrial City",
+    "zone": "Dubai Industrial City (TECOM Group)",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-10-15",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Al Sharqi Shipping inaugurated its AED 70m integrated logistics and distribution hub at Dubai Industrial City.",
+        "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/al-sharqi-shipping-inaugurates-aed-70-million-multi-temperature-integrated-logistics-and-distribution-hub-at-dubai-industrial-city",
+        "sourcePublishedDate": "2026-10-15",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 280000,
+        "unit": "sqft",
+        "basis": "warehouse_gfa",
+        "asWorded": "a total built-up storage area of 280,000 sq. ft."
+      },
+      {
+        "value": 200000,
+        "unit": "sqft",
+        "basis": "open_yard",
+        "asWorded": "200,000 sq. ft. of open yard space"
+      },
+      {
+        "value": 30000,
+        "unit": "sqft",
+        "basis": "unspecified",
+        "asWorded": "30,000 sq. ft. of office space"
+      },
+      {
+        "value": 40000,
+        "unit": "sqft",
+        "basis": "unspecified",
+        "asWorded": "a 40,000 sq. ft. basement area"
+      }
+    ],
+    "pdfConvention": "PDF converts 280,000 sq ft built-up storage to ~26,000 m2 (280,000 sq ft = 26,013 m2) and excludes the 200,000 sq ft (~18,580 m2) yard; office and basement also excluded.",
+    "investment": {
+      "amount": 70000000,
+      "currency": "AED",
+      "asWorded": "represents an investment of AED 70 million"
+    },
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Described as 'newly launched facility', inaugurated 15 Oct 2026."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-10-15",
+      "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/al-sharqi-shipping-inaugurates-aed-70-million-multi-temperature-integrated-logistics-and-distribution-hub-at-dubai-industrial-city"
+    },
+    "sources": [
+      {
+        "url": "https://dubaiindustrialcity.ae/media/press-release/al-sharqi-shipping-inaugurates-aed-70-million-multi-temperature-integrated-logistics-and-distribution-hub-at-dubai-industrial-city",
+        "title": "Al Sharqi Shipping inaugurates AED 70 million multi-temperature integrated logistics and distribution hub at Dubai Industrial City",
+        "publisher": "Dubai Industrial City (TECOM Group)",
+        "publishedDate": "2026-10-15",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://tecomgroup.ae/press-release/al-sharqi-shipping-inaugurates-aed-70-million-multi-temperature-integrated-logistics-and-distribution-hub-at-dubai-industrial-city",
+        "title": "Al Sharqi Shipping Opens AED 70M Logistics Hub in Dubai Industrial City",
+        "publisher": "TECOM Group",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF 'cold and dry hub'; source says 'multi-temperature ... ranging from ambient to -18 C' (compatible wording difference).",
+      "Office (30,000 sq ft) and basement (40,000 sq ft) areas exist in addition to the 280,000 sq ft storage; PDF footnote mentions only the yard as excluded."
+    ],
+    "unresolvedQuestions": [
+      "Whether the 40,000 sq ft basement is inside the 280,000 sq ft built-up storage figure."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 5,
+    "pdfRow": "CEVA Logistics | eCommerce fulfilment warehouse | Dubai South | 23,000 | 15 Jan [other modern]",
+    "name": "CEVA Logistics eCommerce warehouse, Dubai South Free Zone",
+    "developer": null,
+    "investor": null,
+    "owner": null,
+    "operator": "CEVA Logistics",
+    "location": "Dubai South Free Zone (Logistics District)",
+    "zone": "Dubai South",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-01-15",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "CEVA announced a new 23,000 sqm multi-user contract-logistics eCommerce warehouse in Dubai South; set up in weeks; >30,000 units/day (trade-press snippets).",
+        "sourceUrl": "https://www.logisticsmanager.com/ceva-opens-new-e-commerce-warehouse-in-dubai",
+        "sourcePublishedDate": null,
+        "sourceType": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "areas": [
+      {
+        "value": 23000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "the new multi-user contract logistics facility spans 23,000 square meters (search-snippet wording)"
+      }
+    ],
+    "pdfConvention": "PDF counts 23,000 as floor space.",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "Trade press mentions 20 m ceilings, LED, solar; no 'Grade A' wording seen."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "CEVA fitted out the space in weeks, implying the building pre-dated 2026; developer/landlord not identified."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.logisticsmanager.com/ceva-opens-new-e-commerce-warehouse-in-dubai",
+        "title": "CEVA opens new e-commerce warehouse in Dubai",
+        "publisher": "Logistics Manager",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.stattimes.com/logistics/ceva-logistics-expands-regional-footprint-with-new-dubai-facility-1357832",
+        "title": "CEVA Logistics expands regional footprint with new Dubai facility",
+        "publisher": "STAT Times",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://airfreight.news/articles/full/ceva-logistics-opens-new-ecommerce-warehouse-in-dubai",
+        "title": "CEVA Logistics opens new eCommerce warehouse in Dubai",
+        "publisher": "Air Freight News",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [
+      "CEVA Logistics Dubai South eCommerce fulfilment warehouse 23,000 sqm opens",
+      "CEVA Logistics Dubai South 23,000 sqm warehouse press release January 2026 cevalogistics.com"
+    ],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [
+      "No primary (CEVA/Dubai South) page read; all evidence indexed trade press.",
+      "Building owner/developer and whether it is new-build."
+    ],
+    "confidence": "medium",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 6,
+    "pdfRow": "Gallega Global Logistics | 3PL hub with auto parts | Jafza | 20,000 | 20 May [other modern]",
+    "name": "Gallega Global Logistics multi-user 3PL Logistics Hub (incl. Gallega Aftermarket Hub), Jafza",
+    "developer": null,
+    "investor": "Ghassan Aboud Holding / EasyLease (partnership with DP World GCC)",
+    "owner": null,
+    "operator": "Gallega Global Logistics",
+    "location": "Jebel Ali Free Zone",
+    "zone": "Jafza",
+    "originalAnnouncement": {
+      "date": "2026-02-11",
+      "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/ghassan-aboud-holding-easylease-launch-gallega-aftermarket-hub-at-jafza/"
+    },
+    "events": [
+      {
+        "date": "2026-02-11",
+        "datePrecision": "day",
+        "type": "agreement_signed",
+        "summary": "Ghassan Aboud Holding and EasyLease launch Gallega Aftermarket Hub at Jafza (215K sq ft, >10M parts/yr) following signing of a strategic agreement with DP World GCC.",
+        "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/ghassan-aboud-holding-easylease-launch-gallega-aftermarket-hub-at-jafza/",
+        "sourcePublishedDate": "2026-02-11",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-05-20",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Gallega inaugurated a new 215,000 sq ft multi-user 3PL Logistics Hub at Jafza (Dubai Media Office item dated 20 May 2026; Jafza page dated 21 May).",
+        "sourceUrl": "https://www.mediaoffice.ae/en/news/2026/may/20-05/gallega-global-logistics-opens-logistics-hub-at-jafza",
+        "sourcePublishedDate": "2026-05-20",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 215000,
+        "unit": "sqft",
+        "basis": "unspecified",
+        "asWorded": "a new 215,000 sq. ft. multi-user 3PL Logistics Hub"
+      },
+      {
+        "value": 20000,
+        "unit": "cubic_m",
+        "basis": "unspecified",
+        "asWorded": "State-of-the-art 20,000 cubic metre hub (Feb 2026 aftermarket release subtitle)"
+      }
+    ],
+    "pdfConvention": "PDF converts 215,000 sq ft to 20,000 m2 (215,000 sq ft = 19,974 m2) and counts it as floor space.",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "Opened May 2026; source also calls it 'freezone-based, open storage and multi-user facility' - not clear the 215,000 sq ft is all building, or whether the building pre-existed."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-05-20",
+      "sourceUrl": "https://www.mediaoffice.ae/en/news/2026/may/20-05/gallega-global-logistics-opens-logistics-hub-at-jafza"
+    },
+    "sources": [
+      {
+        "url": "https://www.mediaoffice.ae/en/news/2026/may/20-05/gallega-global-logistics-opens-logistics-hub-at-jafza",
+        "title": "Gallega Global Logistics Opens 215,000 sq. ft. 3PL Logistics Hub at Jafza",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-05-20",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.jafza.ae/resource-centre/media/news/gallega-global-logistics-opens-215000-sq-ft-3pl-logistics-hub-at-jafza/",
+        "title": "Gallega Global Logistics Opens 215,000 sq. ft. 3PL Logistics Hub at Jafza",
+        "publisher": "Jafza (DP World)",
+        "publishedDate": "2026-05-21",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.jafza.ae/resource-centre/media/news/ghassan-aboud-holding-easylease-launch-gallega-aftermarket-hub-at-jafza/",
+        "title": "Ghassan Aboud Holding, EasyLease Launch Gallega Aftermarket Hub at Jafza",
+        "publisher": "Jafza (DP World)",
+        "publishedDate": "2026-02-11",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "The Feb 2026 release subtitle says '20,000 cubic metre hub' while its body says '215K SQFT'; the PDF's 20,000 m2 matches the sq ft conversion, not the cubic-metre wording."
+    ],
+    "unresolvedQuestions": [
+      "Is the Feb 2026 'Aftermarket Hub' (215K sq ft) the same facility as the May 2026 '3PL Logistics Hub' (215,000 sq ft)? Both same size, same partners - likely, but not stated.",
+      "Whether 215,000 sq ft is enclosed floor space or includes open storage (CEO quote mentions 'open storage')."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 7,
+    "pdfRow": "Emirates Snack Foods + Aldar | Cold store | Dubai South | 20,000 | Q2 [other modern]",
+    "name": "Emirates Snack Foods cold store and distribution facility - Dubai South",
+    "developer": "Aldar Properties (build-to-suit)",
+    "investor": "Aldar Properties",
+    "owner": "Aldar (completed d-hold asset in Aldar Investment AUM)",
+    "operator": "Emirates Snack Foods (ESF)",
+    "location": "Dubai South Logistics District",
+    "zone": "Dubai South",
+    "originalAnnouncement": {
+      "date": "2025-05-22",
+      "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-breaks-ground-on-a-custom-designed-cold-store-facility"
+    },
+    "events": [
+      {
+        "date": "2025-05-22",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "Aldar broke ground on a custom-designed cold store and distribution facility for ESF in Dubai South Logistics District; handover planned Q4 2025.",
+        "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-breaks-ground-on-a-custom-designed-cold-store-facility",
+        "sourcePublishedDate": "2025-05-22",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-Q2",
+        "datePrecision": "quarter",
+        "type": "construction_completed",
+        "summary": "Aldar Q3 2026 results: 'Following completion in Q2, the Emirates Snack Foods facility has started to meaningfully contribute to segment EBITDA.'",
+        "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026",
+        "sourcePublishedDate": "2026-10-27",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 20000,
+        "unit": "sqm",
+        "basis": "gla",
+        "asWorded": "Developed across a leasable area of almost 20,000 sqm"
+      },
+      {
+        "value": 20000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "Emirates Snack Foods - Dubai South ... 20,000 sqm (Aldar portfolio page)"
+      }
+    ],
+    "pdfConvention": "PDF counts 20,000 as floor space; Aldar's release gives it as leasable area (GLA).",
+    "investment": null,
+    "gradeA": {
+      "status": "probable",
+      "evidence": "Aldar quote in ESF release: 'we look forward to delivering further Grade A facilities' - implies Grade A, not stated for ESF directly."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Aldar states completion in Q2 2026 (target had been Q4 2025)."
+    },
+    "forecastCompletion": "Q4 2025 (May 2025 release)",
+    "actualCompletion": {
+      "date": "2026-Q2",
+      "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026"
+    },
+    "sources": [
+      {
+        "url": "https://www.aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026",
+        "title": "Aldar delivers robust Q3 performance with net profit rising 19% to AED 7.1 billion in first nine months of 2026",
+        "publisher": "Aldar Properties",
+        "publishedDate": "2026-10-27",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.aldar.com/en/news-and-media/aldar-breaks-ground-on-a-custom-designed-cold-store-facility",
+        "title": "Aldar breaks ground on a custom designed cold store facility for Emirates Snack Foods",
+        "publisher": "Aldar Properties",
+        "publishedDate": "2025-05-22",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.aldar.com/en/industrial-and-logistics",
+        "title": "Industrial and Logistics (portfolio page)",
+        "publisher": "Aldar Properties",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "Basis: source says 'leasable area of almost 20,000 sqm' (GLA), PDF heading says floor space."
+    ],
+    "unresolvedQuestions": [
+      "No opening/occupation date; completion given only as Q2 2026."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 8,
+    "pdfRow": "Palmon Group + GFH Partners | Chemical store, USD 11 m | Jafza | 10,400 | 14 Jan [specialised]",
+    "name": "Palmon Group specialised chemical storage logistics hub (temperature-controlled chemical warehouse), Jafza",
+    "developer": "Palmon Group (development manager)",
+    "investor": "GFH Partners Manrre REIT (CEIC) PLC, managed by GFH Partners",
+    "owner": "GFH Partners Manrre REIT",
+    "operator": "Safe Logistics (10-year lease)",
+    "location": "Jebel Ali Free Zone (chemical zone)",
+    "zone": "Jafza",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-01-14",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Facility inaugurated by Abdulla bin Damithan (DP World GCC); built in 12 months; 10-year lease to Safe Logistics. Exact inauguration day not stated; Khaleej Times published 14 Jan 2026.",
+        "sourceUrl": "https://www.khaleejtimes.com/business/specialised-chemical-hub-opens-at-jebel-ali-free-zone",
+        "sourcePublishedDate": "2026-01-14",
+        "sourceType": "secondary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 112000,
+        "unit": "sqft",
+        "basis": "mixed_building_area",
+        "asWorded": "a built-up area of 112,000sq ft on a 180,000sq ft plot"
+      },
+      {
+        "value": 180000,
+        "unit": "sqft",
+        "basis": "site_land_area",
+        "asWorded": "on a 180,000sq ft plot"
+      }
+    ],
+    "pdfConvention": "PDF converts 112,000 sq ft built-up area to 10,400 m2 (= 10,405 m2); built-up area includes ~3% office.",
+    "investment": {
+      "amount": 11000000,
+      "currency": "USD",
+      "asWorded": "total investment in the facility was approximately $11 million, covering land, construction, compliance, and specialized fitouts"
+    },
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "'adds a mission-critical, Grade A asset to the portfolio of Manrre REIT' (owner/fund wording via Khaleej Times)"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Newly completed ('completed in a record 12 months') and inaugurated Jan 2026; building completion may have been late 2025."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-01",
+      "sourceUrl": "https://www.khaleejtimes.com/business/specialised-chemical-hub-opens-at-jebel-ali-free-zone"
+    },
+    "sources": [
+      {
+        "url": "https://www.khaleejtimes.com/business/specialised-chemical-hub-opens-at-jebel-ali-free-zone",
+        "title": "Specialised chemical hub opens at Jebel Ali Free Zone",
+        "publisher": "Khaleej Times",
+        "publishedDate": "2026-01-14",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://gulfnews.com/business/corporate-news/gfh-partners-manrre-reit-and-palmon-group-open-11-million-regional-hub-for-specialised-chemical-storage-at-jafza-1.500409466",
+        "title": "GFH Partners Manrre REIT and Palmon Group open $11 million regional hub for specialised chemical storage at Jafza",
+        "publisher": "Gulf News",
+        "publishedDate": "2026-01-15",
+        "type": "secondary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF partner 'GFH Partners' - owner is GFH Partners Manrre REIT (managed by GFH Partners); operator is Safe Logistics."
+    ],
+    "unresolvedQuestions": [
+      "Exact inauguration date (sources published 14-15 Jan 2026; a trade item reportedly 12 Jan - not read)."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 9,
+    "pdfRow": "Dior | Regional distribution hub | Dubai South | 7,200 | 21 Sep [other modern]",
+    "name": "Dior Regional Distribution Centre for the Middle East",
+    "developer": null,
+    "investor": "Dior",
+    "owner": null,
+    "operator": "Dior",
+    "location": "EZDubai Logistics Hub, Dubai South",
+    "zone": "Dubai South (EZDubai)",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-09-21",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Dubai South marked the official inauguration of Dior's Regional Distribution Centre at EZDubai Logistics Hub; LEED Gold.",
+        "sourceUrl": "https://www.dubaisouth.ae/en/newsroom/dubai-south-welcomes-dior-regional-distribution-centre",
+        "sourcePublishedDate": "2026-09-21",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 7200,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "Spanning 7,200 square metres across two levels"
+      }
+    ],
+    "pdfConvention": "PDF counts 7,200 as floor space; source says across two levels (so likely total floor area, not footprint).",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "Inauguration Sep 2026; unknown whether the building is newly built or existing EZDubai stock."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-09-21",
+      "sourceUrl": "https://www.dubaisouth.ae/en/newsroom/dubai-south-welcomes-dior-regional-distribution-centre"
+    },
+    "sources": [
+      {
+        "url": "https://www.dubaisouth.ae/en/newsroom/dubai-south-welcomes-dior-regional-distribution-centre",
+        "title": "Dubai South welcomes Dior Regional Distribution Centre",
+        "publisher": "Dubai South",
+        "publishedDate": "2026-09-21",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [
+      "Building developer/landlord."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 10,
+    "pdfRow": "MOSOLF | Vehicle hub, 15,000 m2 site | Jafza | 1,000 | March [specialised]",
+    "name": "MOSOLF automotive hub, Jafza",
+    "developer": null,
+    "investor": "MOSOLF Group",
+    "owner": null,
+    "operator": "MOSOLF",
+    "location": "Jebel Ali Free Zone",
+    "zone": "Jafza",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-03",
+        "datePrecision": "month",
+        "type": "opened",
+        "summary": "'The site has been fully operational since March this year.'",
+        "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/mosolf-launches-automotive-hub-in-jafza-to-expand-vehicle-processing-capacity/",
+        "sourcePublishedDate": "2026-05-21",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-05-21",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "Jafza announces MOSOLF's new automotive hub (161,000 sq ft incl. open vehicle storage and ~11,000 sq ft PDI warehouse).",
+        "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/mosolf-launches-automotive-hub-in-jafza-to-expand-vehicle-processing-capacity/",
+        "sourcePublishedDate": "2026-05-21",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 161000,
+        "unit": "sqft",
+        "basis": "site_land_area",
+        "asWorded": "The new facility spans 161,000 square feet in total, including open vehicle storage"
+      },
+      {
+        "value": 11000,
+        "unit": "sqft",
+        "basis": "warehouse_gfa",
+        "asWorded": "a nearly 11,000-square-foot warehouse equipped for Pre-Delivery Inspection (PDI)"
+      }
+    ],
+    "pdfConvention": "PDF converts 161,000 sq ft to a ~15,000 m2 site (= 14,957 m2) and ~11,000 sq ft warehouse to 1,000 m2 (= 1,022 m2).",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Vehicle compound with small PDI warehouse."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "'New automotive logistics facility', fully operational since March 2026."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-03",
+      "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/mosolf-launches-automotive-hub-in-jafza-to-expand-vehicle-processing-capacity/"
+    },
+    "sources": [
+      {
+        "url": "https://www.jafza.ae/resource-centre/media/news/mosolf-launches-automotive-hub-in-jafza-to-expand-vehicle-processing-capacity/",
+        "title": "MOSOLF launches automotive hub in Jafza to expand vehicle processing capacity",
+        "publisher": "Jafza (DP World)",
+        "publishedDate": "2026-05-21",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 11,
+    "pdfRow": "Petrochem + DP World | Chemical terminal | Jebel Ali Port | Not disclosed (AED 300 m) | 14 Jan [specialised]",
+    "name": "Petrochem petrochemical terminal and corporate headquarters, Jebel Ali",
+    "developer": null,
+    "investor": "Petrochem Middle East",
+    "owner": "Petrochem (owner-operator, per MD quote)",
+    "operator": "Petrochem Middle East",
+    "location": "Jebel Ali",
+    "zone": "Jebel Ali Port / DP World ecosystem",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-01-14",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Petrochem Middle East inaugurated its AED 300m petrochemical terminal and corporate HQ in Jebel Ali (DP World release dated 14 Jan 2026).",
+        "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/petrochem-and-dp-world-inaugurate-aed-300-million-terminal-at-jebel-ali-port",
+        "sourcePublishedDate": "2026-01-14",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [],
+    "pdfConvention": "PDF shows area 'Not disclosed'; none found.",
+    "investment": {
+      "amount": 300000000,
+      "currency": "AED",
+      "asWorded": "its AED 300 million petrochemical terminal and corporate headquarters"
+    },
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Chemical terminal; offices to LEED Gold."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Inaugurated Jan 2026; Petrochem's second UAE terminal."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-01-14",
+      "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/petrochem-and-dp-world-inaugurate-aed-300-million-terminal-at-jebel-ali-port"
+    },
+    "sources": [
+      {
+        "url": "https://www.dpworld.com/en/news/releases/uae/petrochem-and-dp-world-inaugurate-aed-300-million-terminal-at-jebel-ali-port",
+        "title": "Petrochem and DP World inaugurate AED 300 million terminal at Jebel Ali Port",
+        "publisher": "DP World",
+        "publishedDate": "2026-01-14",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://mediaoffice.ae/en/news/2026/january/14-01/petrochem-and-dp-world-inaugurate-aed-300-million-terminal-at-jebel-ali-port",
+        "title": "Petrochem and DP World inaugurate AED 300 million terminal at Jebel Ali Port",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-01-14",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "AED 300m covers terminal plus corporate HQ / standalone office buildings, not the terminal alone."
+    ],
+    "unresolvedQuestions": [
+      "Storage capacity / site area not disclosed.",
+      "Whether the site is inside Jebel Ali Port or Jafza - release says 'in Jebel Ali'."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 12,
+    "pdfRow": "Hellmann + Calipar | Healthcare hub | Dubai South | Not disclosed | 31 Mar",
+    "name": "Hellmann Calipar Healthcare Logistics (HCHL) distribution facility, Dubai South Logistics District",
+    "developer": null,
+    "investor": "Hellmann Worldwide Logistics / HCHL",
+    "owner": null,
+    "operator": "Hellmann Calipar Healthcare Logistics",
+    "location": "Dubai South Logistics District",
+    "zone": "Dubai South",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-03-31",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "Dubai South 'has welcomed a new distribution facility by Hellmann Calipar Healthcare Logistics'; HCHL's fifth UAE distribution centre; hazardous-goods chamber, solar.",
+        "sourceUrl": "https://www.dubaisouth.ae/en/newsroom/dubai-south-welcomes-new-distribution-facility-by-hellmann-calipar-healthcare-logistics-at-the-logistics-district",
+        "sourcePublishedDate": "2026-03-31",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [],
+    "pdfConvention": "PDF: not disclosed; none found.",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "New facility for HCHL, but release dated 31 Mar 2026 does not say whether building is new-build."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.dubaisouth.ae/en/newsroom/dubai-south-welcomes-new-distribution-facility-by-hellmann-calipar-healthcare-logistics-at-the-logistics-district",
+        "title": "Dubai South welcomes new distribution facility by Hellmann Calipar Healthcare Logistics at the Logistics District",
+        "publisher": "Dubai South",
+        "publishedDate": "2026-03-31",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://mediaoffice.ae/en/news/2026/march/31-03/dubai-south",
+        "title": "Dubai South (Hellmann Calipar facility)",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-03-31",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [
+      "Floor area and opening date (31 Mar is the release date)."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 13,
+    "pdfRow": "Lufthansa Technik | Aircraft parts repairs | Dubai South | Not disclosed | 24 Mar [specialised]",
+    "name": "Lufthansa Technik Middle East Painting & Grinding Center, MBRAH",
+    "developer": "Lufthansa Technik Middle East",
+    "investor": "Lufthansa Technik Middle East",
+    "owner": null,
+    "operator": "Lufthansa Technik Middle East",
+    "location": "Mohammed Bin Rashid Aerospace Hub (MBRAH), Dubai South",
+    "zone": "Dubai South / MBRAH",
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-03-25",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "MBRAH officially inaugurated a new Painting & Grinding Center developed by Lufthansa Technik ME, supporting component painting/grinding for structural and composite repairs (Media Office item dated 25 Mar 2026).",
+        "sourceUrl": "https://mediaoffice.ae/en/news/2026/march/25-03/mohammed-bin-rashid-aerospace-hub",
+        "sourcePublishedDate": "2026-03-25",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [],
+    "pdfConvention": "PDF: not disclosed; none found.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "MRO workshop."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "New centre inaugurated March 2026; adds to LHT ME's existing MBRAH presence (not a new site)."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-03-25",
+      "sourceUrl": "https://mediaoffice.ae/en/news/2026/march/25-03/mohammed-bin-rashid-aerospace-hub"
+    },
+    "sources": [
+      {
+        "url": "https://mediaoffice.ae/en/news/2026/march/25-03/mohammed-bin-rashid-aerospace-hub",
+        "title": "MBRAH And Lufthansa Technik ME Inaugurate New Aviation Facility in Dubai",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-03-25",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF date 24 Mar; Dubai Media Office item is dated Wednesday 25 March 2026 (ceremony date not stated separately).",
+      "PDF 'Aircraft parts repairs' - source describes a Painting & Grinding Center supporting structural/composite component repairs, an add-on to an existing LHT ME operation."
+    ],
+    "unresolvedQuestions": [
+      "Whether a 24 Mar ceremony date appears in any other source."
+    ],
+    "confidence": "high",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 14,
+    "pdfRow": "DP World | Inland empty-container depot | Al Awir | Open depot, 100,000 m2 site | August [land/yard]",
+    "name": "DP World inland empty container depot, Al Awir",
+    "developer": "DP World",
+    "investor": "DP World",
+    "owner": "DP World",
+    "operator": "DP World",
+    "location": "Al Awir, Dubai (direct access to Emirates Road)",
+    "zone": null,
+    "originalAnnouncement": null,
+    "events": [
+      {
+        "date": "2026-08-21",
+        "datePrecision": "day",
+        "type": "opened",
+        "summary": "DP World 'has also opened a new 100,000 sqm inland empty container depot in Al Awir' (in release dated 21 Aug 2026; opening day not given).",
+        "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-moves-500000-teus-across-gcc-overland-network",
+        "sourcePublishedDate": "2026-08-21",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 100000,
+        "unit": "sqm",
+        "basis": "open_yard",
+        "asWorded": "a new 100,000 sqm inland empty container depot in Al Awir, Dubai"
+      }
+    ],
+    "pdfConvention": "PDF treats 100,000 m2 as site/yard area and excludes it from floor-space totals.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Open container depot."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Described as new depot opened by Aug 2026."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": {
+      "date": "2026-08",
+      "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-moves-500000-teus-across-gcc-overland-network"
+    },
+    "sources": [
+      {
+        "url": "https://www.dpworld.com/en/news/releases/uae/dp-world-moves-500000-teus-across-gcc-overland-network",
+        "title": "DP World moves 500,000 TEUs across GCC overland network",
+        "publisher": "DP World",
+        "publishedDate": "2026-08-21",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [],
+    "unresolvedQuestions": [
+      "Exact opening date (release date 21 Aug 2026 is the earliest evidence)."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 15,
+    "pdfRow": "Aldar + DP World | Grade A park, phase 2 | NIP | 81,500 m2 | Ready Q1 2027 [Grade A]",
+    "name": "Aldar Logistics Centres - NIP, Phase 2",
+    "developer": "Aldar Properties",
+    "investor": "Aldar Properties",
+    "owner": "Aldar",
+    "operator": null,
+    "location": "National Industries Park, Jebel Ali, Dubai",
+    "zone": "National Industries Park (DP World zone)",
+    "originalAnnouncement": {
+      "date": "2024-07-15",
+      "sourceUrl": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513"
+    },
+    "events": [
+      {
+        "date": "2024-07-15",
+        "datePrecision": "day",
+        "type": "agreement_signed",
+        "summary": "Aldar-DP World agreement for a three-building, 144,000 sqm Grade A park at NIP.",
+        "sourceUrl": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513",
+        "sourcePublishedDate": "2024-07-15",
+        "sourceType": "secondary",
+        "verification": "direct"
+      },
+      {
+        "date": "2025-11",
+        "datePrecision": "month",
+        "type": "construction_start",
+        "summary": "Groundbreaking of phase two held with Aldar, DP World, NIP and Group AMANA; full park targeted Q1 2027 (search snippets of Nov 2025 release).",
+        "sourceUrl": "https://www.tradingview.com/news/reuters.com,2025-11-24:newsml_Zaw5Xxgcf:0-pressr-aldar-advances-phased-delivery-of-grade-a-logistics-park-at-national-industries-park-in-dubai/",
+        "sourcePublishedDate": "2025-11-24",
+        "sourceType": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "areas": [
+      {
+        "value": 148500,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "National Industries Park, Dubai 148,500 sqm (Aldar portfolio page, whole park)"
+      },
+      {
+        "value": 81000,
+        "unit": "sqm",
+        "basis": "gla",
+        "asWorded": "Logistics Park in NIP with GLA 81k sqm across 2 additional modular buildings (search snippet of 9M 2024 presentation)"
+      }
+    ],
+    "pdfConvention": "PDF derives 81,500 m2 = 148,500 total less 67,000 phase 1; no source states 81,500.",
+    "investment": null,
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "'Grade A logistics park' throughout Aldar/DP World announcements"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Under construction; not delivered."
+    },
+    "forecastCompletion": "Q1 2027 (whole park, Nov 2025 update, indexed); H1 2027 for 2 additional buildings (9M 2024 presentation, indexed)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.aldar.com/en/industrial-and-logistics",
+        "title": "Industrial and Logistics (portfolio page)",
+        "publisher": "Aldar Properties",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://gulfnews.com/business/property/uae-master-developer-aldar-inks-pact-with-dp-world-to-build-logistics-park-in-dubai-1.1721036326513",
+        "title": "UAE master developer Aldar inks pact with DP World to build logistics park in Dubai",
+        "publisher": "Gulf News",
+        "publishedDate": "2024-07-15",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.wam.ae/en/article/bmvnenj-aldar-advances-phased-delivery-grade-logistics",
+        "title": "Aldar advances phased delivery of Grade A logistics park at National Industries Park in Dubai",
+        "publisher": "WAM",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.tradingview.com/news/reuters.com,2025-11-24:newsml_Zaw5Xxgcf:0-pressr-aldar-advances-phased-delivery-of-grade-a-logistics-park-at-national-industries-park-in-dubai/",
+        "title": "PRESSR: Aldar advances phased delivery of grade a logistics park at national industries park in Dubai",
+        "publisher": "TradingView / Reuters (Zawya PRESSR)",
+        "publishedDate": "2025-11-24",
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://cdn.aldar.com/-/media/project/aldar-tenant/aldar2/9m-2024-financial-results/aldar-properties-results-presentation-9m-2024_final.pdf?rev=59b0cc6159c84e76b44da261bc75ada9",
+        "title": "Aldar Properties 9M 2024 Results Presentation",
+        "publisher": "Aldar Properties",
+        "publishedDate": "2024-10-29",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [
+      "Aldar DP World logistics park National Industries Park handover completed first phase tenants 2026",
+      "aldar.com 'phased delivery' Grade A logistics park National Industries Park"
+    ],
+    "conflictsWithPdf": [
+      "81,500 is a PDF derivation; an Aldar 2024 presentation (indexed) gives phase-2 GLA as ~81k sqm. Total park size 144,000 (2024) vs 148,500 (Aldar site).",
+      "Aldar Q3 2026 results (read directly) do not mention phase 2 status or the Q1 2027 date."
+    ],
+    "unresolvedQuestions": [
+      "Phase 2 status in H2 2026.",
+      "Exact phase-2 groundbreaking date (Nov 2025)."
+    ],
+    "confidence": "medium",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 16,
+    "pdfRow": "Sweid & Sweid + Dutco | Grade A park, phase 1 of 3 | Warsan | 53,360 m2 | Ready Q4 2026 [Grade A] (footnote: 'Terralogix')",
+    "name": "Terralogix logistics park, Phase 1",
+    "developer": "Dutco and Sweid & Sweid",
+    "investor": "Dutco; Sweid & Sweid",
+    "owner": null,
+    "operator": null,
+    "location": "Warsan, Northern Dubai",
+    "zone": null,
+    "originalAnnouncement": {
+      "date": "2025-06-11",
+      "sourceUrl": "https://enterpriseam.com/uae/2025/06/11/dutco-sweid-sweid-to-build-dubais-largest-private-owned-logistics-park/"
+    },
+    "events": [
+      {
+        "date": "2025-06-11",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "Dutco and Sweid & Sweid launch Terralogix, ~3.3m sq ft, 'Dubai's largest privately owned logistics park'; Phase 1 under construction, completion Q3 2026; pre-leasing open (indexed).",
+        "sourceUrl": "https://enterpriseam.com/uae/2025/06/11/dutco-sweid-sweid-to-build-dubais-largest-private-owned-logistics-park/",
+        "sourcePublishedDate": "2025-06-11",
+        "sourceType": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "areas": [
+      {
+        "value": 3300000,
+        "unit": "sqft",
+        "basis": "site_land_area",
+        "asWorded": "3.3 million sq ft (launch coverage; basis inferred as site)"
+      },
+      {
+        "value": 182000,
+        "unit": "sqm",
+        "basis": "gla",
+        "asWorded": "about 182,000 sq m of leasable Grade-A space (terralogix.ae, via search snippet)"
+      },
+      {
+        "value": 53360,
+        "unit": "sqm",
+        "basis": "gla",
+        "asWorded": "Phase 1 at 53,360 sq m (terralogix.ae, via search snippet)"
+      }
+    ],
+    "pdfConvention": "PDF counts 53,360 as floor space for phase 1 only.",
+    "investment": null,
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "Developer site: 'leasable Grade-A logistics space' (indexed only)"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Under construction; not delivered as of evidence seen."
+    },
+    "forecastCompletion": "Q3 2026 (June 2025 launch coverage) vs Q4 2026 (terralogix.ae, indexed)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://terralogix.ae/",
+        "title": "Terralogix - Dubai's Premium Logistics Hub",
+        "publisher": "Terralogix (Dutco / Sweid & Sweid)",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://sweidandsweid.com/dutco-sweid-sweid-launch-dubais-largest-privately-owned-logistics-park/",
+        "title": "Dutco, Sweid & Sweid Launch Dubai's Largest Privately-Owned Logistics Park",
+        "publisher": "Sweid & Sweid",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://enterpriseam.com/uae/2025/06/11/dutco-sweid-sweid-to-build-dubais-largest-private-owned-logistics-park/",
+        "title": "Dutco + Sweid & Sweid to build Dubai's largest private-owned logistics park",
+        "publisher": "Enterprise AM",
+        "publishedDate": "2025-06-11",
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.logisticsmiddleeast.com/logistics/terralogix-unveiled-as-dubais-largest-private-logistics-park",
+        "title": "Terralogix unveiled as Dubai's largest private logistics park",
+        "publisher": "Logistics Middle East",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [
+      "Terralogix Sweid & Sweid Dutco Warsan Grade A logistics park phase 1",
+      "Terralogix Warsan logistics park 2026 progress phase one handover leasing",
+      "Dutco Sweid & Sweid Terralogix launch June 2025 3.3 million sq ft"
+    ],
+    "conflictsWithPdf": [
+      "Completion target moved from Q3 2026 (launch) to Q4 2026 (developer site); PDF uses Q4 2026.",
+      "Leasable area: 182,000 sq m (developer site) vs ~1.96m sq ft (~182,000 sq m) - consistent; total 305,000 sq m vs 3.3m sq ft (~306,600 sq m)."
+    ],
+    "unresolvedQuestions": [
+      "No page read directly (terralogix.ae, sweidandsweid.com not reachable from this session); no 2026 construction-progress source found.",
+      "Whether Phase 1 is still on track for Q4 2026."
+    ],
+    "confidence": "medium",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 17,
+    "pdfRow": "Talal Group | AED 150 m distribution centre | DIC | 32,500 m2 | Started 21 Jul [other modern]",
+    "name": "Talal Group Central Distribution Centre",
+    "developer": null,
+    "investor": "Talal Group",
+    "owner": "Talal Group",
+    "operator": "Talal Group",
+    "location": "Dubai Industrial City",
+    "zone": "Dubai Industrial City (TECOM Group)",
+    "originalAnnouncement": {
+      "date": "2026-07-21",
+      "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/talal-group-breaks-ground-on-aed-150-million-central-distribution-centre-at-dubai-industrial-city"
+    },
+    "events": [
+      {
+        "date": "2026-07-21",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "Talal Group broke ground on AED 150m Central Distribution Centre; completion targeted Q3 2027.",
+        "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/talal-group-breaks-ground-on-aed-150-million-central-distribution-centre-at-dubai-industrial-city",
+        "sourcePublishedDate": "2026-07-21",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 350000,
+        "unit": "sqft",
+        "basis": "mixed_building_area",
+        "asWorded": "an integrated logistics hub spanning 350,000 sq. ft. of built-up area"
+      }
+    ],
+    "pdfConvention": "PDF converts 350,000 sq ft to 32,500 m2 (= 32,516 m2); built-up area includes HQ, cash-and-carry store and customer service centre.",
+    "investment": {
+      "amount": 150000000,
+      "currency": "AED",
+      "asWorded": "Representing an investment of AED 150 million"
+    },
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Groundbreaking July 2026."
+    },
+    "forecastCompletion": "Q3 2027",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://dubaiindustrialcity.ae/media/press-release/talal-group-breaks-ground-on-aed-150-million-central-distribution-centre-at-dubai-industrial-city",
+        "title": "Talal Group breaks ground on AED 150 million Central Distribution Centre at Dubai Industrial City",
+        "publisher": "Dubai Industrial City (TECOM Group)",
+        "publishedDate": "2026-07-21",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "Area is mixed built-up area (logistics + corporate HQ + wholesale store + customer centre), not pure warehouse floor space."
+    ],
+    "unresolvedQuestions": [],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 18,
+    "pdfRow": "Hellmann + INDU Group | Auto spare parts hub | Jafza | 27,900 m2 | Started 8 Jun [other modern]",
+    "name": "Hellmann-Indu automotive logistics hub, Jafza",
+    "developer": "INDU Logistics (INDU Group)",
+    "investor": "INDU Group / Hellmann (not specified)",
+    "owner": null,
+    "operator": "Hellmann Worldwide Logistics (dedicated automotive hub in its ME network)",
+    "location": "Jebel Ali Free Zone",
+    "zone": "Jafza",
+    "originalAnnouncement": {
+      "date": "2026-06-08",
+      "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/jafza-expands-automotive-ecosystem-with-new-hellmann-indu-logistics-hub/"
+    },
+    "events": [
+      {
+        "date": "2026-06-08",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "Hellmann and INDU Group 'have broken ground' on a new automotive logistics hub in Jafza (Jafza item dated 8 Jun 2026; ceremony date not stated).",
+        "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/jafza-expands-automotive-ecosystem-with-new-hellmann-indu-logistics-hub/",
+        "sourcePublishedDate": "2026-06-08",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 300000,
+        "unit": "sqft",
+        "basis": "unspecified",
+        "asWorded": "With a total area of nearly 300,000 sq. ft., the site will provide scalable infrastructure"
+      }
+    ],
+    "pdfConvention": "PDF converts ~300,000 sq ft to 27,900 m2 (= 27,871 m2) and counts it as floor space.",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Groundbreaking June 2026."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.jafza.ae/resource-centre/media/news/jafza-expands-automotive-ecosystem-with-new-hellmann-indu-logistics-hub/",
+        "title": "Jafza expands automotive ecosystem with new Hellmann-Indu logistics hub",
+        "publisher": "Jafza (DP World)",
+        "publishedDate": "2026-06-08",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "Source says 'total area of nearly 300,000 sq. ft.' of 'the site' - may be site area rather than floor space."
+    ],
+    "unresolvedQuestions": [
+      "Measurement basis (site vs building).",
+      "Completion target and investment not disclosed."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 19,
+    "pdfRow": "DP World + Arcapita Lintara | Grade A, dangerous goods | Jafza | 20,000 m2 | Ready Q1 2027 [Grade A]",
+    "name": "DP World / Lintara build-to-suit logistics centre, Jafza",
+    "developer": "Lintara Properties (Arcapita) - development manager",
+    "investor": "Arcapita Group Holdings (Lintara)",
+    "owner": "Lintara/Arcapita (asset manager on completion; ownership not stated)",
+    "operator": "DP World",
+    "location": "Jebel Ali Free Zone",
+    "zone": "Jafza",
+    "originalAnnouncement": {
+      "date": "2026-06-30",
+      "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-and-arcapitas-lintara-break-ground-on-20000-sqm-logistics-centre-in-jafza"
+    },
+    "events": [
+      {
+        "date": "2026-06-30",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "DP World and Lintara broke ground on a 20,000 sqm build-to-suit Grade A logistics centre with dedicated dangerous-goods storage; completion expected Q1 2027.",
+        "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-and-arcapitas-lintara-break-ground-on-20000-sqm-logistics-centre-in-jafza",
+        "sourcePublishedDate": "2026-06-30",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 20000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "a new 20,000 square metre build-to-suit logistics centre"
+      }
+    ],
+    "pdfConvention": "PDF counts 20,000 as floor space.",
+    "investment": null,
+    "gradeA": {
+      "status": "confirmed",
+      "evidence": "'The Grade A facility is being developed by Lintara Properties' (DP World release)"
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Groundbreaking June 2026."
+    },
+    "forecastCompletion": "Q1 2027",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.dpworld.com/en/news/releases/uae/dp-world-and-arcapitas-lintara-break-ground-on-20000-sqm-logistics-centre-in-jafza",
+        "title": "DP World and Arcapita's Lintara break ground on 20,000 sqm logistics centre in Jafza",
+        "publisher": "DP World",
+        "publishedDate": "2026-06-30",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF gives no start date; groundbreaking release is dated 30 Jun 2026."
+    ],
+    "unresolvedQuestions": [
+      "Investment not disclosed."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 20,
+    "pdfRow": "Emirates | MRO, 380,000 m2 storage | Dubai South | USD 5.1 bn | Started 18 May, due mid-2030 [specialised]",
+    "name": "Emirates engineering complex (MRO facility) at Dubai South",
+    "developer": "Emirates; main contractor China Railway Construction Corporation",
+    "investor": "Emirates",
+    "owner": "Emirates",
+    "operator": "Emirates Engineering",
+    "location": "Dubai South (DWC - Al Maktoum International Airport)",
+    "zone": "Dubai South",
+    "originalAnnouncement": {
+      "date": "2023-11-14",
+      "sourceUrl": "https://www.thenationalnews.com/business/aviation/2023/11/14/emirates-to-build-950m-engineering-hub-at-dubai-world-central/"
+    },
+    "events": [
+      {
+        "date": "2023-11-14",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "At Dubai Airshow, Emirates announced a $950m, one million square metre engineering facility at Dubai World Central; phase 1 to start 2024, complete 2027.",
+        "sourceUrl": "https://www.thenationalnews.com/business/aviation/2023/11/14/emirates-to-build-950m-engineering-hub-at-dubai-world-central/",
+        "sourcePublishedDate": "2023-11-14",
+        "sourceType": "secondary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-05-18",
+        "datePrecision": "day",
+        "type": "construction_start",
+        "summary": "Emirates broke ground on a US$5.1bn engineering complex at Dubai South spanning 1.1m sq m incl. 380,000 sq m storage/logistics; completion 'by middle of 2030'.",
+        "sourceUrl": "https://www.emirates.com/media-centre/emirates-breaks-ground-on-us-51-billion-ultra-modern-engineering-facility-at-dubai-south/",
+        "sourcePublishedDate": "2026-05-18",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-11-05",
+        "datePrecision": "day",
+        "type": "other",
+        "summary": "Emirates Group H1 results restate the May groundbreaking 'with completion expected in the mid-2030s'.",
+        "sourceUrl": "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+        "sourcePublishedDate": "2026-11-05",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 1100000,
+        "unit": "sqm",
+        "basis": "mixed_building_area",
+        "asWorded": "will span a staggering 1.1 million square metres"
+      },
+      {
+        "value": 380000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "380,000 sq. metres of storage and logistics capacity"
+      },
+      {
+        "value": 77000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "77,000 sq. metres of dedicated workshop space for repairs and maintenance"
+      }
+    ],
+    "pdfConvention": "PDF lists 380,000 m2 storage in the description and USD 5.1bn in the area column; footnote says 380,000 is not warehouse floor space. Note the PDF's 215,260 'being built' total = rows 15-19 only.",
+    "investment": {
+      "amount": 5100000000,
+      "currency": "USD",
+      "asWorded": "its new US$ 5.1 billion engineering complex at Dubai South"
+    },
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "MRO complex."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Construction started May 2026."
+    },
+    "forecastCompletion": "'by middle of 2030' (18 May 2026 release) vs 'mid-2030s' (5 Nov 2026 Group results)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.emirates.com/media-centre/emirates-breaks-ground-on-us-51-billion-ultra-modern-engineering-facility-at-dubai-south/",
+        "title": "Emirates breaks ground on US$ 5.1 billion ultra-modern engineering facility at Dubai South",
+        "publisher": "Emirates",
+        "publishedDate": "2026-05-18",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://mediaoffice.ae/en/news/2026/may/18-05/emirates-has-broken-ground-on-its-new-engineering-complex-at-dubai-south",
+        "title": "Emirates has broken ground on its new engineering complex at Dubai South",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-05-18",
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+        "title": "Emirates Group announces half-year profit for 2026-27",
+        "publisher": "Emirates Group",
+        "publishedDate": "2026-11-05",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.thenationalnews.com/business/aviation/2023/11/14/emirates-to-build-950m-engineering-hub-at-dubai-world-central/",
+        "title": "Emirates airline to build $950m engineering centre at Dubai World Central",
+        "publisher": "The National",
+        "publishedDate": "2023-11-14",
+        "type": "secondary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "Completion: Emirates' groundbreaking release says 'by middle of 2030' (matches PDF), but the Emirates Group H1 2026-27 results say 'completion expected in the mid-2030s'.",
+      "Scope grew from the Nov 2023 plan ($950m, 1m sq m, at DWC, phase 1 by 2027) to $5.1bn and 1.1m sq m."
+    ],
+    "unresolvedQuestions": [
+      "Which completion wording is current (2030 vs mid-2030s)?",
+      "Whether 380,000 sq m is floor area or volume/capacity measure."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 21,
+    "pdfRow": "DP World | Food District, starts 2027 | Al Aweer | 2,690,000 m2 | District, 22 Jan",
+    "name": "Dubai Food District (expansion/rebrand of Al Aweer Central Fruit and Vegetable Market)",
+    "developer": "DP World",
+    "investor": "DP World",
+    "owner": null,
+    "operator": "DP World",
+    "location": "Al Aweer, Dubai",
+    "zone": null,
+    "originalAnnouncement": {
+      "date": "2026-01-22",
+      "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-announces-dubai-food-district-a-new-hub-for-global-food-trade"
+    },
+    "events": [
+      {
+        "date": "2026-01-22",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "DP World unveiled Dubai Food District, a 29m sq ft multi-category food hub; first phase scheduled to begin in 2027.",
+        "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/dp-world-announces-dubai-food-district-a-new-hub-for-global-food-trade",
+        "sourcePublishedDate": "2026-01-22",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 29000000,
+        "unit": "sqft",
+        "basis": "district_area",
+        "asWorded": "create a 29 million square foot, multi-category food trade hub"
+      }
+    ],
+    "pdfConvention": "PDF converts 29m sq ft to 2,690,000 m2 (= 2,694,188 m2) and labels it district area.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Market district."
+    },
+    "netNewSince2025": {
+      "value": "no",
+      "reasoning": "29m sq ft is the total district after expansion and includes the existing Al Aweer market (open since 2004); incremental area not given."
+    },
+    "forecastCompletion": "First phase to begin 2027",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.dpworld.com/en/news/releases/uae/dp-world-announces-dubai-food-district-a-new-hub-for-global-food-trade",
+        "title": "DP World announces Dubai Food District, a new hub for global food trade",
+        "publisher": "DP World",
+        "publishedDate": "2026-01-22",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://www.mediaoffice.ae/en/news/2026/january/22-01/dp-world-announces-dubai-food-district",
+        "title": "DP World announces Dubai Food District",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-01-22",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "The 2.69m m2 figure is the whole district including the existing market, not new area."
+    ],
+    "unresolvedQuestions": [
+      "Investment and incremental area."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 22,
+    "pdfRow": "Gargash Prime + JINGDONG Property | eCommerce and fulfilment hub | Dubai | 232,000 m2 | Land, MoU 15 Oct",
+    "name": "Gargash Prime / JINGDONG Property Dubai logistics facility (regional distribution and fulfilment hub)",
+    "developer": "Proposed JV of Gargash Prime and JINGDONG Property",
+    "investor": "Gargash Prime; JINGDONG Property (JD.com)",
+    "owner": null,
+    "operator": null,
+    "location": "Dubai (site not named)",
+    "zone": null,
+    "originalAnnouncement": {
+      "date": "2026-10-15",
+      "sourceUrl": "https://mediaoffice.ae/en/news/2026/october/15-10/gargash-prime"
+    },
+    "events": [
+      {
+        "date": "2026-10-13",
+        "datePrecision": "day",
+        "type": "mou",
+        "summary": "MoU signed 13 October in Shenzhen on sidelines of Dubai Business Forum - China, for a JV to develop a 2.5m sq ft plot.",
+        "sourceUrl": "https://mediaoffice.ae/en/news/2026/october/15-10/gargash-prime",
+        "sourcePublishedDate": "2026-10-15",
+        "sourceType": "primary",
+        "verification": "direct"
+      },
+      {
+        "date": "2026-10-15",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "Dubai Media Office publishes the announcement.",
+        "sourceUrl": "https://mediaoffice.ae/en/news/2026/october/15-10/gargash-prime",
+        "sourcePublishedDate": "2026-10-15",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 2500000,
+        "unit": "sqft",
+        "basis": "site_land_area",
+        "asWorded": "development of a 2.5 million square feet land (~250,000 sqm) in Dubai"
+      }
+    ],
+    "pdfConvention": "PDF converts 2.5m sq ft to 232,000 m2 (= 232,258 m2) and labels it land.",
+    "investment": null,
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "New MoU, no facility yet."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://mediaoffice.ae/en/news/2026/october/15-10/gargash-prime",
+        "title": "Gargash Prime and JINGDONG Property sign joint venture to develop a 2.5 million sq. ft. plot of land for a Dubai Logistics Facility in the UAE",
+        "publisher": "Dubai Media Office",
+        "publishedDate": "2026-10-15",
+        "type": "primary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://jdcorporateblog.com/gargash-prime-and-jingdong-property-sign-joint-venture-to-develop-a-2-5-mn-sq-ft-land-for-a-dubai-logistics-facility-in-the-uae/",
+        "title": "Gargash Prime and JINGDONG Property Sign Joint Venture to Develop a 2.5 Mn. Sq. Ft. Land for a Dubai Logistics Facility in the UAE",
+        "publisher": "JD Corporate Blog",
+        "publishedDate": null,
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "PDF 'MoU 15 Oct'; source says the MoU was signed on 13 October (15 Oct is the announcement date).",
+      "Source's own conversion is '~250,000 sqm'; exact conversion of 2.5m sq ft is ~232,258 m2 (PDF's figure). Record both.",
+      "PDF label 'eCommerce and fulfilment hub'; source says 'regional distribution and fulfilment hub' (headline also says 'joint venture')."
+    ],
+    "unresolvedQuestions": [
+      "Site location, investment, timeline."
+    ],
+    "confidence": "high",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 23,
+    "pdfRow": "Gallega Global Logistics | Vehicle yard, 6,500 cars | Jafza | 92,900 m2 | Yard, 15 Apr",
+    "name": "Gallega Finished Vehicles Hub, Jafza",
+    "developer": null,
+    "investor": "Ghassan Aboud Holding / EasyLease",
+    "owner": null,
+    "operator": "Gallega Global Logistics",
+    "location": "Jebel Ali Free Zone",
+    "zone": "Jafza",
+    "originalAnnouncement": {
+      "date": "2026-04-15",
+      "sourceUrl": "https://x.com/DXBMediaOffice/status/2044414836805943321"
+    },
+    "events": [
+      {
+        "date": "2026-04-15",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "Dubai Media Office post: Gallega launches an integrated Finished Vehicles Hub in Jafza, 1m sq ft, capacity up to 6,500 vehicles, to commence operations May 2026 (indexed; date derived from the post ID timestamp).",
+        "sourceUrl": "https://x.com/DXBMediaOffice/status/2044414836805943321",
+        "sourcePublishedDate": "2026-04-15",
+        "sourceType": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "areas": [
+      {
+        "value": 1000000,
+        "unit": "sqft",
+        "basis": "unspecified",
+        "asWorded": "a logistics facility spanning 1 million square feet with a capacity of up to 6,500 vehicles"
+      }
+    ],
+    "pdfConvention": "PDF converts 1m sq ft to 92,900 m2 (= 92,903 m2) and labels it yard.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Vehicle yard with light PDI setup."
+    },
+    "netNewSince2025": {
+      "value": "unknown",
+      "reasoning": "Launch announced April 2026; whether operations began in May 2026 not confirmed."
+    },
+    "forecastCompletion": "Operations to commence May 2026 (indexed)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://x.com/DXBMediaOffice/status/2044414836805943321",
+        "title": "Dubai Media Office post: Gallega Global Logistics launches an integrated Finished Vehicles Hub in Jafza",
+        "publisher": "Dubai Media Office (X)",
+        "publishedDate": "2026-04-15",
+        "type": "primary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.tradearabia.com/News/414062/Gallega-Global-Logistics-launches-1-million-sq-ft-finished-vehicles-hub-in-Jafza",
+        "title": "Gallega Global Logistics launches 1 million sq ft finished vehicles hub in Jafza",
+        "publisher": "TradeArabia",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://businesstoday.me/logistics-news/gallega-global-logistics-launches-1-million-sqft-finished-vehicles-hub-in-jafza-to-strengthen-regional-supply-chain/",
+        "title": "Gallega Global Logistics Launches 1 Million SQFT Finished Vehicles Hub in Jafza",
+        "publisher": "Business Today Middle East",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [
+      "Gallega Global Logistics vehicle yard 6,500 cars Jafza 1 million sq ft",
+      "Gallega finished vehicles hub Jafza April 2026 capacity cars",
+      "mediaoffice.ae Gallega Global Logistics finished vehicles hub Jafza (site-restricted)",
+      "Direct fetch of guessed mediaoffice.ae URL returned 404"
+    ],
+    "conflictsWithPdf": [
+      "PDF puts this under 'signed or announced', but the announcement says operations were to commence May 2026 - it may now be operating (not confirmed).",
+      "Source calls it a 'logistics facility' with light PDI, CCTV, yard management - the PDF's 'yard' basis is plausible but not stated."
+    ],
+    "unresolvedQuestions": [
+      "No page read directly; all evidence from search results.",
+      "Whether operations started in May 2026."
+    ],
+    "confidence": "medium",
+    "confirmed": "partly"
+  },
+  {
+    "pdfRef": 24,
+    "pdfRow": "Dubai South + Phoenix Aviation | MRO, freighter conversion | Q1 2029 | 71,000 m2 | Signed 30 Oct",
+    "name": "Phoenix Aviation wide-body MRO, cabin modification and cargo-conversion centre, MBRAH",
+    "developer": "Phoenix Aviation",
+    "investor": "Phoenix Aviation",
+    "owner": null,
+    "operator": "Phoenix Aviation",
+    "location": "Airside plot, Mohammed bin Rashid Aerospace Hub (MBRAH), Dubai South",
+    "zone": "Dubai South / MBRAH",
+    "originalAnnouncement": {
+      "date": "2026-10-30",
+      "sourceUrl": "https://www.dubaisouth.ae/en/newsroom/dubai-south-signs-agreement-with-phoenix-aviation-for-a-new-airside-facility-at-mohammed-bin-rashid-aerospace-hub"
+    },
+    "events": [
+      {
+        "date": "2026-10-30",
+        "datePrecision": "day",
+        "type": "agreement_signed",
+        "summary": "Dubai South signed an agreement with Phoenix Aviation for a new airside plot at MBRAH (ceremony at MRO Europe); completion scheduled Q1 2029.",
+        "sourceUrl": "https://www.dubaisouth.ae/en/newsroom/dubai-south-signs-agreement-with-phoenix-aviation-for-a-new-airside-facility-at-mohammed-bin-rashid-aerospace-hub",
+        "sourcePublishedDate": "2026-10-30",
+        "sourceType": "primary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 35000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "a 35,000-square-metre aircraft hangar"
+      },
+      {
+        "value": 18000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "an 18,000-square-metre delivery centre for aircraft handovers and storage"
+      },
+      {
+        "value": 15000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "15,000 square metres of workshops and stores"
+      },
+      {
+        "value": 3000,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "3,000 square metres of offices"
+      }
+    ],
+    "pdfConvention": "PDF's 71,000 m2 is the sum of the four components (35,000 + 18,000 + 15,000 + 3,000); the source never states a 71,000 total.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Aviation MRO."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "New agreement, facility due Q1 2029."
+    },
+    "forecastCompletion": "Q1 2029",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.dubaisouth.ae/en/newsroom/dubai-south-signs-agreement-with-phoenix-aviation-for-a-new-airside-facility-at-mohammed-bin-rashid-aerospace-hub",
+        "title": "Dubai South signs agreement with Phoenix Aviation for a new airside facility at Mohammed bin Rashid Aerospace Hub",
+        "publisher": "Dubai South",
+        "publishedDate": "2026-10-30",
+        "type": "primary",
+        "verification": "direct"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "71,000 is a PDF-computed total of mixed building types (hangar, delivery centre, workshops/stores, offices); plot area not given."
+    ],
+    "unresolvedQuestions": [
+      "Exact signing date (release dated 30 Oct 2026; signed 'during MRO Europe')."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 25,
+    "pdfRow": "Dubai CommerCity | The Hive, ready 2027 to 2028 | 5,600 m2 | Floor, 4 Oct",
+    "name": "The Hive, Dubai CommerCity phase two (Logistics Cluster)",
+    "developer": "Dubai CommerCity (DIEZ)",
+    "investor": "Dubai CommerCity",
+    "owner": null,
+    "operator": "Dubai CommerCity",
+    "location": "Dubai CommerCity",
+    "zone": "Dubai CommerCity free zone (Dubai Integrated Economic Zones Authority)",
+    "originalAnnouncement": {
+      "date": "2026-10-04",
+      "sourceUrl": "https://www.thenationalnews.com/business/economy/2026/10/04/dubai-to-expand-commercity-in-push-for-digital-economy-growth/"
+    },
+    "events": [
+      {
+        "date": "2026-10-04",
+        "datePrecision": "day",
+        "type": "announcement",
+        "summary": "Dubai CommerCity phase-two expansion (Dh1.8bn) announced, delivered in phases Q1 2027-Q4 2028; includes The Hive, a 5,600 sq m logistics facility with 181 flexible units.",
+        "sourceUrl": "https://www.thenationalnews.com/business/economy/2026/10/04/dubai-to-expand-commercity-in-push-for-digital-economy-growth/",
+        "sourcePublishedDate": "2026-10-04",
+        "sourceType": "secondary",
+        "verification": "direct"
+      }
+    ],
+    "areas": [
+      {
+        "value": 5600,
+        "unit": "sqm",
+        "basis": "unspecified",
+        "asWorded": "The Hive, a 5,600 square metre facility that will provide an alternative logistics model"
+      }
+    ],
+    "pdfConvention": "PDF labels 5,600 m2 as floor.",
+    "investment": {
+      "amount": 1800000000,
+      "currency": "AED",
+      "asWorded": "Dh1.8 billion ($272.2 million) investment - whole phase two, not The Hive alone"
+    },
+    "gradeA": {
+      "status": "unverified",
+      "evidence": "No 'Grade A' wording."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Announced Oct 2026; to be delivered 2027-2028."
+    },
+    "forecastCompletion": "Phase two delivery Q1 2027 to Q4 2028 (not specific to The Hive)",
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://www.thenationalnews.com/business/economy/2026/10/04/dubai-to-expand-commercity-in-push-for-digital-economy-growth/",
+        "title": "Dubai to expand CommerCity in push for digital economy growth",
+        "publisher": "The National",
+        "publishedDate": "2026-10-04",
+        "type": "secondary",
+        "verification": "direct"
+      },
+      {
+        "url": "https://gulfnews.com/business/markets/dubai-commercity-to-add-91000-sqm-in-dh18-billion-expansion-1.500697923",
+        "title": "Dubai is doubling down on digital trade - CommerCity unveils Dh1.8 billion expansion",
+        "publisher": "Gulf News",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [],
+    "conflictsWithPdf": [
+      "'Ready 2027 to 2028' is the window for the whole phase two, not specifically The Hive.",
+      "The National gives Dh1.8bn as both '$272.2 million' and '$490 million' in the same article (Dh1.8bn ~ $490m)."
+    ],
+    "unresolvedQuestions": [
+      "Delivery date for The Hive specifically."
+    ],
+    "confidence": "high",
+    "confirmed": "yes"
+  },
+  {
+    "pdfRef": 26,
+    "pdfRow": "DP World + Mitsui O.S.K. Lines | Vehicle processing | Jebel Ali | Not disclosed | Term sheet 6 Oct",
+    "name": "Proposed DP World / MOL automotive logistics and processing facility, Jebel Ali Port",
+    "developer": null,
+    "investor": null,
+    "owner": null,
+    "operator": null,
+    "location": "Jebel Ali Port",
+    "zone": "Jebel Ali Port",
+    "originalAnnouncement": {
+      "date": "2023-12-07",
+      "sourceUrl": "https://www.mol.co.jp/en/pr/2023/23148.html"
+    },
+    "events": [
+      {
+        "date": "2023-12-07",
+        "datePrecision": "day",
+        "type": "mou",
+        "summary": "MOL and DP World MoU to explore auto logistics (finished-vehicle stocking/redistribution via Jebel Ali) and decarbonisation (indexed).",
+        "sourceUrl": "https://www.mol.co.jp/en/pr/2023/23148.html",
+        "sourcePublishedDate": "2023-12-07",
+        "sourceType": "primary",
+        "verification": "indexed"
+      },
+      {
+        "date": "2026-10",
+        "datePrecision": "month",
+        "type": "term_sheet",
+        "summary": "DP World and MOL signed a term sheet setting out the framework for a proposed automotive logistics and processing facility at Jebel Ali Port; no investment, timeline or FID (indexed trade press; exact date not seen).",
+        "sourceUrl": "https://splash247.com/dp-world-and-mol-move-jebel-ali-automotive-hub-plan-forward/",
+        "sourcePublishedDate": null,
+        "sourceType": "secondary",
+        "verification": "indexed"
+      }
+    ],
+    "areas": [],
+    "pdfConvention": "PDF: not disclosed; none found.",
+    "investment": null,
+    "gradeA": {
+      "status": "not_applicable",
+      "evidence": "Vehicle processing facility."
+    },
+    "netNewSince2025": {
+      "value": "yes",
+      "reasoning": "Proposal only."
+    },
+    "forecastCompletion": null,
+    "actualCompletion": null,
+    "sources": [
+      {
+        "url": "https://splash247.com/dp-world-and-mol-move-jebel-ali-automotive-hub-plan-forward/",
+        "title": "DP World and MOL move Jebel Ali automotive hub plan forward",
+        "publisher": "Splash247",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://en.portnews.ru/news/397922/",
+        "title": "DP World and MOL sign term sheet for UAE vehicle logistics hub",
+        "publisher": "PortNews",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://container-news.com/dp-world-and-mol-plan-new-automotive-logistics-facility-at-jebel-ali/",
+        "title": "DP World and MOL plan new automotive logistics facility at Jebel Ali",
+        "publisher": "Container News",
+        "publishedDate": null,
+        "type": "secondary",
+        "verification": "indexed"
+      },
+      {
+        "url": "https://www.mol.co.jp/en/pr/2023/23148.html",
+        "title": "MOL and DP World sign MoU to Explore Auto logistics and Decarbonization Business Opportunities",
+        "publisher": "Mitsui O.S.K. Lines",
+        "publishedDate": "2023-12-07",
+        "type": "primary",
+        "verification": "indexed"
+      }
+    ],
+    "pdfOnly": false,
+    "searchesTried": [
+      "DP World Mitsui O.S.K. Lines term sheet vehicle processing Jebel Ali October 2026",
+      "'MOL' 'DP World' term sheet automotive hub Jebel Ali signed",
+      "DP World MOL term sheet (site-restricted to dpworld.com, mol.co.jp, wam.ae, mediaoffice.ae)",
+      "DP World UAE news list on dpworld.com scanned - no MOL release found"
+    ],
+    "conflictsWithPdf": [
+      "PDF date 6 Oct not seen in any source; one search summary attributed an 11 Oct 2026 date to a Shipping Arabia report (not verified).",
+      "Signatory for DP World named differently across outlets (Ahmad Yousef Al-Hassan vs Abdulla bin Damithan) per search summaries."
+    ],
+    "unresolvedQuestions": [
+      "Primary DP World/MOL release not located; exact signing date unconfirmed."
+    ],
+    "confidence": "medium",
+    "confirmed": "partly"
+  }
+]

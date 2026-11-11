@@ -1,0 +1,227 @@
+[
+  {
+    "id": "dpworld",
+    "name": "DP World newsroom (UAE releases)",
+    "newsroomUrl": "https://www.dpworld.com/en/news/releases/uae",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Global index https://www.dpworld.com/news/releases/ also seen; legacy path https://www.dpworld.com/uae/news/releases/ also indexed. WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "jafza",
+    "name": "Jafza (Jebel Ali Free Zone)",
+    "newsroomUrl": "https://www.jafza.ae/resource-centre/media/news/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Paginated (/page/2 seen). WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "dubai-south",
+    "name": "Dubai South",
+    "newsroomUrl": "https://www.dubaisouth.ae/en/newsroom",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Paginated with ?page=N. WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "ezdubai",
+    "name": "EZDubai (Dubai South e-commerce zone)",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No separate newsroom found; EZDubai news appears in Dubai South newsroom/WAM.",
+    "checked": "not_found"
+  },
+  {
+    "id": "tecom-dic",
+    "name": "TECOM Group / Dubai Industrial City",
+    "newsroomUrl": "https://prod.tecomgroup.ae/press-release/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Only a prod.tecomgroup.ae press-release article URL was indexed; listing path inferred from it, not confirmed. Dubai Industrial City news also via Dubai Media Office.",
+    "checked": "indexed"
+  },
+  {
+    "id": "dubai-customs",
+    "name": "Dubai Customs",
+    "newsroomUrl": "https://www.dubaicustoms.gov.ae/en/mobile/pages/news.aspx",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Mobile news listing (?p=N) indexed. ",
+    "checked": "indexed"
+  },
+  {
+    "id": "dubai-trade",
+    "name": "Dubai Trade",
+    "newsroomUrl": "https://www.dubaitrade.ae/en/news-announcements/dp-world",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "DP World notices listing (?start=N); dates on page inconsistent.",
+    "checked": "indexed"
+  },
+  {
+    "id": "pcfc",
+    "name": "Ports, Customs & Free Zone Corporation (PCFC)",
+    "newsroomUrl": "https://pcfc.ae/en/pages/newsdetails.aspx?newsid=169",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Only individual news-detail and newsletter PDF URLs indexed; listing page not confirmed. PCFC news also on Dubai Media Office.",
+    "checked": "indexed"
+  },
+  {
+    "id": "fujairah-port",
+    "name": "Port of Fujairah",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No official port newsroom found; Fujairah Terminals news appears on adports.ae. Regional context only.",
+    "checked": "not_found"
+  },
+  {
+    "id": "wam",
+    "name": "WAM Emirates News Agency",
+    "newsroomUrl": "https://www.wam.ae/en/list/latest-news",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No official RSS feed found in search. WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "dubai-media-office",
+    "name": "Government of Dubai Media Office",
+    "newsroomUrl": "https://www.mediaoffice.ae/en",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Article paths /en/news/YYYY/<month>/DD-MM/<slug>; note misspelling 'novemebr' in Nov 2026 path. No RSS found. WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "emirates",
+    "name": "Emirates / Emirates SkyCargo media centre",
+    "newsroomUrl": "https://www.emirates.com/media-centre/",
+    "rssUrl": "https://www.emirates.com/media-centre/tagfeed/en-us/tags/Our__Business",
+    "sitemapUrl": null,
+    "notes": "Tag RSS feed URL indexed (tag 'Our Business'); search extract says the media centre offers 'RSS feed - Latest Stories' but the exact URL was not seen. Sibling platform media.dubaiairports.ae/feed/en confirms the /feed/en pattern but not for emirates.com.",
+    "checked": "indexed"
+  },
+  {
+    "id": "dnata",
+    "name": "dnata newsroom",
+    "newsroomUrl": "https://www.dnata.com/media-centre/en/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Archive ?h=1 and tag filters (?t=UAE) indexed; search extract says archive lists 'RSS feed - Dnata' but URL not seen. Emirates Group newsroom: https://www.theemiratesgroup.com/media-centre/ WebFetch could not resolve this host from the session (network policy); URL seen in search results only.",
+    "checked": "indexed"
+  },
+  {
+    "id": "dhl",
+    "name": "DHL Group press releases",
+    "newsroomUrl": "https://group.dhl.com/en/media-relations/press-releases.html",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Listing path inferred from indexed article path /en/media-relations/press-releases/2025/...; not confirmed.",
+    "checked": "indexed"
+  },
+  {
+    "id": "fedex",
+    "name": "FedEx newsroom",
+    "newsroomUrl": "https://newsroom.fedex.com/newsroom/global-english/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Global English newsroom indexed; no MEISA-specific newsroom found.",
+    "checked": "indexed"
+  },
+  {
+    "id": "ups",
+    "name": "UPS press room",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Not found in searches.",
+    "checked": "not_found"
+  },
+  {
+    "id": "dsv",
+    "name": "DSV press (UAE)",
+    "newsroomUrl": "https://www.dsv.com/en-ae/about-dsv/press/news",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Indexed article path /en-ae/about-dsv/press/news/ae/2026/06/...; listing inferred.",
+    "checked": "indexed"
+  },
+  {
+    "id": "ceva",
+    "name": "CEVA Logistics",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No CEVA newsroom URL seen in results.",
+    "checked": "not_found"
+  },
+  {
+    "id": "aramex",
+    "name": "Aramex",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No Aramex press-release listing seen; Aramex releases found via Zawya.",
+    "checked": "not_found"
+  },
+  {
+    "id": "maersk",
+    "name": "Maersk",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Only a Maersk UAE warehousing service page indexed (https://www.maersk.com/local-information/imea/uae/local-solutions/warehousing-and-distribution); no newsroom URL seen.",
+    "checked": "not_found"
+  },
+  {
+    "id": "kuehne-nagel",
+    "name": "Kuehne+Nagel newsroom",
+    "newsroomUrl": "https://newsroom.kuehne-nagel.com/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Indexed via an article on that host.",
+    "checked": "indexed"
+  },
+  {
+    "id": "aldar",
+    "name": "Aldar news & media",
+    "newsroomUrl": "https://www.aldar.com/en/news-and-media",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Article paths /en/news-and-media/<slug>; cdn.aldar.com mirrors also indexed.",
+    "checked": "indexed"
+  },
+  {
+    "id": "arcapita",
+    "name": "Arcapita insights",
+    "newsroomUrl": "https://arcapita.com/insights/",
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "Indexed via DSV/Lintara article on /insights/.",
+    "checked": "indexed"
+  },
+  {
+    "id": "sweid-sweid",
+    "name": "Sweid & Sweid",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No company newsroom found; Terralogix site https://terralogix.ae/ indexed.",
+    "checked": "not_found"
+  },
+  {
+    "id": "dutco",
+    "name": "Dutco Group",
+    "newsroomUrl": null,
+    "rssUrl": null,
+    "sitemapUrl": null,
+    "notes": "No company newsroom found.",
+    "checked": "not_found"
+  }
+]
