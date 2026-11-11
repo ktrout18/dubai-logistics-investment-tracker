@@ -282,3 +282,49 @@ describe('pipeline-stage figures', () => {
     expect(m.investmentAnnouncements.disclosed.byCurrency).toEqual({});
   });
 });
+
+describe('primaryUnspecified (reported area, basis not stated)', () => {
+  const withAreas = (p: Project, areas: Project['areas'], primaryAreaIndex?: number): Project => {
+    const q = { ...cloneProjects([p])[0]!, areas };
+    if (primaryAreaIndex === undefined) delete q.primaryAreaIndex;
+    else q.primaryAreaIndex = primaryAreaIndex;
+    return q;
+  };
+  const src = 'https://news.example.com/x';
+
+  it('sums only primary measures whose basis is unspecified, never secondary ones', () => {
+    const a = withAreas(alpha, [{ valueM2: 67_000, basis: 'unspecified', sourceUrl: src }], 0);
+    const b = withAreas(beta, [
+      { valueM2: 20_000, basis: 'gla', sourceUrl: src },
+      { valueM2: 1_100_000, basis: 'unspecified', sourceUrl: src },
+    ], 0);
+    // No primaryAreaIndex: the first measure is primary.
+    const g = withAreas(gamma, [
+      { valueM2: 30_000, basis: 'unspecified', sourceUrl: src },
+      { valueM2: 50_000, basis: 'site_land_area', sourceUrl: src },
+    ]);
+    const ps = [a, b, g, ...FIXTURE_PROJECTS.filter((p) => ![alpha.id, beta.id, gamma.id].includes(p.id))];
+    const m = computeMetrics(ps, 2026);
+    const all = [m.gradeADelivered, m.gradeAProbableDelivered, m.otherModernDelivered];
+    const ids = all.flatMap((x) => x.primaryUnspecified.projectIds).sort();
+    expect(ids).toEqual([alpha.id, gamma.id].sort());
+    const total = all.reduce((t, x) => t + x.primaryUnspecified.totalM2, 0);
+    expect(total).toBe(97_000);
+    // Existing per-basis fields are unchanged and still separate.
+    expect(m.otherModernDelivered.areas.gla.projectIds).toContain(beta.id);
+  });
+
+  it('lists only projects with no area measure at all as area not disclosed', () => {
+    const none = withAreas(alpha, []);
+    const m = computeMetrics([none], 2026);
+    expect(m.gradeADelivered.withoutAnyAreaIds).toEqual([alpha.id]);
+    expect(m.gradeADelivered.primaryUnspecified).toEqual({ totalM2: 0, projectIds: [] });
+    const m2 = computeMetrics(FIXTURE_PROJECTS, 2026);
+    expect(m2.gradeADelivered.withoutAnyAreaIds).toEqual([]);
+  });
+
+  it('is present on every bucket including committed and under construction', () => {
+    expect(m2026.committedNotStarted.primaryUnspecified).toBeDefined();
+    expect(m2026.underConstruction.all.primaryUnspecified).toBeDefined();
+  });
+});

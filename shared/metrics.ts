@@ -138,6 +138,16 @@ export interface ProjectBucket {
   areas: AreaBreakdown;
   /** Projects in the bucket with no warehouse_gfa / gla / mixed_building_area figure (floor space undisclosed). */
   withoutBuildingAreaIds: string[];
+  /**
+   * Reported area whose basis the source does not state: Σ over bucket
+   * projects whose PRIMARY measure (`primaryAreaIndex`, else the first
+   * measure) has basis `unspecified`, counting that primary measure only.
+   * Secondary unspecified measures are excluded. Never add this to any other
+   * basis total.
+   */
+  primaryUnspecified: BasisTotal;
+  /** Projects in the bucket with no area measure at all (area not disclosed). */
+  withoutAnyAreaIds: string[];
 }
 
 export interface StatusCount {
@@ -241,12 +251,32 @@ export function isDeliveredInYear(
   return isDeliveredStatus(p.status) && p.actualCompletion !== undefined && yearOf(p.actualCompletion.date) === year;
 }
 
+/** The project's primary area measure: `primaryAreaIndex`, else the first measure. */
+export function primaryAreaMeasure(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): Project['areas'][number] | undefined {
+  return (p.primaryAreaIndex !== undefined ? p.areas[p.primaryAreaIndex] : undefined) ?? p.areas[0];
+}
+
+/** Σ primary measures with basis `unspecified` (see `ProjectBucket.primaryUnspecified`). */
+export function sumPrimaryUnspecified(projects: readonly Pick<Project, 'id' | 'areas' | 'primaryAreaIndex'>[]): BasisTotal {
+  let total = 0;
+  const projectIds: string[] = [];
+  for (const p of projects) {
+    const m = primaryAreaMeasure(p);
+    if (m?.basis !== 'unspecified') continue;
+    total += m.valueM2;
+    projectIds.push(p.id);
+  }
+  return { totalM2: roundTo(total, 2), projectIds };
+}
+
 function bucket(projects: readonly Project[]): ProjectBucket {
   return {
     projectCount: projects.length,
     projectIds: projects.map((p) => p.id),
     areas: sumAreasByBasis(projects),
     withoutBuildingAreaIds: projects.filter((p) => !hasBuildingArea(p)).map((p) => p.id),
+    primaryUnspecified: sumPrimaryUnspecified(projects),
+    withoutAnyAreaIds: projects.filter((p) => p.areas.length === 0).map((p) => p.id),
   };
 }
 

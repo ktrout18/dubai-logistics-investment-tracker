@@ -3,10 +3,13 @@
   "lastRunStatus": "never_run",
   "sourceScans": [],
   "coverageLimitations": [
-    "The register is not exhaustive: it lists only projects found in public sources and verified to the stated level.",
-    "Seed data from the owner's research PDF has not yet been imported.",
-    "Private, unannounced and owner-occupier developments are frequently missing from public sources.",
-    "Area figures are reported on the basis the source gives (GFA, GLA, land, yard); figures of different bases are never added together."
+    "Seed note (11 Nov 2026): the register was seeded from the owner's November 2026 briefing PDF (26 rows plus its 3 'not counted' items) and checked against public sources; the briefing view reproduces the PDF's figures 'as reported', while strict metrics follow each source's own measurement basis and status. See docs/SEED_NOTES.md.",
+    "The register is not exhaustive: it lists only projects found in public sources and verified to the stated level. Further candidates are held in the pending-review list until an official source confirms them.",
+    "Many sources were seen only through search-engine results ('indexed'), not read directly; each source shows its verification level. Pages on wam.ae need JavaScript and could not be read, tecomgroup.ae refused automated requests, and terralogix.ae was unreachable.",
+    "Investment values are undisclosed for most projects; where disclosed they are summed per currency and never converted except via the USD peg.",
+    "Area figures are reported on the basis the source gives (GFA, GLA, mixed building, land, yard, district). Many sources do not state the basis; those figures are marked 'unspecified' and never enter floor-space totals, so strict warehouse floor-space figures are lower than headline totals.",
+    "Opening and completion dates are often given only as a release date, month, quarter or half-year; precision is recorded with each date.",
+    "Private, unannounced and owner-occupier developments are frequently missing from public sources."
   ],
   "exhaustive": false
 }

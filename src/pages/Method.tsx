@@ -1,0 +1,247 @@
+import { useEffect, useMemo } from 'react';
+import {
+  CHANGE_VERIFICATION_LABELS,
+  NET_NEW_BASELINE_DATE,
+  REVIEW_KIND_LABELS,
+  REVIEW_STATE_LABELS,
+  RUN_STATUS_LABELS,
+  SCAN_STATUS_LABELS,
+  VERIFICATION_LABELS,
+  VERIFICATION_LEVELS,
+  computePresentedTotals,
+} from '../../shared/index.ts';
+import { ExtLink, PageHeader } from '../components/ui.tsx';
+import { useData } from '../lib/data.tsx';
+import { formatDate, formatDubaiDateTime } from '../lib/format.ts';
+import { hrefFor } from '../lib/router.ts';
+
+function valueText(v: unknown): string {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') return String(v);
+  const s = JSON.stringify(v);
+  return s.length > 140 ? `${s.slice(0, 140)}…` : s;
+}
+
+function proposedSummary(p: Record<string, unknown>): string {
+  const name = typeof p.name === 'string' ? p.name : undefined;
+  const keys = Object.keys(p);
+  if (name) return name;
+  return keys.slice(0, 4).join(', ') + (keys.length > 4 ? '…' : '');
+}
+
+export function Method() {
+  const { data, byId } = useData();
+  const open = data.pendingReview.items.filter((i) => i.state === 'open').sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  const changes = [...data.changelog.changes].sort((a, b) => b.appliedAt.localeCompare(a.appliedAt)).slice(0, 50);
+  const meta = data.meta;
+  const presented = useMemo(() => computePresentedTotals(data.register.projects, new Date().getUTCFullYear()), [data.register.projects]);
+
+  useEffect(() => {
+    // Support in-page anchors like #/method#review
+    const frag = window.location.hash.split('#')[2];
+    if (frag) document.getElementById(frag)?.scrollIntoView();
+  }, []);
+
+  return (
+    <div className="page">
+      <PageHeader kicker="Method" title="How figures are counted">
+        The register lists projects found in public sources. It is not exhaustive. Each figure on this site links to the projects and sources behind it.
+      </PageHeader>
+
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <section className="card p-5 sm:p-6" aria-labelledby="rules">
+          <h2 id="rules" className="text-lg font-semibold">
+            Counting rules
+          </h2>
+          <ol className="mt-3 list-decimal space-y-3 pl-5 text-[15px] leading-relaxed">
+            <li>
+              <strong>Measurement bases are never mixed.</strong> Gross floor area (GFA), gross leasable area (GLA) and mixed building area are shown
+              as separate figures. Land, open-yard and district areas are not floor space and appear only in their own labelled place.
+            </li>
+            <li>
+              <strong>Grade-A needs evidence.</strong> A facility is Grade-A <em>confirmed</em> only when a source states the grade or its specification
+              (for example clear height, floor loading, certification). <em>Probable</em> Grade-A is shown separately and never merged with confirmed.
+              Everything else is reported as other modern space.
+            </li>
+            <li>
+              <strong>Delivered means evidenced.</strong> A facility counts as opened or completed in a year only when a source published at or after
+              completion confirms it. Forecast completion dates are always labelled as forecasts and never count as delivery.
+            </li>
+            <li>
+              <strong>Phases, not umbrellas.</strong> When a park is built in phases, each phase is counted; the umbrella project is listed for context but
+              its area and investment are excluded from totals so nothing is counted twice.
+            </li>
+            <li>
+              <strong>Dubai only.</strong> Totals cover projects in Dubai. Projects elsewhere are listed under regional context and never enter Dubai
+              figures.
+            </li>
+            <li>
+              <strong>Money as published.</strong> Investment values are summed per currency and never converted, except AED values a source states
+              itself or USD at the official peg, which are labelled.
+            </li>
+            <li>
+              <strong>Net new</strong> means new supply completed after {formatDate(NET_NEW_BASELINE_DATE)}.
+            </li>
+          </ol>
+        </section>
+
+        <div className="space-y-5">
+          <section className="card p-5 sm:p-6" aria-labelledby="asreported">
+            <h2 id="asreported" className="text-lg font-semibold">
+              Floor space as reported
+            </h2>
+            <p className="mt-3 text-[15px] leading-relaxed">
+              The headline sentence and the briefing snapshot follow the owner&apos;s briefing: they add up the area figure each source gives for a
+              facility, whatever its basis. That is a quick, readable total, not a like-for-like measure. The figure cards beneath the headline are the
+              strict figures, one per basis.
+            </p>
+            {presented.openings.rows.length > 0 && (
+              <p className="mt-3 text-sm text-ink-muted">
+                The briefing lists {presented.openings.openedCount} facilities as opened and {presented.openings.completedOnlyCount} as completed. Strictly, by
+                status, sources confirm only completion (not opening) for {presented.openings.statusCompletedOnlyCount} of them.
+              </p>
+            )}
+            <p className="mt-3 text-sm text-ink-muted">
+              Many sources give an area without saying whether it is gross, leasable or plot area. Where that is a project&apos;s main figure, it is
+              shown as &ldquo;reported area, basis not stated&rdquo;, as its own figure, and never added to GFA, GLA or mixed building area.
+            </p>
+          </section>
+          <section className="card p-5 sm:p-6" aria-labelledby="verified">
+            <h2 id="verified" className="text-lg font-semibold">
+              What &ldquo;verified&rdquo; means
+            </h2>
+            <ul className="mt-3 space-y-2 text-[15px]">
+              {VERIFICATION_LEVELS.map((v) => (
+                <li key={v}>
+                  <strong className="capitalize">{v}:</strong> {VERIFICATION_LABELS[v]}.
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-sm text-ink-muted">
+              A project counts as verified when at least one of its sources was read directly. Changes found by the automated check are applied only
+              with an official source or several independent ones; everything else waits for human review below.
+            </p>
+          </section>
+          <section className="card p-5 sm:p-6" aria-labelledby="runs">
+            <h2 id="runs" className="text-lg font-semibold">
+              Automated checks
+            </h2>
+            <p className="mt-3 text-sm">
+              Last run: {meta.lastAttemptedRun ? formatDubaiDateTime(meta.lastAttemptedRun) : 'never'} ({RUN_STATUS_LABELS[meta.lastRunStatus]}). Last
+              success: {meta.lastSuccessfulRun ? formatDubaiDateTime(meta.lastSuccessfulRun) : 'none yet; the data is the verified seed'}.
+            </p>
+            {meta.sourceScans.length > 0 && (
+              <ul className="mt-3 space-y-1 text-sm text-ink-muted">
+                {meta.sourceScans.map((s) => (
+                  <li key={s.sourceId}>
+                    {s.name}: {SCAN_STATUS_LABELS[s.status]}
+                    {s.note ? ` (${s.note})` : ''}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
+      </div>
+
+      <section id="review" className="mt-10 scroll-mt-4" aria-labelledby="review-h">
+        <h2 id="review-h" className="text-xl font-semibold">
+          Awaiting review <span className="num text-ink-soft">({open.length})</span>
+        </h2>
+        <p className="mt-1 text-sm text-ink-muted">Findings held back from the register until a person checks them. Shown read-only.</p>
+        {open.length === 0 ? (
+          <p className="mt-3 text-sm text-ink-soft">Nothing is waiting for review.</p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {open.map((i) => (
+              <li key={i.id} className="card p-4 text-sm">
+                <p className="flex flex-wrap items-center gap-2">
+                  <span className="rounded bg-[#EEF2F3] px-1.5 py-0.5 text-xs font-medium">{REVIEW_KIND_LABELS[i.kind]}</span>
+                  <span className="font-medium">
+                    {i.projectId && byId.get(i.projectId) ? (
+                      <a href={hrefFor(`/project/${i.projectId}`)}>{byId.get(i.projectId)!.name}</a>
+                    ) : (
+                      proposedSummary(i.proposed)
+                    )}
+                  </span>
+                  <span className="text-xs text-ink-soft">
+                    {REVIEW_STATE_LABELS[i.state]} · found {formatDubaiDateTime(i.createdAt)}
+                  </span>
+                </p>
+                <p className="mt-2">
+                  <strong className="font-medium">Why held:</strong> {i.reasonHeld}
+                </p>
+                <ul className="mt-2 space-y-1">
+                  {i.evidence.map((e) => (
+                    <li key={e.url} className="text-ink-muted">
+                      <ExtLink href={e.url} />
+                      {e.publishedDate && ` · ${formatDate(e.publishedDate)}`}
+                      {e.quote && <q className="ml-1 italic">{e.quote}</q>}
+                    </li>
+                  ))}
+                </ul>
+                {i.issueUrl && (
+                  <p className="mt-1">
+                    <ExtLink href={i.issueUrl}>Review issue</ExtLink>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="mt-10" aria-labelledby="changes-h">
+        <h2 id="changes-h" className="text-xl font-semibold">
+          Recent changes
+        </h2>
+        {changes.length === 0 ? (
+          <p className="mt-3 text-sm text-ink-soft">No changes recorded yet.</p>
+        ) : (
+          <div className="card mt-4 overflow-x-auto">
+            <table className="data-table">
+              <caption>Recent changes to the register</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Project</th>
+                  <th scope="col">Field</th>
+                  <th scope="col">Previous → new</th>
+                  <th scope="col">Reason</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Verification</th>
+                  <th scope="col">Applied</th>
+                </tr>
+              </thead>
+              <tbody>
+                {changes.map((c) => (
+                  <tr key={c.id}>
+                    <th scope="row" className="border-b border-line px-3 py-2.5 text-left align-top font-normal">
+                      <a href={hrefFor(`/project/${c.projectId}`)}>{byId.get(c.projectId)?.name ?? c.projectId}</a>
+                    </th>
+                    <td>
+                      <code className="text-xs">{c.field}</code>
+                    </td>
+                    <td className="min-w-[12rem] max-w-[22rem] break-words">
+                      <span className="text-ink-muted line-through">{valueText(c.previousValue)}</span> →{' '}
+                      <span className="font-medium">{valueText(c.newValue)}</span>
+                    </td>
+                    <td className="min-w-[12rem]">{c.reason}</td>
+                    <td className="whitespace-nowrap">
+                      <ExtLink href={c.evidenceUrl} />
+                      <span className="block text-xs text-ink-soft">{formatDate(c.evidenceDate)}</span>
+                    </td>
+                    <td>{CHANGE_VERIFICATION_LABELS[c.verificationStatus]}</td>
+                    <td className="whitespace-nowrap text-xs">
+                      {formatDubaiDateTime(c.appliedAt)}
+                      <span className="block text-ink-soft">{c.appliedBy === 'pipeline' ? 'Pipeline' : 'Manual'}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}

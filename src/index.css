@@ -1,3 +1,111 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper text-ink antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  :focus-visible {
+    outline: 3px solid #00838f;
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  a {
+    @apply text-accent-700 underline decoration-accent-300 underline-offset-2 hover:decoration-accent-700;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply text-ink;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply relative rounded-lg border border-line bg-white;
+  }
+  .kicker {
+    @apply text-xs font-semibold uppercase tracking-wider text-ink-soft;
+  }
+  .btn {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-line bg-white px-3 py-1.5 text-sm font-medium text-ink no-underline shadow-sm hover:border-accent-300 hover:bg-accent-50;
+  }
+  .btn-primary {
+    @apply border-accent-700 bg-accent-700 text-white hover:bg-accent-800 hover:border-accent-800;
+  }
+  .field {
+    @apply block w-full rounded-md border border-[#B8C3C7] bg-white px-2.5 py-1.5 text-sm text-ink;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .data-table {
+    @apply w-full border-collapse text-sm;
+  }
+  .data-table caption {
+    @apply sr-only;
+  }
+  .data-table :where(thead th) {
+    @apply whitespace-nowrap border-b border-line bg-[#F3F6F7] px-2.5 py-2 text-left text-xs font-semibold uppercase tracking-wide text-ink-muted;
+  }
+  .data-table :where(td) {
+    @apply border-b border-line px-2.5 py-2.5 align-top;
+  }
+  .data-table tbody tr:hover {
+    @apply bg-accent-50/50;
+  }
+}
+
+/* Print: drop navigation and controls, keep content. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .card {
+    break-inside: avoid;
+  }
+}
+
+/* Snapshot slides print one per landscape page. */
+@media print {
+  @page snapshot {
+    size: 16in 9in;
+    margin: 0;
+  }
+  .slide-print {
+    page: snapshot;
+    break-after: page;
+  }
+}
+
+@media print {
+  .slide-outer {
+    width: 16in !important;
+    height: 9in !important;
+    box-shadow: none !important;
+  }
+  .slide-inner {
+    transform: scale(0.96) !important;
+  }
+}
+
+/* Keep visually-hidden text inside horizontally scrolling tables from widening the page. */
+.overflow-x-auto {
+  position: relative;
+}

@@ -90,6 +90,7 @@ vitest and tsx all resolve them.
 | `phaseLabel?` | string | e.g. "Phase 1". Expected whenever `parentId` is set. |
 | `provenance` | `seed_pdf | manual | pipeline` | |
 | `seedNote?` | string | Original PDF wording / qualifications. |
+| `presentation?` | `Presentation` | Briefing-view labels reproducing the owner's Nov 2026 PDF ("as reported"). Never used by strict metrics. See §2a. |
 | `createdAt`, `updatedAt` | timestamp | `updatedAt ≥ createdAt`. |
 
 ### Investment
@@ -142,6 +143,42 @@ error (`ACTUAL_COMPLETION_SOURCE_PREDATES`): such a source can only be a forecas
 `id` is unique within the project (`makeEventId`). Events must be sorted by
 date and not in the future.
 
+### Presentation (briefing view, §2a)
+
+`PresentationSchema` / `type Presentation`, optional on a project. It holds
+the owner's PDF wording and charted figures so the first public view matches
+the PDF while every row still links to its strict, sourced record. Umbrellas
+never carry one.
+
+| Field | Type | Notes |
+|---|---|---|
+| `pdfRef?` | int 1–26 | Row in the owner's Nov 2026 PDF. Absent for `not_counted` / `added_after_pdf` rows. |
+| `section` | `PresentationSection` | `openings`, `being_built`, `signed_or_announced`, `not_counted`, `added_after_pdf`. |
+| `partners` | string[] | Company chips as shown, lead first. Display only (filtering uses `companies`). |
+| `descriptor`, `locationLabel`, `areaLabel`, `dateLabel` | string | PDF text as shown (e.g. "Not disclosed (AED 300 m)", "Q3, completed"). |
+| `presentedAreaM2?` | number | The figure the PDF charts, if any. |
+| `presentedAreaKind?` | `floor | district | land | yard` | What the PDF says the figure is. |
+| `countedInPresentedTotal` | boolean | True only for rows inside the PDF subtotals. |
+| `category` | `grade_a_developer | other_modern | specialised | land_site_yard` | PDF colour category. |
+| `sortOrder` | number | Row order within the section. |
+| `presentedMilestone?` | `opened | completed_only` | Openings rows only: how the PDF counts the row ("opened 13 … and completed one more"). Default `opened`. |
+| `differsFromSources?` | string | Short plain note where sources disagree with the PDF wording or figure. |
+
+Enums: `PRESENTATION_SECTIONS`, `PRESENTED_AREA_KINDS`,
+`PRESENTATION_CATEGORIES`, `PRESENTED_MILESTONES`, each with a `*_LABELS` map
+(also in `ENUM_LABELS` as `presentationSection`, `presentedAreaKind`,
+`presentationCategory`, `presentedMilestone`).
+
+**"As reported" vs strict.** `computePresentedTotals` (below) adds up
+`presentedAreaM2` across rows regardless of the source's measurement basis,
+and splits opened / completed-only by `presentedMilestone`, not by `status`.
+That reproduces the PDF; it is explicitly **not** a like-for-like metric.
+Strict figures come only from `computeMetrics`. Where the strict status is
+only `construction_completed` for a row the PDF calls opened (e.g. a source
+says "commissioning"), `presentedMilestone` stays `opened`, the difference
+goes in `differsFromSources`, and `statusCompletedOnlyCount` exposes the
+strict count.
+
 ### Phasing (umbrellas)
 
 A project that has at least one child (some project's `parentId` points at
@@ -183,6 +220,10 @@ label maps are also in `ENUM_LABELS` (use `labelFor(kind, value)`).
 | `REVIEW_STATES` | `ReviewState` | `REVIEW_STATE_LABELS` | open, accepted, rejected |
 | `RUN_STATUSES` | `RunStatus` | `RUN_STATUS_LABELS` | never_run, success, partial, failed |
 | `SCAN_STATUSES` | `ScanStatus` | `SCAN_STATUS_LABELS` | ok, fallback_used, failed, skipped |
+| `PRESENTATION_SECTIONS` | `PresentationSection` | `PRESENTATION_SECTION_LABELS` | openings, being_built, signed_or_announced, not_counted, added_after_pdf |
+| `PRESENTED_AREA_KINDS` | `PresentedAreaKind` | `PRESENTED_AREA_KIND_LABELS` | floor, district, land, yard |
+| `PRESENTATION_CATEGORIES` | `PresentationCategory` | `PRESENTATION_CATEGORY_LABELS` | grade_a_developer, other_modern, specialised, land_site_yard |
+| `PRESENTED_MILESTONES` | `PresentedMilestone` | `PRESENTED_MILESTONE_LABELS` | opened, completed_only |
 
 Status groupings: `DELIVERED_STATUSES` (construction_completed, operational),
 `COMMITTED_NOT_STARTED_STATUSES` (signed_agreement, investment_committed),
@@ -253,7 +294,8 @@ agreement_signed, investment_committed).
 ```ts
 interface BasisTotal { totalM2: number; projectIds: string[] }          // totalM2 rounded to 2 dp
 type AreaBreakdown = Record<AreaBasis, BasisTotal>;
-interface ProjectBucket { projectCount: number; projectIds: string[]; areas: AreaBreakdown; withoutBuildingAreaIds: string[] }
+interface ProjectBucket { projectCount: number; projectIds: string[]; areas: AreaBreakdown; withoutBuildingAreaIds: string[];
+                         primaryUnspecified: BasisTotal; withoutAnyAreaIds: string[] }
 interface StatusCount { count: number; projectIds: string[] }
 
 interface Metrics {
@@ -281,6 +323,16 @@ interface Metrics {
 
 `withoutBuildingAreaIds` lists bucket members with no GFA/GLA/mixed figure,
 so the UI can say "N further projects with floor area not disclosed".
+
+`primaryUnspecified` is the "reported area, basis not stated" figure: the sum
+over bucket members whose **primary** measure (`primaryAreaIndex`, else the
+first measure; `primaryAreaMeasure(p)`) has basis `unspecified`, counting that
+primary measure only. Secondary `unspecified` measures (e.g. a whole-campus
+figure next to a storage figure) are excluded. It is shown as its own figure
+and never added to GFA, GLA or mixed building area; `areas.unspecified`
+(largest unspecified measure per project) is unchanged. `withoutAnyAreaIds`
+lists members with no area measure at all ("area not disclosed").
+Helpers: `primaryAreaMeasure(p)`, `sumPrimaryUnspecified(projects)`.
 
 ---
 
@@ -447,6 +499,29 @@ function sumAreasByBasis(projects): AreaBreakdown;
 function emptyAreaBreakdown(): AreaBreakdown;
 function hasBuildingArea(p: Pick<Project,'areas'>): boolean;
 ```
+
+### `presentation.ts`
+```ts
+interface PresentedTotals {
+  year: number;
+  openings: { rows: Project[]; openedCount: number; completedOnlyCount: number; statusCompletedOnlyCount: number;
+              disclosedFloorCount: number; floorAreaM2: number };
+  beingBuilt: { rows: Project[]; floorAreaM2: number };
+  signedOrAnnounced: { rows: Project[] };
+  notCounted: { rows: Project[] };
+  addedAfterPdf: { rows: Project[] };
+}
+function computePresentedTotals(projects: readonly Project[], year: number): PresentedTotals;
+function presentedRows(projects: readonly Project[], section: PresentationSection): Project[];  // sorted by sortOrder, then id
+function isCountedPresentedArea(p: Project): boolean;   // countedInPresentedTotal && presentedAreaM2 present
+function sumPresentedArea(rows: readonly Project[]): number;
+```
+Rows are sorted by `sortOrder`. `floorAreaM2` = Σ `presentedAreaM2` where
+`countedInPresentedTotal` ("as reported", mixed bases). `openedCount` =
+openings rows minus `completedOnlyCount` (rows with `presentedMilestone:
+'completed_only'`); `statusCompletedOnlyCount` = openings rows whose `status`
+is `construction_completed`. `disclosedFloorCount` = openings rows with a
+counted figure.
 
 ### `validate.ts`
 ```ts
