@@ -27,7 +27,7 @@ the production build (`dist/`), on the real register.
 | 7 | MoU → signed agreement updates the existing project | met offline only |
 | 8 | A blocked source triggers fallback research | met offline only (fetch-side fallbacks also seen live) |
 | 9 | Unverified claims are held for review | met offline only |
-| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | see §10 (partly demonstrated) |
+| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; schedule off by the owner's choice; no live API run yet |
 
 ---
 
@@ -139,6 +139,50 @@ the production build (`dist/`), on the real register.
 * "f. all sources failing": data byte-identical, run `failed`,
   `lastSuccessfulRun` not advanced, no "no new announcements" claim.
 
-## 10. The scheduled workflow runs and the site reflects validated changes
+## 10. The scheduled workflow runs and the site reflects validated changes — not yet demonstrated end to end
 
-To be completed after the workflow runs on GitHub (see below).
+What **is** shown:
+
+* **The workflow runs on GitHub.** Manual dispatch in zero-spend mode
+  (`dry_run: true`, `search_provider: none`, `extract: false`, `since: 14d`,
+  `redeploy: true`) on commit `1d7c331`:
+  https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43031415378
+  → **success** (ingest job, `deploy / build`, `deploy / deploy` all green).
+  * Plan line: `event=workflow_dispatch dry_run=true search=none extract=false anthropic_api_calls_possible=false redeploy=true`.
+  * `ANTHROPIC_API_KEY secret present: true` (the key is configured; it was
+    not passed to the pipeline and has not been used).
+  * CLI: `mode: dry run; search: none; extraction: off; Anthropic API calls possible: no (zero spend)`.
+  * Result: `Run run-20261111T134227Z (dry run): PARTIAL.` 14 of 33 sources
+    scanned (DP World and Aldar via the sitemap fallback), 44 new documents,
+    0 extracted, 17 relevant documents not analysed (extraction off),
+    searches used 0/40, estimated cost $0.0000, files written: none.
+  * The 19 sources reported "could NOT be scanned" are the search-only
+    sources (no search provider in this mode) plus Dubai Trade, WAM, DHL and
+    DSV (no article links in the listing HTML) and PCFC (HTTP 403 on both
+    pages). On the GitHub runner, unlike the build container, the Emirates
+    media centre listing worked (18 links).
+  * `npm run validate` passed on the runner; the commit step was skipped (dry
+    run) and `main` was not changed by the run.
+  * The reusable deploy ran from the ingest workflow (`redeploy`) and
+    published the site with `pages: write` / `id-token: write`.
+* **CI and Deploy on push** for `1d7c331`: CI run 43031402561 success,
+  Deploy run 43031402530 success.
+* **The commit path is guarded:** commit only when not a dry run, after
+  ingest and `npm run validate` both pass, and only if `data/` changed
+  (`pipeline/__tests__/units.test.ts` "ingest.yml: schedule gated by
+  SCHEDULE_ENABLED, zero-spend manual defaults, no secrets in the file").
+
+What is **not** shown yet:
+
+* **No scheduled run has happened**: the schedule (`30 4 * * *`,
+  `30 12 * * *` UTC) is wired but off until the owner sets the repository
+  variable `SCHEDULE_ENABLED` to `true`.
+* **No live Anthropic API run** (search or extraction) has been made, so no
+  automated data commit has yet gone through validation → commit → deploy,
+  and the site has not yet shown a pipeline-made change. Next step, with the
+  owner's go-ahead: a manual run with `search_provider: anthropic`,
+  `extract: true` and `dry_run` still ticked (about $1), then one with
+  `dry_run` unticked.
+* The deployed site could not be opened from the build container (its
+  network blocks github.io); the browser checks in §1–2 were made on the same
+  build served locally.

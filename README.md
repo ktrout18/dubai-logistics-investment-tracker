@@ -187,7 +187,10 @@ Both are explained step by step in [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md
     Zawya, Arabian Business, Logistics Middle East, Construction Week, Dubai
     Trade. Their listing URLs are unverified and most rely on search, which
     needs the paid search provider.
-* Without a search provider (`none`), search-only sources are skipped, so a
-  zero-spend run covers only the sources that can be fetched directly.
+* Without a search provider (`none`), search-only sources cannot be scanned
+  and are reported as failed, so a zero-spend run covers only the sources
+  that can be fetched directly (14 of 33 on the GitHub runner on
+  11 Nov 2026). Dubai Trade, WAM, DHL and DSV listings had no article links
+  in their HTML on that run.
 * Many figures have no stated measurement basis, so strict floor-space totals
   are lower than headline totals. This is intended.
