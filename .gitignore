@@ -5,3 +5,4 @@ public/data/
 .DS_Store
 coverage/
 .env
+pipeline-runs/

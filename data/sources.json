@@ -1,4 +1,1125 @@
 {
   "schemaVersion": 1,
-  "sources": []
+  "note": "Owned by the pipeline (pipeline/sources.ts validates it). accessMethods are tried in order; see docs/PIPELINE.md. 'probe' records what a live request on the given date actually returned.",
+  "sources": [
+    {
+      "id": "dpworld",
+      "name": "DP World newsroom (UAE releases)",
+      "tier": "primary",
+      "kind": "port_operator",
+      "publisher": "DP World",
+      "domains": [
+        "www.dpworld.com",
+        "dpworld.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dpworld.com/en/news/uae",
+          "linkPattern": "/en/news/uae/[a-z0-9-]+"
+        },
+        {
+          "type": "sitemap",
+          "url": "https://www.dpworld.com/sitemap.xml",
+          "linkPattern": "/en/news/uae/[a-z0-9-]+",
+          "maxChildSitemaps": 9,
+          "note": "sitemap index of 9 child maps; <lastmod> is a crawl date, not a publication date"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dpworld.com",
+          "query": "DP World UAE Jebel Ali Jafza logistics warehouse news"
+        }
+      ],
+      "notes": "Listing redirects from /en/news/releases/uae/ to /en/news/uae and is rendered by JavaScript (Next.js): the HTML has no article links, so discovery falls back to the sitemap, then to site search.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.dpworld.com/en/news/releases/uae/ -> 200 after redirect to /en/news/uae; ~2 MB HTML, ~2 KB readable text, no article links (JS-rendered)",
+          "robots.txt 200: allows /en/news/; disallows /api/, /_next/",
+          "sitemap.xml 200: sitemap index with 9 children; sitemap-0 and sitemap-1 (500 URLs each) contained no /en/news/uae/ URLs"
+        ]
+      }
+    },
+    {
+      "id": "jafza",
+      "name": "Jafza (Jebel Ali Free Zone) news",
+      "tier": "primary",
+      "kind": "free_zone",
+      "publisher": "Jafza",
+      "domains": [
+        "www.jafza.ae",
+        "jafza.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.jafza.ae/resource-centre/media/news/",
+          "linkPattern": "/resource-centre/media/news/(?!page/)[a-z0-9-]+/?$"
+        },
+        {
+          "type": "site_search",
+          "site": "www.jafza.ae",
+          "query": "Jafza news logistics warehouse"
+        }
+      ],
+      "notes": "Server-rendered listing with dated article links; paginated (/page/2/).",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.jafza.ae/resource-centre/media/news/ -> 200, ~10 KB text, article links and dates present (e.g. 'Jafza expands automotive ecosystem with new Hellmann Indu logistics hub')",
+          "robots.txt 200: explicitly allows ClaudeBot/anthropic-ai; disallows /dlm_uploads/"
+        ]
+      }
+    },
+    {
+      "id": "dubai-south",
+      "name": "Dubai South newsroom",
+      "tier": "primary",
+      "kind": "free_zone",
+      "publisher": "Dubai South",
+      "domains": [
+        "www.dubaisouth.ae",
+        "dubaisouth.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dubaisouth.ae/en/newsroom",
+          "linkPattern": "/en/newsroom/[a-z0-9-]+"
+        },
+        {
+          "type": "sitemap",
+          "url": "https://www.dubaisouth.ae/sitemap.xml",
+          "linkPattern": "/en/newsroom/[a-z0-9-]+"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dubaisouth.ae",
+          "query": "Dubai South logistics district warehouse news"
+        }
+      ],
+      "notes": "Listing works directly with dated links. Covers EZDubai news too.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.dubaisouth.ae/en/newsroom -> 200, 19 article links with dates (e.g. 'Dubai South welcomes Dior regional distribution centre')",
+          "robots.txt 200: disallows /search, /api/internal/, *.pdf"
+        ]
+      }
+    },
+    {
+      "id": "ezdubai",
+      "name": "EZDubai (Dubai South e-commerce zone)",
+      "tier": "primary",
+      "kind": "free_zone",
+      "publisher": "EZDubai / Dubai South",
+      "domains": [
+        "www.ezdubai.ae",
+        "ezdubai.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dubaisouth.ae/en/newsroom",
+          "linkPattern": "/en/newsroom/[a-z0-9-]+",
+          "keywords": [
+            "ezdubai",
+            "e-commerce",
+            "ecommerce"
+          ],
+          "note": "EZDubai has no newsroom of its own; its news is published in the Dubai South newsroom"
+        },
+        {
+          "type": "site_search",
+          "site": "www.ezdubai.ae",
+          "query": "EZDubai e-commerce logistics hub"
+        }
+      ],
+      "notes": "www.ezdubai.ae home page has no news section (no article links); news appears in the Dubai South newsroom and on WAM.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.ezdubai.ae/ -> 200, no news links",
+          "robots.txt 200, sitemap.xml listed"
+        ]
+      }
+    },
+    {
+      "id": "tecom-dic",
+      "name": "TECOM Group / Dubai Industrial City press releases",
+      "tier": "primary",
+      "kind": "developer",
+      "publisher": "Dubai Industrial City (TECOM Group)",
+      "domains": [
+        "dubaiindustrialcity.ae",
+        "tecomgroup.ae",
+        "prod.tecomgroup.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://dubaiindustrialcity.ae/media/press-releases",
+          "linkPattern": "/media/press-release/[a-z0-9-]+"
+        },
+        {
+          "type": "site_search",
+          "site": "tecomgroup.ae",
+          "query": "TECOM Group Dubai Industrial City warehouse logistics press release",
+          "note": "tecomgroup.ae answered 403 to direct requests; only the search index is used for it"
+        }
+      ],
+      "notes": "dubaiindustrialcity.ae home page lists dated press releases (/media/press-release/<slug>). tecomgroup.ae refuses direct requests (403) and is not retried.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://dubaiindustrialcity.ae/ -> 200, press-release links with dates (e.g. 'Al Sharqi Shipping inaugurates AED 70 million multi-temperature ... hub at Dubai Industrial City')",
+          "tecomgroup.ae -> 403 (known, not retried)"
+        ]
+      }
+    },
+    {
+      "id": "dubai-customs",
+      "name": "Dubai Customs news",
+      "tier": "primary",
+      "kind": "government",
+      "publisher": "Dubai Customs",
+      "domains": [
+        "www.dubaicustoms.gov.ae",
+        "dubaicustoms.gov.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "alt_url",
+          "url": "https://www.dubaicustoms.gov.ae/en/mobile/Pages/News.aspx",
+          "linkPattern": "newsdetails\\.aspx\\?itemid=\\d+",
+          "note": "mobile listing (SharePoint), single-quoted hrefs"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dubaicustoms.gov.ae",
+          "query": "Dubai Customs news logistics"
+        }
+      ],
+      "notes": "Mobile news page works directly: dated items linking to newsdetails.aspx?itemid=N. robots.txt request was reset by the server during the probe; the fetcher then skips the host for that run (conservative).",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.dubaicustoms.gov.ae/en/mobile/Pages/News.aspx -> 200, dated items, links newsdetails.aspx?itemid=2203 ...",
+          "GET /robots.txt -> connection reset (curl 35)"
+        ]
+      }
+    },
+    {
+      "id": "dubai-trade",
+      "name": "Dubai Trade announcements (DP World notices)",
+      "tier": "primary",
+      "kind": "government",
+      "publisher": "Dubai Trade",
+      "domains": [
+        "www.dubaitrade.ae",
+        "dubaitrade.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dubaitrade.ae/en/news-announcements/dp-world",
+          "linkPattern": "/en/news-announcements/"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dubaitrade.ae",
+          "query": "Dubai Trade announcement logistics"
+        }
+      ],
+      "notes": "Operational notices; dates on the page were inconsistent in desk research. Mostly context, rarely project news.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "pcfc",
+      "name": "Ports, Customs and Free Zone Corporation (PCFC)",
+      "tier": "primary",
+      "kind": "government",
+      "publisher": "PCFC",
+      "domains": [
+        "pcfc.ae",
+        "www.pcfc.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://pcfc.ae/en/Pages/news.aspx",
+          "linkPattern": "newsdetails\\.aspx"
+        },
+        {
+          "type": "alt_url",
+          "url": "https://pcfc.ae/en/Pages/Warnings-and-Circulars.aspx",
+          "linkPattern": "\\.aspx"
+        },
+        {
+          "type": "site_search",
+          "site": "pcfc.ae",
+          "query": "PCFC news Jebel Ali free zone"
+        }
+      ],
+      "notes": "Both owner-suggested pages answer 403 to our honest User-Agent; the pipeline does not retry or work around it and falls back to the search index and syndicated copies (Dubai Media Office, WAM).",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://pcfc.ae/en/Pages/news.aspx -> 403",
+          "GET https://pcfc.ae/en/Pages/Warnings-and-Circulars.aspx -> 403",
+          "GET /robots.txt -> 404 (no restrictions published)"
+        ]
+      }
+    },
+    {
+      "id": "fujairah-port",
+      "name": "Port of Fujairah press releases (corridor context)",
+      "tier": "primary",
+      "kind": "port_operator",
+      "publisher": "Fujairah Ports Authority",
+      "domains": [
+        "fujairahport.ae",
+        "www.fujairahport.ae"
+      ],
+      "enabled": true,
+      "regionalContext": true,
+      "accessMethods": [
+        {
+          "type": "rss",
+          "url": "https://fujairahport.ae/feed/"
+        },
+        {
+          "type": "html_list",
+          "url": "https://fujairahport.ae/media-center/press-releases/",
+          "linkPattern": "fujairahport\\.ae/(?!category/|media-center/|wp-)[a-z0-9-]+/?$"
+        },
+        {
+          "type": "site_search",
+          "site": "fujairahport.ae",
+          "query": "Port of Fujairah press release"
+        }
+      ],
+      "notes": "Outside Dubai: findings are regional context only and never enter Dubai totals. WordPress feed works.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://fujairahport.ae/media-center/press-releases/ -> 200 (year category links)",
+          "GET https://fujairahport.ae/feed/ -> 200 application/rss+xml, items with pubDate"
+        ]
+      }
+    },
+    {
+      "id": "wam",
+      "name": "WAM Emirates News Agency",
+      "tier": "primary",
+      "kind": "news_agency",
+      "publisher": "WAM (Emirates News Agency)",
+      "domains": [
+        "www.wam.ae",
+        "wam.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.wam.ae/en/list/latest-news",
+          "linkPattern": "/en/article/"
+        },
+        {
+          "type": "site_search",
+          "site": "www.wam.ae",
+          "query": "Dubai logistics warehouse OR distribution centre OR free zone"
+        }
+      ],
+      "notes": "State news agency; syndicates government announcements. The listing HTML carries headlines and teasers but no article links (rendered by JavaScript); its API refused a request earlier. Discovery uses site search.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.wam.ae/en/list/latest-news -> 200, headlines/teasers in HTML but no article links",
+          "wam.ae/robots.txt -> 301 to www"
+        ]
+      }
+    },
+    {
+      "id": "dubai-media-office",
+      "name": "Government of Dubai Media Office",
+      "tier": "primary",
+      "kind": "government",
+      "publisher": "Dubai Media Office",
+      "domains": [
+        "www.mediaoffice.ae",
+        "mediaoffice.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.mediaoffice.ae/en",
+          "linkPattern": "/en/news/\\d{4}/",
+          "keywords": [
+            "logistic",
+            "warehous",
+            "distribution",
+            "cold-stor",
+            "cold-chain",
+            "freight",
+            "cargo",
+            "jafza",
+            "jebel-ali",
+            "dubai-south",
+            "industrial",
+            "fulfil",
+            "supply-chain",
+            "e-commerce",
+            "ecommerce",
+            "dp-world",
+            "dpworld",
+            "free-zone",
+            "freezone",
+            "terminal",
+            "skycargo",
+            "dnata",
+            "aramex",
+            "dhl",
+            "dic",
+            "dip-",
+            "customs",
+            "trade",
+            "port",
+            "aviation",
+            "airport",
+            "manufactur",
+            "factory",
+            "economy"
+          ]
+        },
+        {
+          "type": "site_search",
+          "site": "www.mediaoffice.ae",
+          "query": "Dubai logistics warehouse industrial news"
+        }
+      ],
+      "notes": "Home page lists latest news (paths /en/news/YYYY/<month>/DD-MM/<slug>, month sometimes misspelt, e.g. 'novemebr'). Keyword filter on slugs keeps unrelated government news out.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.mediaoffice.ae/en -> 200, 30+ /en/news/2026/... links",
+          "robots.txt 200: disallows /content, /upload/, /sitecore"
+        ]
+      }
+    },
+    {
+      "id": "emirates",
+      "name": "Emirates / Emirates SkyCargo media centre",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Emirates",
+      "domains": [
+        "www.emirates.com",
+        "emirates.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.emirates.com/media-centre/",
+          "linkPattern": "/media-centre/[a-z0-9-]+/?$"
+        },
+        {
+          "type": "rss",
+          "url": "https://www.emirates.com/media-centre/tagfeed/en-us/tags/Our__Business",
+          "note": "tag feed URL from desk research, unverified"
+        },
+        {
+          "type": "site_search",
+          "site": "www.emirates.com",
+          "query": "Emirates SkyCargo Dubai facility OR warehouse OR hub"
+        }
+      ],
+      "notes": "The probe's HTTP/2 stream to /media-centre/ was reset by the server; behaviour in CI unknown.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.emirates.com/media-centre/ -> HTTP/2 stream reset (curl 92)",
+          "robots.txt 200"
+        ]
+      }
+    },
+    {
+      "id": "dnata",
+      "name": "dnata media centre",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "dnata",
+      "domains": [
+        "www.dnata.com",
+        "dnata.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dnata.com/media-centre/en/",
+          "linkPattern": "/media-centre/(?!en/|ar-ae|media-library)[a-z0-9-]{15,}/?$"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dnata.com",
+          "query": "dnata cargo warehouse Dubai"
+        }
+      ],
+      "notes": "Presspage-hosted newsroom; dated article links in the HTML.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.dnata.com/media-centre/en/ -> 200, dated article links (e.g. 'dnata commits AED 175 million to expand ... UAE ground equipment fleet')"
+        ]
+      }
+    },
+    {
+      "id": "dhl",
+      "name": "DHL Group press releases",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "DHL Group",
+      "domains": [
+        "group.dhl.com",
+        "www.dhl.com",
+        "dhl.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://group.dhl.com/en/media-relations/press-releases.html",
+          "linkPattern": "/press-releases/\\d{4}/"
+        },
+        {
+          "type": "site_search",
+          "site": "group.dhl.com",
+          "query": "DHL Dubai OR UAE warehouse OR logistics hub"
+        }
+      ],
+      "notes": "Listing path inferred from article URLs.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "fedex",
+      "name": "FedEx newsroom",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "FedEx",
+      "domains": [
+        "newsroom.fedex.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "newsroom.fedex.com",
+          "query": "FedEx Dubai OR UAE hub OR facility"
+        }
+      ],
+      "notes": "No MEISA newsroom found; global newsroom via search.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "ups",
+      "name": "UPS press room",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "UPS",
+      "domains": [
+        "about.ups.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "about.ups.com",
+          "query": "UPS Dubai OR UAE facility"
+        }
+      ],
+      "notes": "Press room host about.ups.com assumed from desk research.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "dsv",
+      "name": "DSV press (UAE)",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "DSV",
+      "domains": [
+        "www.dsv.com",
+        "dsv.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.dsv.com/en-ae/about-dsv/press/news",
+          "linkPattern": "/press/news/"
+        },
+        {
+          "type": "site_search",
+          "site": "www.dsv.com",
+          "query": "DSV Dubai OR UAE logistics facility"
+        }
+      ],
+      "notes": "Listing inferred from indexed article paths.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "ceva",
+      "name": "CEVA Logistics",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "CEVA Logistics",
+      "domains": [
+        "www.cevalogistics.com",
+        "cevalogistics.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.cevalogistics.com",
+          "query": "CEVA Logistics Dubai OR UAE warehouse"
+        }
+      ],
+      "notes": "No newsroom URL confirmed.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "aramex",
+      "name": "Aramex",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Aramex",
+      "domains": [
+        "www.aramex.com",
+        "aramex.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.aramex.com",
+          "query": "Aramex Dubai logistics facility"
+        }
+      ],
+      "notes": "Aramex releases also appear on Zawya.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "maersk",
+      "name": "Maersk",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Maersk",
+      "domains": [
+        "www.maersk.com",
+        "maersk.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.maersk.com",
+          "query": "Maersk Dubai OR Jebel Ali warehouse OR logistics park"
+        }
+      ],
+      "notes": "No newsroom URL confirmed.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "kuehne-nagel",
+      "name": "Kuehne+Nagel newsroom",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Kuehne+Nagel",
+      "domains": [
+        "newsroom.kuehne-nagel.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "newsroom.kuehne-nagel.com",
+          "query": "Kuehne+Nagel Dubai OR UAE"
+        }
+      ],
+      "notes": "Added: global forwarder with Dubai facilities.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "aldar",
+      "name": "Aldar news and media",
+      "tier": "primary",
+      "kind": "developer",
+      "publisher": "Aldar",
+      "domains": [
+        "www.aldar.com",
+        "aldar.com",
+        "cdn.aldar.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "html_list",
+          "url": "https://www.aldar.com/en/news-and-media",
+          "linkPattern": "/en/news-and-media/[a-z0-9-]+"
+        },
+        {
+          "type": "sitemap",
+          "url": "https://www.aldar.com/sitemap.xml",
+          "linkPattern": "/en/news-and-media/[a-z0-9-]+"
+        },
+        {
+          "type": "site_search",
+          "site": "www.aldar.com",
+          "query": "Aldar logistics OR warehouse OR industrial Dubai"
+        }
+      ],
+      "notes": "Abu Dhabi developer active in Dubai logistics. The listing answered 403; the sitemap (listed in robots.txt) is the next method.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://www.aldar.com/en/news-and-media -> 403",
+          "robots.txt 200 with Sitemap: https://www.aldar.com/sitemap.xml"
+        ]
+      }
+    },
+    {
+      "id": "arcapita",
+      "name": "Arcapita / Lintara insights",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Arcapita",
+      "domains": [
+        "arcapita.com",
+        "www.arcapita.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "arcapita.com",
+          "query": "Arcapita Lintara Dubai logistics warehouse"
+        }
+      ],
+      "notes": "Lintara (Arcapita logistics platform) has no confirmed own domain; searched via arcapita.com.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "sweid-sweid",
+      "name": "Sweid & Sweid / Terralogix",
+      "tier": "primary",
+      "kind": "developer",
+      "publisher": "Sweid & Sweid",
+      "domains": [
+        "terralogix.ae",
+        "www.terralogix.ae"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "terralogix.ae",
+          "query": "Terralogix Sweid Dubai warehouse"
+        }
+      ],
+      "notes": "No company newsroom found; Terralogix site used as the closest official domain (unverified).",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "dutco",
+      "name": "Dutco Group",
+      "tier": "primary",
+      "kind": "company",
+      "publisher": "Dutco Group",
+      "domains": [
+        "www.dutco.com",
+        "dutco.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.dutco.com",
+          "query": "Dutco Dubai warehouse OR logistics"
+        }
+      ],
+      "notes": "Domain from desk research, unverified; no newsroom found.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "reuters",
+      "name": "Reuters",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Reuters",
+      "domains": [
+        "www.reuters.com",
+        "reuters.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.reuters.com",
+          "query": "Dubai logistics OR warehouse OR Jebel Ali"
+        }
+      ],
+      "notes": "Reputable wire; search only.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "the-national",
+      "name": "The National",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "The National",
+      "domains": [
+        "www.thenationalnews.com",
+        "thenationalnews.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "sitemap",
+          "url": "https://www.thenationalnews.com/arc/outboundfeeds/news-sitemap/?outputType=xml",
+          "keywords": [
+            "logistic",
+            "warehous",
+            "distribution",
+            "cold-stor",
+            "cold-chain",
+            "freight",
+            "cargo",
+            "jafza",
+            "jebel-ali",
+            "dubai-south",
+            "industrial",
+            "fulfil",
+            "supply-chain",
+            "e-commerce",
+            "ecommerce",
+            "dp-world",
+            "dpworld",
+            "free-zone",
+            "freezone",
+            "terminal",
+            "skycargo",
+            "dnata",
+            "aramex",
+            "dhl"
+          ]
+        },
+        {
+          "type": "site_search",
+          "site": "www.thenationalnews.com",
+          "query": "Dubai logistics warehouse"
+        }
+      ],
+      "notes": "robots.txt disallows /article/ and /section/ for all agents; news sitemap is listed in robots.txt.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "robots.txt 200: disallows /article/, /section/, /blogs/; lists news-sitemap"
+        ]
+      }
+    },
+    {
+      "id": "khaleej-times",
+      "name": "Khaleej Times",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Khaleej Times",
+      "domains": [
+        "www.khaleejtimes.com",
+        "khaleejtimes.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "sitemap",
+          "url": "https://www.khaleejtimes.com/news_sitemap.xml",
+          "keywords": [
+            "logistic",
+            "warehous",
+            "distribution",
+            "cold-stor",
+            "cold-chain",
+            "freight",
+            "cargo",
+            "jafza",
+            "jebel-ali",
+            "dubai-south",
+            "industrial",
+            "fulfil",
+            "supply-chain",
+            "e-commerce",
+            "ecommerce",
+            "dp-world",
+            "dpworld",
+            "free-zone",
+            "freezone",
+            "terminal",
+            "skycargo",
+            "dnata",
+            "aramex",
+            "dhl"
+          ]
+        },
+        {
+          "type": "site_search",
+          "site": "www.khaleejtimes.com",
+          "query": "Dubai logistics warehouse"
+        }
+      ],
+      "notes": "News sitemap listed in robots.txt.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "robots.txt 200: lists news_sitemap.xml"
+        ]
+      }
+    },
+    {
+      "id": "gulf-news",
+      "name": "Gulf News",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Gulf News",
+      "domains": [
+        "gulfnews.com",
+        "www.gulfnews.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "sitemap",
+          "url": "https://gulfnews.com/news_sitemap.xml",
+          "keywords": [
+            "logistic",
+            "warehous",
+            "distribution",
+            "cold-stor",
+            "cold-chain",
+            "freight",
+            "cargo",
+            "jafza",
+            "jebel-ali",
+            "dubai-south",
+            "industrial",
+            "fulfil",
+            "supply-chain",
+            "e-commerce",
+            "ecommerce",
+            "dp-world",
+            "dpworld",
+            "free-zone",
+            "freezone",
+            "terminal",
+            "skycargo",
+            "dnata",
+            "aramex",
+            "dhl"
+          ]
+        },
+        {
+          "type": "site_search",
+          "site": "gulfnews.com",
+          "query": "Dubai logistics warehouse"
+        }
+      ],
+      "notes": "Google-News sitemap with publication dates.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "GET https://gulfnews.com/news_sitemap.xml -> 200, 337 URLs with news:publication_date",
+          "robots.txt 200: disallows /search*, /advanced-search*"
+        ]
+      }
+    },
+    {
+      "id": "zawya",
+      "name": "Zawya (LSEG) press releases",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Zawya",
+      "domains": [
+        "www.zawya.com",
+        "zawya.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.zawya.com",
+          "query": "Dubai logistics warehouse press release"
+        }
+      ],
+      "notes": "Carries company press releases verbatim (e.g. Aramex).",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "arabian-business",
+      "name": "Arabian Business",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Arabian Business",
+      "domains": [
+        "www.arabianbusiness.com",
+        "arabianbusiness.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.arabianbusiness.com",
+          "query": "Dubai logistics warehouse"
+        }
+      ],
+      "notes": "Regional business press.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "logistics-middle-east",
+      "name": "Logistics Middle East",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Logistics Middle East",
+      "domains": [
+        "www.logisticsmiddleeast.com",
+        "logisticsmiddleeast.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.logisticsmiddleeast.com",
+          "query": "Dubai warehouse OR distribution centre"
+        }
+      ],
+      "notes": "Trade press focused on logistics.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    },
+    {
+      "id": "construction-week",
+      "name": "Construction Week Middle East",
+      "tier": "secondary",
+      "kind": "media",
+      "publisher": "Construction Week",
+      "domains": [
+        "www.constructionweekonline.com",
+        "constructionweekonline.com"
+      ],
+      "enabled": true,
+      "accessMethods": [
+        {
+          "type": "site_search",
+          "site": "www.constructionweekonline.com",
+          "query": "Dubai warehouse OR logistics construction"
+        }
+      ],
+      "notes": "Trade press for construction milestones.",
+      "probe": {
+        "date": "2026-11-11",
+        "results": [
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+        ]
+      }
+    }
+  ]
 }

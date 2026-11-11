@@ -1,0 +1,235 @@
+name: Ingest announcements
+
+# Discovery-and-verification pipeline (pipeline/, docs/PIPELINE.md).
+#
+# Scheduled runs are OFF until the repository variable SCHEDULE_ENABLED is set
+# to exactly 'true' (Settings → Secrets and variables → Actions → Variables).
+# A scheduled run is a full live run: Anthropic search + extraction, writes
+# data/, commits, deploys. It costs money (about $1.1 per run, see README).
+#
+# Manual runs (Actions → Ingest announcements → Run workflow) always run. Their
+# DEFAULTS are zero-spend: dry run, no search provider, extraction off. In that
+# mode the API key is not even passed to the pipeline, so no Anthropic API call
+# is possible. A paid run needs an explicit choice: search_provider=anthropic
+# and/or extract=true.
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # 08:30 Dubai (UTC+4, no DST)
+    - cron: '30 12 * * *' # 16:30 Dubai
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: fetch and analyse but write no data files and open no issues'
+        type: boolean
+        default: true
+      search_provider:
+        description: 'Search provider. none = direct fetching only, no spend. anthropic = Claude web search (PAID)'
+        type: choice
+        options:
+          - none
+          - anthropic
+        default: none
+      extract:
+        description: 'Send relevant articles to Claude for extraction (PAID). Off = fetch and filter only'
+        type: boolean
+        default: false
+      since:
+        description: 'Discovery window: 7d, 14d … or a date YYYY-MM-DD'
+        type: string
+        default: '7d'
+      max_searches:
+        description: 'Cap on searches for this run (blank = config default)'
+        type: string
+        default: ''
+      redeploy:
+        description: 'Rebuild and deploy the site even if nothing was committed'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    # No recurring spend unless the owner opts in; manual dispatch always runs.
+    if: github.event_name == 'workflow_dispatch' || vars.SCHEDULE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      issues: write
+    outputs:
+      committed: ${{ steps.commit.outputs.committed }}
+      redeploy: ${{ steps.plan.outputs.redeploy }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Plan run
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
+          IN_SEARCH: ${{ inputs.search_provider }}
+          IN_EXTRACT: ${{ inputs.extract }}
+          IN_REDEPLOY: ${{ inputs.redeploy }}
+          VAR_SEARCH: ${{ vars.PIPELINE_SEARCH_PROVIDER }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "schedule" ]; then
+            dry_run=false; search="${VAR_SEARCH:-anthropic}"; extract=true; redeploy=false
+          else
+            # Anything not explicitly chosen falls back to the zero-spend value.
+            dry_run=true; [ "${IN_DRY_RUN:-true}" = "false" ] && dry_run=false
+            search="${IN_SEARCH:-none}"
+            extract=false; [ "${IN_EXTRACT:-false}" = "true" ] && extract=true
+            redeploy=false; [ "${IN_REDEPLOY:-false}" = "true" ] && redeploy=true
+          fi
+          case "$search" in none|anthropic|brave) ;; *) echo "::error::unknown search provider '$search'"; exit 2 ;; esac
+          spend=false
+          if [ "$search" = "anthropic" ] || [ "$extract" = "true" ]; then spend=true; fi
+          {
+            echo "dry_run=$dry_run"
+            echo "search=$search"
+            echo "extract=$extract"
+            echo "spend=$spend"
+            echo "redeploy=$redeploy"
+          } >> "$GITHUB_OUTPUT"
+          echo "event=$EVENT dry_run=$dry_run search=$search extract=$extract anthropic_api_calls_possible=$spend redeploy=$redeploy"
+          {
+            echo "### Run plan"
+            echo "- Trigger: $EVENT"
+            echo "- Dry run: $dry_run"
+            echo "- Search provider: $search"
+            echo "- Extraction: $extract"
+            echo "- Anthropic API calls possible: $spend"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report whether the API key is configured
+        env:
+          KEY_PRESENT: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        run: |
+          # Prints true/false only. The secret's value is never printed.
+          echo "ANTHROPIC_API_KEY secret present: ${KEY_PRESENT}"
+          echo "- ANTHROPIC_API_KEY secret present: ${KEY_PRESENT}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Ingest
+        id: ingest
+        env:
+          ANTHROPIC_KEY_SECRET: ${{ secrets.ANTHROPIC_API_KEY }}
+          BRAVE_KEY_SECRET: ${{ secrets.BRAVE_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PLAN_DRY_RUN: ${{ steps.plan.outputs.dry_run }}
+          PLAN_SEARCH: ${{ steps.plan.outputs.search }}
+          PLAN_EXTRACT: ${{ steps.plan.outputs.extract }}
+          PLAN_SPEND: ${{ steps.plan.outputs.spend }}
+          INPUT_SINCE: ${{ inputs.since }}
+          INPUT_MAX_SEARCHES: ${{ inputs.max_searches }}
+        run: |
+          set -euo pipefail
+          # The key reaches the pipeline only on a run that is meant to spend.
+          if [ "$PLAN_SPEND" = "true" ]; then export ANTHROPIC_API_KEY="$ANTHROPIC_KEY_SECRET"; fi
+          if [ "$PLAN_SEARCH" = "brave" ]; then export BRAVE_API_KEY="$BRAVE_KEY_SECRET"; fi
+          unset ANTHROPIC_KEY_SECRET BRAVE_KEY_SECRET
+          args=(--search "$PLAN_SEARCH")
+          if [ "$PLAN_DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          if [ "$PLAN_EXTRACT" != "true" ]; then args+=(--no-extract); fi
+          since="${INPUT_SINCE:-7d}"
+          if ! [[ "$since" =~ ^([0-9]+d|[0-9]{4}-[0-9]{2}-[0-9]{2})$ ]]; then
+            echo "::error::since must look like 7d or YYYY-MM-DD"; exit 2
+          fi
+          args+=(--since "$since")
+          if [ -n "${INPUT_MAX_SEARCHES:-}" ]; then
+            if ! [[ "$INPUT_MAX_SEARCHES" =~ ^[0-9]+$ ]]; then echo "::error::max_searches must be a number"; exit 2; fi
+            args+=(--max-searches "$INPUT_MAX_SEARCHES")
+          fi
+          echo "npm run ingest -- ${args[*]}"
+          npm run ingest -- "${args[@]}"
+
+      - name: Per-source scan results
+        if: always() && steps.ingest.outcome != 'skipped'
+        run: |
+          node -e '
+            const fs = require("fs");
+            const dir = "pipeline-runs";
+            const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".json")).sort() : [];
+            if (!files.length) { console.log("no run report found"); process.exit(0); }
+            const r = JSON.parse(fs.readFileSync(dir + "/" + files[files.length - 1], "utf8"));
+            const lines = ["### Source scans (" + r.runId + ")", "", "| Source | Status | Method | Docs | Note |", "|---|---|---|---|---|"];
+            for (const s of r.sources) lines.push("| " + [s.sourceId, s.status, s.method || "", s.documents ?? "", (s.note || "").replace(/\|/g, "/").slice(0, 200)].join(" | ") + " |");
+            lines.push("", "Searches used: " + r.searches.used + "; estimated cost $" + r.cost.totalUsd.toFixed(4) + "; files written: " + (r.filesWritten.join(", ") || "none"));
+            console.log(lines.join("\n"));
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+          '
+
+      - name: Validate data
+        run: npm run validate
+
+      - name: Commit data changes
+        id: commit
+        if: steps.plan.outputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain -- data/)" ]; then
+            echo "No data changes to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- data/
+          git commit -m "data: automated ingest $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Upload run report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ingest-report-${{ github.run_id }}
+          path: pipeline-runs/*.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Job summary
+        if: always()
+        env:
+          COMMITTED: ${{ steps.commit.outputs.committed }}
+          INGEST_OUTCOME: ${{ steps.ingest.outcome }}
+        run: |
+          {
+            echo "### Ingest job"
+            echo "- Ingest step: ${INGEST_OUTCOME:-not run}"
+            echo "- Data committed: ${COMMITTED:-no}"
+            echo "- Full report: artifact ingest-report-${{ github.run_id }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    needs: ingest
+    if: needs.ingest.outputs.committed == 'true' || needs.ingest.outputs.redeploy == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
