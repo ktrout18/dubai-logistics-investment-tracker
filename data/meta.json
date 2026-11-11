@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "lastRunStatus": "never_run",
+  "sourceScans": [],
+  "coverageLimitations": [
+    "The register is not exhaustive: it lists only projects found in public sources and verified to the stated level.",
+    "Seed data from the owner's research PDF has not yet been imported.",
+    "Private, unannounced and owner-occupier developments are frequently missing from public sources.",
+    "Area figures are reported on the basis the source gives (GFA, GLA, land, yard); figures of different bases are never added together."
+  ],
+  "exhaustive": false
+}
