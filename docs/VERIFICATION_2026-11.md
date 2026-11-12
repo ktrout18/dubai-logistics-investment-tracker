@@ -113,8 +113,10 @@ those statuses and dates appear.
 ## H. Git and CI
 
 * CI (`ci.yml`, push) on `consistency-repair`: `a8485e6` success, `02f74ac`
-  success, `167f964` success (run 43175717348). The run for the commit that
-  adds this file is checked in the verifier's report.
+  success, `167f964` success (run 43175717348), `f7d7488` success (run
+  43175886149), `c2f2288` success (run 43177776646; `6fe0a6e` and `c85010c`
+  were pushed with it). The run for the commit that adds this line is checked
+  in the verifier's report.
 * No "Deploy to GitHub Pages" or "Ingest announcements" run exists for
   `consistency-repair`; the last deploy is `main` at `ed1f809`
   (2026-11-12T06:25Z), before this branch.
