@@ -1,4 +1,10 @@
-# Seed notes: 2026 register (seeded 11 November 2026)
+# Seed notes: 2026 register (seeded 11 November 2026, audited 12 November 2026)
+
+> **Evidence audit, 12 Nov 2026.** Every record was re-checked field by field
+> against its sources (`docs/AUDIT_2026-11.md`). The reviewed evidence is the
+> single source of truth; the PDF never overrides it. Structured fields below
+> reflect the audit; the `presentation` (briefing) blocks were left unchanged
+> for the next step, which rebuilds the briefing from the audited records.
 
 This page explains how `data/register.json` and `data/pending-review.json`
 were seeded from the owner's November 2026 briefing PDF, how each PDF figure
@@ -13,7 +19,7 @@ maps to the structured (strict) data, and what could not be verified.
   plus pages read directly while seeding (listed in §6).
 * **Counts:** 31 projects (26 PDF rows, 2 umbrellas, 3 "not counted"
   items), 14 pending-review items, 0 regional (non-Dubai) projects.
-  `npm run validate`: 0 errors, 5 warnings (§5).
+  `npm run validate`: 0 errors, 7 warnings (§5).
 
 ## 1. Two views of the same data
 
@@ -34,8 +40,11 @@ The briefing view reproduces the PDF exactly:
 
 `statusCompletedOnlyCount` = 3. Under the strict status, rows 1, 2 and 7 are
 "construction completed": the sources confirm completion, but not opening,
-for dnata (row 2) and Emirates Snack Foods (row 7). Each of these rows
-explains the gap in `differsFromSources`.
+for Aldar NIP phase 1 (row 1) and Emirates Snack Foods (row 7), and say only
+"commissioning" for dnata (row 2). The other 11 openings rows have explicit
+opening wording (§4 of `docs/AUDIT_2026-11.md`). The briefing view above is
+the PDF "as reported"; the audit lists which of its claims the evidence does
+not support (AUDIT §5).
 
 ## 2. All 26 PDF rows
 
@@ -48,31 +57,31 @@ source uses the words "Grade A" (quoted in `gradeAEvidence`).
 | Ref | Project id | PDF figure | Structured figure / basis | Grade A | Verification | Differences from the PDF |
 |---|---|---|---|---|---|---|
 | 1 | `aldar-logistics-centres-nip-phase-1` | 67,000; Q3, completed | 67,000 m² `unspecified`; construction completed Q3 2026 | confirmed (Aldar Q3 2026) | Milestone direct; area indexed (2 of 4 sources direct) | The basis of 67,000 is stated in no page read; the figure comes only from search snippets of the Nov 2025 release. A phase of the NIP umbrella. |
-| 2 | `dnata-logistics-dubai-south-warehouse` | 57,000; Apr to Sep | 57,000 m² `unspecified`; AED 100 m; commissioned in 2026 (year precision) → construction completed | unverified | Direct (3 of 4); two copies of the 5 Nov release read while seeding | The PDF says opened; the source says "commissioning". `netNew` is unknown: completion was due Nov 2025, so the building may predate 2026. |
-| 3 | `dsv-lintara-jafza-build-to-suit-warehouse` | 30,000; 20 May | 30,000 m² `unspecified`; opened 21 May 2026 | confirmed (DSV/Arcapita release) | Direct (2 of 3) | Sources say build-to-suit for DSV, not "multiuser"; the date is 21 May, not 20 May. |
-| 4 | `al-sharqi-shipping-dic-logistics-hub` | 26,000; 15 Oct | 26,012.85 m² `warehouse_gfa` (280,000 sq ft built-up storage) + 18,580.61 m² `open_yard`; AED 70 m | unverified | Direct (1 of 1) | The PDF omits 30,000 sq ft of offices and a 40,000 sq ft basement (noted). |
-| 5 | `ceva-logistics-dubai-south-ecommerce-warehouse` | 23,000; 15 Jan | 23,000 m² `unspecified`; opened Jan 2026 (month) | unverified | **Indexed only** (0 of 2) | Trade press only; the building probably predates 2026, so `netNew` is unknown. |
-| 6 | `gallega-global-logistics-jafza-3pl-hub` | 20,000; 20 May | 19,974.15 m² `unspecified` (215,000 sq ft); opened 20 May 2026 | unverified | Direct (3 of 3) | The source mentions open storage; enclosed floor area is not confirmed. Merged with the Feb 2026 "Aftermarket Hub" (same size, same partners). |
-| 7 | `emirates-snack-foods-cold-store-dubai-south` | 20,000; Q2 | 20,000 m² `gla` ("leasable area of almost 20,000 sqm"); construction completed Q2 2026 | unverified (only "further Grade A facilities" is said; no specification published) | Direct (3 of 3) | The basis is GLA. The PDF says opened; Aldar gives only completion and rental income. |
-| 8 | `palmon-manrre-jafza-chemical-storage-hub` | 10,400; 14 Jan | 10,405.14 m² `mixed_building_area` (112,000 sq ft built-up, including offices) + 16,722.55 m² `site_land_area`; USD 11 m | confirmed (Manrre REIT: "Grade A asset") | Direct (2 of 2) | Owner is GFH Partners Manrre REIT; operator is Safe Logistics. The inauguration day is not stated. |
-| 9 | `dior-regional-distribution-centre-ezdubai` | 7,200; 21 Sep | 7,200 m² `unspecified` (two levels) | unverified | Direct (1 of 1) | None |
-| 10 | `mosolf-automotive-hub-jafza` | 1,000; March | 1,021.93 m² `warehouse_gfa` (PDI warehouse) + 14,957.39 m² `site_land_area` | not applicable | Direct (1 of 1) | None (the PDF footnote matches) |
-| 11 | `petrochem-jebel-ali-terminal-and-hq` | Not disclosed (AED 300 m); 14 Jan | No area; AED 300 m | not applicable | Direct (1 of 1) | The AED 300 m includes the HQ and offices. |
-| 12 | `hellmann-calipar-healthcare-dubai-south` | Not disclosed; 31 Mar | No area; opened Mar 2026 (month) | unverified | Direct (1 of 1) | 31 Mar is the release date. The PDF gives no category; set to **specialised** (judgement). |
-| 13 | `lufthansa-technik-me-painting-grinding-centre-mbrah` | Not disclosed; 24 Mar | No area; opened 25 Mar 2026 | not applicable | Direct (1 of 1) | The source date is 25 Mar. It is a painting and grinding centre added to an existing site. |
-| 14 | `dp-world-al-awir-inland-container-depot` | Open depot, 100,000 m² site; August | 100,000 m² `open_yard`; opened Aug 2026 (month) | not applicable | Direct (1 of 1) | None |
-| 15 | `aldar-logistics-centres-nip-phase-2` | 81,500 m²; Ready Q1 2027 | 81,000 m² `gla` (Aldar 9M 2024 presentation); under construction; forecast Q1 2027 | confirmed (Aldar leasing page) | Milestone indexed (2 of 5 direct) | The PDF's **81,500 is derived** (148,500 − 67,000); Aldar's own figure is about 81,000 m² GLA (search snippet). |
-| 16 | `terralogix-logistics-park-phase-1` | 53,360 m²; Ready Q4 2026 | 53,360 m² `unspecified`; under construction; forecast Q4 2026 | confirmed (developer site, **indexed only**) | **Indexed only** (0 of 3) | The target moved from Q3 to Q4 2026. "Phase 1 of 3" is not confirmed. A phase of the Terralogix umbrella. |
+| 2 | `dnata-logistics-dubai-south-warehouse` | 57,000; Apr to Sep | 57,000 m² `unspecified`; AED 100 m; "commissioning" in Apr–Sep 2026 (year precision) → construction completed (weakest call) | unverified | Direct (all sources re-read 12 Nov) | The PDF says opened; all three copies of the release say "commissioning". `netNew` unknown. |
+| 3 | `dsv-lintara-jafza-build-to-suit-warehouse` | 30,000; 20 May | 30,000 m² `unspecified`; opened 20 May 2026 (DSV press, indexed); completion announced 21 May (direct) | confirmed (DSV/Arcapita release) | Direct (2 of 4); opening date indexed | Single-occupier build-to-suit for DSV, not "multiuser". 20 May is supported (DSV); 21 May is the release date. |
+| 4 | `al-sharqi-shipping-dic-logistics-hub` | 26,000; 15 Oct | 26,012.85 m² `warehouse_gfa` (280,000 sq ft built-up storage) + 18,580.61 m² `open_yard`; AED 70 m; opened Oct 2026 (month) | unverified | Direct (1 of 1) | 15 Oct is the release dateline; ceremony day not stated. Offices and basement not in the figure. |
+| 5 | `ceva-logistics-dubai-south-ecommerce-warehouse` | 23,000; 15 Jan | 23,000 m² `unspecified`; opened Jan 2026 (month) | unverified | **Indexed only** (0 of 2) | Trade press only; building probably predates 2026. |
+| 6 | `gallega-global-logistics-jafza-3pl-hub` | 20,000; 20 May | 19,974.15 m² `unspecified` (215,000 sq ft); inaugurated May 2026 (month) | unverified | Direct (3 of 3) | "Open storage and multi-user facility"; enclosed floor area not confirmed. Merged with the Feb 2026 "Aftermarket Hub". |
+| 7 | `emirates-snack-foods-cold-store-dubai-south` | 20,000; Q2 | 20,000 m² `gla` ("leasable area of almost 20,000 sqm"); construction completed Q2 2026 | **confirmed** (Aldar: "The Grade A facility features state-of-the-art cold store capabilities") | Direct (3 of 3) | GLA basis; the PDF says opened, Aldar gives only completion. |
+| 8 | `palmon-manrre-jafza-chemical-storage-hub` | 10,400; 14 Jan | 10,405.14 m² `mixed_building_area` + 16,722.55 m² `site_land_area`; USD 11 m (incl. land); opened Jan 2026 (month) | **probable** (newspapers relaying the owner only) | Direct (2 of 2) | Owner Manrre REIT; operator Safe Logistics; ceremony day not stated. |
+| 9 | `dior-regional-distribution-centre-ezdubai` | 7,200; 21 Sep | 7,200 m² `unspecified` (two levels); inaugurated Sep 2026 (month) | unverified | Direct (1 of 1) | 21 Sep is the newsroom date. |
+| 10 | `mosolf-automotive-hub-jafza` | 1,000; March | 1,021.93 m² `unspecified` (PDI warehouse, basis not stated) + 14,957.39 m² `site_land_area`; operational since Mar 2026 | not applicable | Direct (1 of 1) | The PDI warehouse is not stated as GFA. |
+| 11 | `petrochem-jebel-ali-terminal-and-hq` | Not disclosed (AED 300 m); 14 Jan | No area; AED 300 m (terminal + HQ + office buildings); inaugurated Jan 2026 (month) | not applicable | Direct (1 of 1) | AED 300 m is not the terminal alone. |
+| 12 | `hellmann-calipar-healthcare-dubai-south` | Not disclosed; 31 Mar | No area; opened Mar 2026 (month) | unverified | Direct (1 of 1) | 31 Mar is the release date. Category **specialised** (judgement). |
+| 13 | `lufthansa-technik-me-painting-grinding-centre-mbrah` | Not disclosed; 24 Mar | No area; inaugurated Mar 2026 (month) | not applicable | Direct (1 of 1) | Item dated 25 Mar; a painting and grinding centre added to an existing site. |
+| 14 | `dp-world-al-awir-inland-container-depot` | Open depot, 100,000 m² site; August | 100,000 m² `unspecified` (depot; basis not stated); opened by Aug 2026 (month of release) | not applicable | Direct (1 of 1) | The release says "has also opened" without a date. |
+| 15 | `aldar-logistics-centres-nip-phase-2` | 81,500 m²; Ready Q1 2027 | 81,000 m² `gla` (Aldar 9M 2024 presentation, indexed); under construction; forecast Q1 2027 | confirmed (Aldar leasing page) | Milestone indexed | **81,500 is derived** (148,500 − 67,000, across bases) and is not stored. |
+| 16 | `terralogix-logistics-park-phase-1` | 53,360 m²; Ready Q4 2026 | 53,360 m² `unspecified`; under construction; forecast Q4 2026 | **probable** (developer site, indexed only) | **Indexed only** (0 of 3) | "Phase 1 of 3" unsourced. |
 | 17 | `talal-group-central-distribution-centre-dic` | 32,500 m²; Started 21 Jul | 32,516.06 m² `mixed_building_area` (including HQ, cash-and-carry store and customer centre); AED 150 m; forecast Q3 2027 | unverified | Direct (1 of 1) | The figure is mixed built-up area. |
 | 18 | `hellmann-indu-automotive-hub-jafza` | 27,900 m²; Started 8 Jun | 27,870.91 m² `unspecified` ("total area of nearly 300,000 sq ft" of "the site") | unverified | Direct (1 of 1) | May be site area. |
 | 19 | `dp-world-lintara-jafza-dg-logistics-centre` | 20,000 m²; Ready Q1 2027 | 20,000 m² `unspecified`; forecast Q1 2027 | confirmed (DP World release) | Direct (1 of 1) | A MEED snippet gives 43,000 m² (unresolved). |
-| 20 | `emirates-engineering-complex-dubai-south` | USD 5.1 bn; Started 18 May, due mid-2030 | 380,000 m² `mixed_building_area` (storage and logistics capacity) + 1.1 m m² `unspecified`; USD 5.1 bn | not applicable | Direct (3 of 3) | The 5 Nov 2026 Group results say "mid-2030s". |
+| 20 | `emirates-engineering-complex-dubai-south` | USD 5.1 bn; Started 18 May, due mid-2030 | 380,000 m² `unspecified` ("storage and logistics capacity") + 1.1 m m² `unspecified`; USD 5.1 bn (whole MRO complex); no forecast stored | not applicable | Direct (3 of 3) | Emirates gives "by middle of 2030" (May) and "mid-2030s" (Nov). |
 | 21 | `dp-world-dubai-food-district-al-aweer` | 2,690,000 m²; District, 22 Jan | 2,694,188.16 m² `district_area`; proposed; `netNew` no (includes the existing market) | not applicable | Direct (1 of 1) | The figure is the whole district. |
 | 22 | `gargash-prime-jingdong-dubai-logistics-facility` | 232,000 m²; Land, MoU 15 Oct | 232,257.6 m² `site_land_area`; MoU 13 Oct 2026 | unverified | Direct (1 of 1) | The MoU was signed 13 Oct (15 Oct is the announcement). The source converts the area as "~250,000 sqm". |
 | 23 | `gallega-finished-vehicles-hub-jafza` | 92,900 m²; Yard, 15 Apr | 92,903.04 m² `unspecified`; proposed; operations were due May 2026 | not applicable | **Indexed only** (0 of 2) | The source does not state a yard basis, so the record says `unspecified` (§7). It may already be operating. |
-| 24 | `phoenix-aviation-mro-centre-mbrah` | 71,000 m²; Signed 30 Oct | 71,000 m² `mixed_building_area`, a **derived sum** of hangar, delivery centre, workshops and stores, and offices; forecast Q1 2029 | not applicable | Direct (1 of 1) | The source states no total. |
+| 24 | `phoenix-aviation-mro-centre-mbrah` | 71,000 m²; Signed 30 Oct | Four sourced components as `unspecified` (35,000 hangar; 18,000 delivery centre; 15,000 workshops and stores; 3,000 offices); no total stored | not applicable | Direct (1 of 1) | 71,000 is a derived sum, not a measure. |
 | 25 | `dubai-commercity-the-hive` | 5,600 m²; Floor, 4 Oct | 5,600 m² `unspecified`; proposed; investment recorded as undisclosed (Dh1.8 bn covers all of phase two) | unverified | Direct (1 of 1) | "2027 to 2028" covers all of phase two, not The Hive alone. |
-| 26 | `dp-world-mol-jebel-ali-vehicle-processing` | Not disclosed; Term sheet 6 Oct | No area; term sheet Oct 2026 (month); MoU Dec 2023 | not applicable | **Indexed only** (0 of 3) | No source found for 6 Oct. |
+| 26 | `dp-world-mol-jebel-ali-vehicle-processing` | Not disclosed; Term sheet 6 Oct | No area; term sheet Oct 2026 (announced 7 Oct per MarkLines, indexed); MoU Dec 2023 | not applicable | **Indexed only** | No source for 6 Oct. |
 
 **Umbrellas** (no presentation; never counted):
 
@@ -89,72 +98,54 @@ the PDF only names them):
 | Project id | Status | Why it is not counted |
 |---|---|---|
 | `cwt-sml-toll-dc6-dubai-south` | under construction | Completion was due Aug 2026 (Dubai South page, read while seeding); no completion found. Areas: 25,000 m² `unspecified` and 15,620 m² `mixed_building_area`. |
-| `dhl-supply-chain-dubai-south-multi-user-warehouse` | investment committed | The Q1 2026 groundbreaking is unconfirmed (one secondary report says construction began). Completion due summer 2027. 55,000 m² `warehouse_gfa`, EUR 120 m. |
+| `dhl-supply-chain-dubai-south-multi-user-warehouse` | investment committed | The Q1 2026 groundbreaking is unconfirmed (one secondary report says construction began). Completion due summer 2027. 55,000 m² `unspecified` (no GFA stated), EUR 120 m. |
 | `mbrah-sky-support-complex` | under construction | Due by end of Q3 2026 (Dubai South, 28 Jul 2026, read while seeding); no completion found. 16,661 m² `unspecified`. |
 
-## 3. Strict 2026 metrics vs the PDF totals
+## 3. Strict 2026 metrics vs the PDF totals (after the 12 Nov audit)
 
 From `computeMetrics(projects, 2026)`. Population: 29 countable Dubai
-projects (31 less the 2 umbrellas).
+projects (31 less the 2 umbrellas). Full detail in `docs/AUDIT_2026-11.md` §6.
 
 ### Delivered in 2026 (14 projects: PDF rows 1–14)
 
-| Basis | Grade A confirmed (3: rows 1, 3, 8) | Other (11) | Total |
-|---|---|---|---|
-| Warehouse GFA | 0 | 27,034.78 m² (rows 4, 10) | **27,034.78 m²** |
-| GLA | 0 | 20,000 m² (row 7) | **20,000 m²** |
-| Mixed building area | 10,405.14 m² (row 8) | 0 | **10,405.14 m²** |
-| Unspecified (never floor space) | 97,000 m² (rows 1, 3) | 107,174.15 m² (rows 2, 5, 6, 9) | 204,174.15 m² |
-| Site / land | 16,722.55 m² | 14,957.39 m² | 31,679.94 m² |
-| Open yard | 0 | 118,580.61 m² (rows 4, 14) | 118,580.61 m² |
+11 operational with explicit opening evidence, 3 construction completed only
+(rows 1, 2, 7). Grade A: confirmed 3 (rows 1, 3, 7), probable 1 (row 8),
+other 10.
+
+| Basis | Total | Projects |
+|---|---|---|
+| Warehouse GFA | **26,012.85 m²** | row 4 |
+| GLA | **20,000 m²** | row 7 (Grade A confirmed) |
+| Mixed building area | **10,405.14 m²** | row 8 (Grade A probable) |
+| Unspecified (never floor space) | 305,196.08 m² | rows 1, 2, 3, 5, 6, 9, 10 (PDI), 14 |
+| Site / land | 31,679.94 m² | rows 8, 10 |
+| Open yard | 18,580.61 m² | row 4 |
 
 The PDF reports **261,600 m²** of floor space opened. The strict figure is
-**27,035 m² warehouse GFA + 20,000 m² GLA**, plus 10,405 m² of mixed building
-area reported separately. The gap is intended:
-
-* **204,174 m² has no stated basis** (rows 1, 2, 3, 5, 6, 9). These sources
-  give a size ("57,000m² warehouse", "30,000-square-metre warehouse",
-  "spanning 7,200 square metres") without saying whether it is GFA, GLA or
-  plot. The data model never assumes GFA, so these stay `unspecified` and
-  sit outside floor-space totals.
-* **Row 8 (10,400)** is built-up area that includes offices, so it is
-  `mixed_building_area`, reported separately.
-* **Row 7 (20,000)** is GLA, which is reported separately from GFA and never
-  added to it.
-* The PDF's rounding (for example 26,000 vs 26,013 and 1,000 vs 1,022)
-  accounts for a few m².
-* There are no Grade A "probable" calls. "Probable" needs published
-  specifications, and none were found.
-
-The Grade A confirmed bucket holds 3 delivered projects, none of them with a
-GFA or GLA figure.
+**26,013 m² warehouse GFA + 20,000 m² GLA**, plus 10,405 m² of mixed building
+area reported separately; every other figure has no stated floor basis.
 
 ### Being built (current status `under_construction`: 8 projects)
 
 | Basis | Total | Projects |
 |---|---|---|
 | GLA | 81,000 m² | row 15 |
-| Mixed building area | 428,136.06 m² | rows 17 (32,516), 20 (380,000), Toll DC6 (15,620) |
+| Mixed building area | 48,136.06 m² | row 17 (32,516.06), Toll DC6 (15,620) |
 | Unspecified | 1,242,891.91 m² | rows 16, 18, 19, 20 (1.1 m), Toll DC6 (25,000), Sky Support |
 
 The PDF reports **215,260 m²** for rows 15–19. Strictly, only the 81,000 m²
-GLA of NIP phase 2 is warehouse floor space. Row 17 is mixed building area,
-rows 16, 18 and 19 have no stated basis, and the strict population also
-includes row 20 and the two overdue not-counted items. The PDF's 81,500 for
-row 15 is its own subtraction, so the strict figure (81,000) comes from
-Aldar's 2024 presentation instead.
+GLA of NIP phase 2 is warehouse floor space; the PDF's 81,500 is derived and
+is not stored.
 
 ### Other strict figures
 
-* **Committed, not started:** 2 projects: Phoenix (signed agreement; 71,000
-  m² mixed, derived) and DHL (investment committed; 55,000 m² GFA).
+* **Committed, not started:** 2 projects: Phoenix (signed agreement; four
+  component areas, `unspecified`) and DHL (investment committed; 55,000 m²
+  `unspecified`, 96,000 m² plot).
 * **Non-binding:** 5 projects. Proposed: rows 21, 23 and 25; MoU: row 22;
   term sheet: row 26.
 * **2026 investment announcements:** 7 projects with an announcement, MoU,
-  term-sheet or agreement event in 2026, none with a disclosed value. The
-  disclosed amounts in the register (dnata, Al Sharqi, Palmon, Petrochem,
-  Talal, Emirates, DHL) belong to delivery or construction events, or to
-  announcements from before 2026.
+  term-sheet or agreement event in 2026, none with a disclosed value.
 * **Projects with at least one directly read source:** 24 of 29 included.
   Indexed only: rows 5, 16, 23 and 26, and DHL.
 
@@ -192,6 +183,8 @@ this session, that confirmed identity, location, area and milestone.
 | FORECAST_OVERDUE | `gallega-finished-vehicles-hub-jafza` | Operations were due May 2026 and are unconfirmed; the record shows this as an open question. |
 | FORECAST_OVERDUE | `cwt-sml-toll-dc6-dubai-south` | Completion was due Aug 2026 and is unconfirmed (the reason the PDF does not count it). |
 | FORECAST_OVERDUE | `mbrah-sky-support-complex` | Completion was due by end of Q3 2026 and is unconfirmed (the reason the PDF does not count it). |
+| MULTIPLE_AREAS_SAME_BASIS | `emirates-engineering-complex-dubai-south` | 380,000 m² capacity and the 1.1 m m² complex are both `unspecified`; never floor space. |
+| MULTIPLE_AREAS_SAME_BASIS | `phoenix-aviation-mro-centre-mbrah` | Four sourced components, none with a stated basis; the PDF's sum is not stored. |
 | SHARED_SOURCE_URL | NIP umbrella and phase 1, Emirates Snack Foods | Aldar's Q3 2026 results release covers both Aldar facilities. |
 | SHARED_SOURCE_URL | NIP umbrella, Emirates Snack Foods | Aldar's portfolio page lists both assets. |
 
@@ -213,6 +206,15 @@ this session, that confirmed identity, location, area and milestone.
 | jafza.ae: news list | No Gallega Finished Vehicles Hub item. |
 
 ## 7. Decisions and what could not be verified
+
+**Superseded by the 12 Nov 2026 audit** (`docs/AUDIT_2026-11.md`): event
+dates taken from a release dateline are now stored with month precision;
+Emirates Snack Foods Grade A is confirmed (Aldar: "The Grade A facility");
+Palmon and Terralogix Grade A are probable, not confirmed; DSV opened on
+20 May 2026 per DSV; row 24 no longer stores a derived sum; MOSOLF's PDI
+warehouse, DHL's warehouse, Al Awir's depot and Emirates' 380,000 m² are
+`unspecified`; no Emirates completion forecast is stored. The notes below are
+the original seeding decisions, kept for the record.
 
 * **`presentedMilestone` (additive schema field).** The brief defined
   `completedOnlyCount` by status. With the sources as they stand, that gives

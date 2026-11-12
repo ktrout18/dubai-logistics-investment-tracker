@@ -22,7 +22,7 @@ const inputs: ItemInput[] = [
       { url: 'https://mediaoffice.ae/en/news/2026/novemebr/05-11/the-emirates-group-has-announced-its-results-for-the-first-six-months', publishedDate: '2026-11-05', quote: 'commissioning its new AED 100 million (US$ 27 million) logistics facility in Dubai South' },
     ],
     reasonHeld:
-      'The owner\'s PDF counts the dnata warehouse as opened (Apr to Sep). Both copies of the Emirates Group H1 2026-27 release read on 11 Nov 2026 say "commissioning", neither "commissioned" nor "opened", and the dnata newsroom has no opening release. The register keeps status construction_completed; change to operational only on a source that says operations began.',
+      'Still unresolved after the 12 Nov 2026 audit. The owner\'s PDF counts the dnata warehouse as opened (Apr to Sep). All three copies of the Emirates Group H1 2026-27 release (dnata.com, emirates.com, Dubai Media Office; re-read 12 Nov 2026) say "commissioning", neither "commissioned" nor "opened"; the dnata newsroom has no opening release (11 Nov) and a search on 12 Nov found none. The register keeps status construction_completed; change to operational only on a source that says operations began.',
   },
   {
     kind: 'conflict',
@@ -36,7 +36,7 @@ const inputs: ItemInput[] = [
       },
     ],
     reasonHeld:
-      'The PDF counts the Emirates Snack Foods cold store as opened (Q2). Aldar reports completion in Q2 and rental income, which implies a handover to the tenant, but no source states that operations began or gives an opening date. Status kept at construction_completed.',
+      'Still unresolved after the 12 Nov 2026 audit. The PDF counts the Emirates Snack Foods cold store as opened (Q2). Aldar\'s Q3 2026 release (re-read 12 Nov 2026) reports completion in Q2 and segment EBITDA from the facility, but no source states that operations began or gives an opening date (search 12 Nov 2026 found none). Status kept at construction_completed.',
   },
   {
     kind: 'new_project',
@@ -72,7 +72,7 @@ const inputs: ItemInput[] = [
       { url: 'https://tradearabia.com/News/489403/Iron-Mountain-opens-37-000-sq-m-warehousing-facility-in-Dubai-South/IND', quote: 'Iron Mountain opens 37,000-sq m warehousing facility in Dubai South (search results only)' },
     ],
     reasonHeld:
-      'Opened 9 Nov 2026 per search results, after the PDF. No official page could be read (WAM pages need JavaScript; the item is not yet in the Dubai South newsroom), and one outlet gives 37,000 sq ft instead of sq m. Add as "added after PDF" once an official page confirms area and date.',
+      'Opened per reports dated 9 Nov 2026 (re-searched 12 Nov: WAM, Al Khaleej, TradeArabia, GDN, all search results only), after the PDF. No official page could be read (WAM pages need JavaScript; the item was not in the Dubai South newsroom on 11 Nov), the opening day itself is not stated, and one outlet gave 37,000 sq ft instead of sq m. Add as "added after PDF" once an official page confirms area and date.',
   },
   {
     kind: 'new_project',
@@ -111,20 +111,21 @@ const inputs: ItemInput[] = [
       { url: 'https://gpcachem.org/2026/09/25/new-chemical-warehousing-capacity-to-open-in-jafza-north-this-november-2/', publishedDate: '2026-09-25', quote: 'New chemical warehousing capacity to open in Jafza North this November (search results only)' },
     ],
     reasonHeld:
-      'Only a trade-association headline seen through search results: no area, developer or investment, and the November 2026 opening is unconfirmed. Not the same as PDF row 19 (Lintara DG centre, due Q1 2027), though it may relate to a smaller MEED-reported chemical storage scheme.',
+      'Only a trade-association headline seen through search results: no area, developer or investment, and the November 2026 opening is unconfirmed (a 12 Nov 2026 search found nothing further). Not the same as PDF row 19 (Lintara DG centre, due Q1 2027), though it may relate to a smaller MEED-reported chemical storage scheme.',
   },
   {
     kind: 'new_project',
     proposed: {
       name: 'Dubai CommerCity phase two expansion', emirate: 'Dubai', zone: 'Dubai CommerCity',
-      investment: { amount: 1_800_000_000, currency: 'AED', disclosed: true }, areas: [{ valueM2: 91000, basis: 'mixed_building_area' }],
+      investment: { amount: 1_800_000_000, currency: 'AED', disclosed: true },
+      areas: [{ valueM2: 91000, basis: 'unspecified', note: 'The National: "more than 91,000 square metres of new office space" (Business and Social clusters 86,000 m²); not logistics space' }],
     },
     evidence: [
-      { url: 'https://www.thenationalnews.com/business/economy/2026/10/04/dubai-to-expand-commercity-in-push-for-digital-economy-growth/', publishedDate: '2026-10-04', quote: 'Dh1.8 billion expansion ... delivered in phases from Q1 2027 to Q4 2028; includes The Hive' },
+      { url: 'https://www.thenationalnews.com/business/economy/2026/10/04/dubai-to-expand-commercity-in-push-for-digital-economy-growth/', publishedDate: '2026-10-04', quote: 'On aggregate, the projects will add more than 91,000 square metres of new office space ... The expansion of the Business Cluster and the Social Cluster will add 86,000 square metres of new space ... Within the Logistics Cluster, the phase two expansion will add The Hive, a 5,600 square metre facility (re-read 12 Nov 2026)' },
       { url: 'https://www.gulftoday.ae/business/2026/10/04/dubai-commercity-launches-dhs-18-billion-expansion-to-accelerate-future-commerce-digital-economy-growth', publishedDate: '2026-10-04', quote: 'expansion adding 91,000 sqm (search results only)' },
     ],
     reasonHeld:
-      'Overlaps PDF row 25 (The Hive is part of phase two). The 91,000 m² and AED 1.8bn cover offices and other space as well as logistics, and the logistics share is not stated. Adding phase two as a project would double count The Hive; it could become an umbrella over The Hive if other logistics components are sourced.',
+      'Overlaps PDF row 25 (The Hive is part of phase two). Re-read 12 Nov 2026: The National describes the 91,000 m² as "new office space" (86,000 m² in the Business and Social clusters), so it is not logistics floor space; the AED 1.8bn covers the whole expansion and the logistics share is not stated. Adding phase two as a project would double count The Hive; it could become an umbrella over The Hive if other logistics components are sourced.',
   },
   {
     kind: 'new_project',
@@ -137,7 +138,7 @@ const inputs: ItemInput[] = [
       { url: 'https://www.jafza.ae/resource-centre/media/news/legend-holding-group-to-invest-aed-500-million-in-major-automotive-hub-at-jafza/' },
     ],
     reasonHeld:
-      'Announced Dec 2025 (before the 2026 window). The first stage was due by April 2026 but no delivery or construction milestone in 2026 has been sourced; area basis unclear. Checked against PDF rows 6, 10, 18 and 23: different operator.',
+      'Announced Dec 2025 (before the 2026 window). The first stage (5,000 vehicles) was due by April 2026 but no delivery or construction milestone in 2026 has been sourced (re-searched 12 Nov 2026); area basis unclear. Checked against PDF rows 6, 10, 18 and 23: different operator.',
   },
   {
     kind: 'new_project',
@@ -149,7 +150,7 @@ const inputs: ItemInput[] = [
       { url: 'https://www.mediaoffice.ae/en/news/2025/october/30-10/dp-world-cars', publishedDate: '2025-10-30', quote: 'DP World, Cars24 to build AED 55 mln auto hub at NIP; operations by August 2026 (search results only)' },
       { url: 'https://nip.ae/media/news/dp-world-cars24-to-build-aed-55m-auto-hub-at-nip/' },
     ],
-    reasonHeld: 'Announced Oct 2025; operations were due by August 2026 but no 2026 construction or opening milestone has been sourced.',
+    reasonHeld: 'Announced Oct 2025 (220,000 sq ft refurbishment centre per search results); construction was due to start Nov 2025 and operations by August 2026, but no 2026 construction or opening milestone has been sourced (re-searched 12 Nov 2026).',
   },
   {
     kind: 'new_project',
@@ -158,7 +159,7 @@ const inputs: ItemInput[] = [
       { url: 'https://www.dubaisouth.ae/en/newsroom/dubai-south-and-aldar-to-develop-build-to-suit-facility-for-global-logistics-firm-kuehnenagel', publishedDate: '2024-05-22', quote: 'covers an area of 22,915 square meters; handover expected Q2 2025 (search results only)' },
     ],
     reasonHeld:
-      'Announced May 2024 with handover expected Q2 2025; no completion or 2026 milestone found. Aldar\'s portfolio page lists two Dubai South "Grade A Logistics Facility" assets (WE07 18,000 sqm, WE08 25,000 sqm) without dates; whether either is this facility is not stated.',
+      'Announced May 2024 with handover expected Q2 2025; no completion or 2026 milestone found (re-searched 12 Nov 2026). Aldar\'s portfolio page lists two Dubai South "Grade A Logistics Facility" assets (WE07 18,000 sqm, WE08 25,000 sqm) without dates; whether either is this facility is not stated.',
   },
   {
     kind: 'new_project',
