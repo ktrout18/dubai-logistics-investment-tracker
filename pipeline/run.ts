@@ -238,8 +238,11 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     if (!search.available) {
       report.recheck.push({ projectId: '*', results: 0, error: `skipped: no search provider (${deps.search.name})` });
     } else {
-      for (const p of selectRecheck(snap.register.projects, state, recheckN)) {
+      const toRecheck = selectRecheck(snap.register.projects, state, recheckN);
+      for (const [i, p] of toRecheck.entries()) {
         const r = await recheckSearch(p, search, sources, config.resultsPerSearch);
+        // Only the rechecks still to come need to be kept back now.
+        ctx.articleSearchReserve = toRecheck.length - i - 1;
         report.recheck.push({ projectId: p.id, results: r.bySource.reduce((n, g) => n + g.items.length, 0), ...(r.error ? { error: r.error } : {}) });
         if (!r.error) state.recheck[p.id] = startedAt;
         for (const g of r.bySource) {

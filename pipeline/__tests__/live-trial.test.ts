@@ -235,3 +235,21 @@ describe('live trial 2: web search max_uses_exceeded', () => {
     await expect(p.search({ query: 'q', max: 5 })).rejects.toThrow(/unavailable/);
   });
 });
+
+describe('live trial 2: rechecks', () => {
+  it('lets the last recheck use the remaining searches for a blocked article', async () => {
+    const root = await makeDataDir([acmeProject()]);
+    const web = quietWeb();
+    const BLOCKED = 'https://www.jafza.ae/news/acme-cold-store-update/';
+    web.set(BLOCKED, { status: 403, body: 'Forbidden' });
+    const search = new FakeSearch((q) => {
+      if (q.site === 'pcfc.ae' || q.query.startsWith('"Acme cold store update"')) return [];
+      return [{ url: BLOCKED, title: 'Acme cold store update', pageAge: '2026-11-09' }];
+    });
+    const report = await run(root, { web, search }, { recheck: 1, maxSearches: 3 });
+    expect(report.recheck).toEqual([{ projectId: 'acme-logistics-jafza-cold-store', results: 1 }]);
+    // pcfc scan + recheck + one fallback search for the blocked article.
+    expect(search.queries.filter((q) => q.query.startsWith('"Acme cold store update"'))).toHaveLength(1);
+    expect(report.searches.used).toBe(3);
+  });
+});
