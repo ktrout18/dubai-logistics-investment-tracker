@@ -7,10 +7,12 @@ the change (with a ChangeRecord) or queues it for human review. It never
 invents data, never deletes verified data, and never reports "nothing new"
 when a scan failed.
 
-> **Status (proof of concept).** Live API spend has not been approved. All
-> tests use fakes. The scheduled workflow does nothing until the repository
-> variable `SCHEDULE_ENABLED` is set to `true`. The live checks so far are
-> fetch-only dry runs with `--search none` (results below).
+> **Status (proof of concept).** The paid path has run **once, as a dry run**
+> on GitHub Actions (12 Nov 2026: Anthropic search and extraction, nothing
+> written or committed; measured figures in §5 and §7). No live run that
+> writes and commits data has been made yet. All tests use fakes. The
+> scheduled workflow does nothing until the repository variable
+> `SCHEDULE_ENABLED` is set to `true`.
 
 Contracts: `docs/DATA_MODEL.md` (schemas, validation, ids, transitions,
 metrics). The pipeline imports those `shared/` functions and does not
@@ -126,6 +128,14 @@ robots.txt, or too short is not worked around. Instead:
 3. It also searches for the title elsewhere and reads copies on other
    configured sources directly (WAM, Dubai Media Office, reputable media).
    Results from unconfigured sites are ignored.
+
+Steps 2 and 3 cost up to two searches per blocked article. They may only use
+searches beyond a **reserve** of one per remaining source that has a
+`site_search` method plus one per planned recheck. When the reserve is
+reached, the article is recorded as `fallback_search_skipped` (with the
+counts) and the search-only sources still get their search. (The first live
+run spent the whole cap of 40 on eight sources this way and left eleven
+sources unscanned.)
 
 Window: documents dated before `--since` (default 7 days) are marked
 processed and skipped. Documents with no detectable date are skipped and
@@ -254,6 +264,18 @@ A change is published automatically only when all of these hold:
    within 1 %, the same investment and the same emirate.
 9. **`validateRegister`** passes on the resulting data set. Each change is
    validated on its own and then again on the final file set.
+10. **No re-reading of recorded evidence**: if the project already has an
+    event from the same page, a milestone of a different type from that page
+    is a conflict for review (a human already interpreted that page).
+11. **Delivery dates are stated**: a `construction_completed`,
+    `commissioned` or `opened` milestone whose date is only the page's
+    publication date is held. A results report or round-up says when it was
+    published, not when a facility opened.
+
+Rules 10 and 11 were added after the first live dry run, which would have
+read the Emirates Group half-year results ("commissioning its new AED 100
+million … logistics facility in Dubai South", already recorded as dnata's
+`commissioned` event) as an opening dated 5 November 2026.
 
 Anything else becomes a `PendingReviewItem` (`new_project`, `update` or
 `conflict`) with its evidence and `reasonHeld`. Held items are never dropped
@@ -394,6 +416,54 @@ work through the 74 UAE news URLs, 8 per run (no model calls, since they are
 outside the window) until all are processed. After that only new URLs are
 fetched.
 
+### Live paid dry run on GitHub (12 Nov 2026)
+
+One run, with the owner's approval: `dry_run: true`, `search_provider:
+anthropic`, `extract: true`, other inputs at their defaults (`since: 7d`,
+cap 40 searches). Run
+https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43158953250
+on commit `a21541a`, **success** (ingest step 05:05:49 → 05:18:33 UTC). Nothing
+was written or committed. These are the figures of that single run, not an
+average.
+
+* The `ANTHROPIC_API_KEY` secret authenticated: searches returned results and
+  all 16 extraction calls completed. The log has no `search failed` warning,
+  no `extraction_failed` line and no error.
+* `Run run-20261112T050550Z (dry run): PARTIAL.` 22 of 33 sources scanned
+  (7 via a fallback), 11 not scanned: `site_search skipped: search cap
+  reached (40)` (Aramex, Maersk, Kuehne+Nagel, Arcapita, Sweid & Sweid,
+  Dutco, Reuters, Zawya, Arabian Business, Logistics Middle East,
+  Construction Week). Fixed since (reserve, §3.1).
+* Site-restricted search rescued the sources that block or defeat direct
+  access: PCFC (403 on both pages → `site_search`, 6 documents), WAM (no
+  article links in the HTML → `site_search`, 8 documents), Dubai Trade (6),
+  DHL (7), DSV (8); FedEx (8), UPS (6) and
+  CEVA (6) are search-only and were scanned. Aldar's news page now answers
+  with a JavaScript shell instead of 403; its sitemap was used (3
+  documents). Dubai Industrial City worked directly, so `tecomgroup.ae` was
+  not needed.
+* 97 new documents, 16 extracted, 18 candidate facts; 1 change would have
+  been published and 5 held. Searches 40/40. **Estimated cost $1.1238**
+  (report figure; the 40 searches account for $0.40 at list price, the
+  remaining $0.72 is Haiku and Opus tokens; the split by model is in the
+  report artifact, which could not be downloaded from the build container,
+  and is printed in the log from commit `dd92de8` on).
+* The CLI summary line printed `searches used 0/40; estimated cost $0.0000`
+  because it was built before the totals were copied in. Fixed.
+* Would publish: `dnata-logistics-dubai-south-warehouse` → "Opened",
+  verified official, from the Emirates Group H1 2026-27 results release
+  (`commissioning its new AED 100 million (US$ 27 million) logistics
+  facility in Dubai South`). **Wrong**: the register already records that
+  page as the `commissioned` event, "commissioning" is not an opening, and
+  the only date available was the publication date (5 Nov 2026), which would
+  have become `actualCompletion`. Now held (rules 10 and 11, §3.7).
+* Held (correctly): one Khaleej Times item (single secondary source); one
+  item matching four Jafza/Al Aweer projects equally (identity ambiguous);
+  two Abu Dhabi items from Khaleej Times and Gulf News (emirate not named in
+  its quote, single secondary source); one "MRO facility at Al Maktoum
+  International Airport" claim whose location quote was not in the page and
+  whose date (May 2026) was not in its quote (grounding caught a paraphrase).
+
 ---
 
 ## 6. Configuration
@@ -430,7 +500,13 @@ read/write tokens per model at the list prices above, plus searches at
 $0.01 each. A model without a configured price is listed under
 `unpricedModels` rather than guessed.
 
-**Typical run (estimate):**
+**Measured (one run):** the only paid run so far, a dry run on 12 Nov 2026
+(§5), cost **$1.12** by the report's estimate: 40 searches ($0.40, cap
+reached) and about $0.72 of model tokens for 40 search calls and 16
+extractions. It is one data point: the cap was hit, and a first run sees
+many seed-cited pages as new.
+
+**Typical run (estimate made before the live run):**
 
 | Item | Assumption | USD |
 |---|---|---|

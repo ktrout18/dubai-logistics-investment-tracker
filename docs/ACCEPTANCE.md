@@ -1,7 +1,8 @@
 # Acceptance criteria
 
 The owner's ten acceptance criteria, with the status of each and the exact
-evidence. Checked on 11 November 2026.
+evidence. Checked on 11 November 2026; criteria 8–10 updated on 12 November
+2026 after the first paid dry run.
 
 Status values: **met** (shown on real data or on GitHub), **met offline only**
 (proven by automated tests with fakes, not yet on a live run), **not yet
@@ -25,9 +26,9 @@ the production build (`dist/`), on the real register.
 | 5 | A simulated new official opening updates the project, its status history and the totals | met offline only |
 | 6 | A repeated article makes no duplicate | met offline only |
 | 7 | MoU → signed agreement updates the existing project | met offline only |
-| 8 | A blocked source triggers fallback research | met offline only (fetch-side fallbacks also seen live) |
-| 9 | Unverified claims are held for review | met offline only |
-| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; schedule off by the owner's choice; no live API run yet |
+| 8 | A blocked source triggers fallback research | met (live dry run: PCFC 403 → site search; WAM, Dubai Trade, DHL, DSV via site search) |
+| 9 | Unverified claims are held for review | met offline; seen in a live dry run (5 held, nothing written because it was a dry run) |
+| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; paid search and extraction proven in one dry run ($1.12); no run has yet committed data and redeployed; schedule off by the owner's choice |
 
 ---
 
@@ -114,7 +115,7 @@ the production build (`dist/`), on the real register.
   appended event, a `status` ChangeRecord (mou → signed_agreement) and no new
   project record.
 
-## 8. Blocked source triggers fallback — met offline only
+## 8. Blocked source triggers fallback — met
 
 * `pipeline/__tests__/acceptance.test.ts` "d. primary source returning 403":
   html_list (403) → alt_url (403) → site_search; the blocked article is
@@ -125,8 +126,14 @@ the production build (`dist/`), on the real register.
   JavaScript-rendered listing to its sitemap, and PCFC is reported `failed`
   with every reason when no search provider is configured
   (`docs/PIPELINE.md` §5, and §10 below for the GitHub runner).
+* Live with search (paid dry run, run 43158953250): `scan pcfc … fallback_used
+  via site_search: 8 search results (anthropic, site:pcfc.ae, after
+  2026-11-05); earlier: html_list failed: blocked (HTTP 403): HTTP 403 |
+  alt_url failed: blocked (HTTP 403): HTTP 403 (6 new document(s))`. WAM,
+  Dubai Trade, DHL and DSV (no article links in the listing HTML) also fell
+  back to site search (8, 6, 7 and 8 documents).
 
-## 9. Unverified claims are held — met offline only
+## 9. Unverified claims are held — met offline; seen in a live dry run
 
 * `pipeline/__tests__/acceptance.test.ts` "e. claims that must be held for
   review": a single secondary source, a quote not found in the page, a
@@ -138,6 +145,13 @@ the production build (`dist/`), on the real register.
   project is regional context only.
 * "f. all sources failing": data byte-identical, run `failed`,
   `lastSuccessfulRun` not advanced, no "no new announcements" claim.
+* Live dry run (run 43158953250): 5 claims held, for the right reasons
+  (single secondary source; identity ambiguous between four projects; two
+  Abu Dhabi items whose emirate is not named in the quote; a location quote
+  not found in the page). Being a dry run, nothing was written to
+  `pending-review.json` and no issue was opened. The same run would have
+  **published** one claim that should have been held (dnata "opened", see
+  §10); `pipeline/__tests__/live-trial.test.ts` now covers that case.
 
 ## 10. The scheduled workflow runs and the site reflects validated changes — not yet demonstrated end to end
 
@@ -172,17 +186,49 @@ What **is** shown:
   (`pipeline/__tests__/units.test.ts` "ingest.yml: schedule gated by
   SCHEDULE_ENABLED, zero-spend manual defaults, no secrets in the file").
 
+* **Paid search and extraction run on GitHub (one dry run).** Manual
+  dispatch on 12 Nov 2026 with `dry_run: true`, `search_provider:
+  anthropic`, `extract: true` (other inputs at their defaults) on commit
+  `a21541a`:
+  https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43158953250
+  → **success**; the ingest step took 12 min 44 s.
+  * Plan line: `event=workflow_dispatch dry_run=true search=anthropic extract=true anthropic_api_calls_possible=true redeploy=false`.
+  * CLI: `mode: dry run; search: anthropic; extraction: claude-opus-5-5; Anthropic API calls possible: yes`.
+  * The key authenticated; no API error, refusal, rate limit or failed
+    search appears in the log, and all 16 extraction calls returned
+    usable output.
+  * Result: `Run run-20261112T050550Z (dry run): PARTIAL.` 22 of 33 sources
+    scanned (7 via a fallback), 97 new documents, 16 extracted, 18 candidate
+    facts, 1 would-be publication, 5 held. Searches used 40 of 40 (11
+    search-only sources were then skipped: `search cap reached (40)`).
+  * **Measured cost: $1.1238** (the run report's estimate at list prices:
+    40 web searches = $0.40, model tokens about $0.72). The tokens by model
+    are in the report artifact, which the build container's network policy
+    could not download; later runs print them in the log.
+  * `npm run validate` passed; the commit step was skipped (dry run) and
+    `main` was not changed by the run.
+  * Defects found and fixed in commit `dd92de8` (with tests in
+    `pipeline/__tests__/live-trial.test.ts`): the summary line showed
+    `searches used 0/40; estimated cost $0.0000`; blocked-article fallback
+    searches used up the cap before the search-only sources; the one
+    would-be publication (dnata `opened`, from the half-year results
+    wording "commissioning its new … logistics facility", already recorded
+    as the `commissioned` event, dated by the release's publication date)
+    was wrong and is now held; the log did not show claims, evidence URLs
+    or tokens.
+
 What is **not** shown yet:
 
 * **No scheduled run has happened**: the schedule (`30 4 * * *`,
   `30 12 * * *` UTC) is wired but off until the owner sets the repository
   variable `SCHEDULE_ENABLED` to `true`.
-* **No live Anthropic API run** (search or extraction) has been made, so no
-  automated data commit has yet gone through validation → commit → deploy,
-  and the site has not yet shown a pipeline-made change. Next step, with the
-  owner's go-ahead: a manual run with `search_provider: anthropic`,
-  `extract: true` and `dry_run` still ticked (about $1), then one with
-  `dry_run` unticked.
+* **No live run has written data.** The paid path has run only as a dry
+  run, so no automated data commit has yet gone through validation →
+  commit → deploy, and the site has not yet shown a pipeline-made change.
+  The fixes from the dry run (search reserve, the two new hold rules) have
+  not yet been exercised against the live API. Next step, with the owner's
+  go-ahead: a manual run with `dry_run` unticked (about $1.1, judging by the
+  one measured run).
 * The deployed site could not be opened from the build container (its
   network blocks github.io); the browser checks in §1–2 were made on the same
   build served locally.

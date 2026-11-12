@@ -6,9 +6,10 @@ construction milestones and openings in Dubai, with a small public website.
 **Live site:** https://ktrout18.github.io/dubai-logistics-investment-tracker/
 
 Status: proof of concept. The register and website are live. The automated
-update pipeline is built and tested offline, and its GitHub workflow has
-been run in zero-spend mode, but it has **not yet been run live** against the
-Anthropic API, and the twice-daily schedule is **off**. See
+update pipeline is built and tested offline. Its GitHub workflow has run in
+zero-spend mode and **once with paid search and extraction as a dry run**
+(12 Nov 2026, nothing written). No live run that writes and commits data has
+been made yet, and the twice-daily schedule is **off**. See
 [Current limitations](#current-limitations).
 
 ## How it fits together
@@ -128,7 +129,7 @@ runs.
 ## Secrets
 
 * `ANTHROPIC_API_KEY` (repository secret): needed for paid runs. The owner
-  has added it; it has not been used yet. The workflow only passes it to the
+  has added it; it authenticated on the paid dry run of 12 Nov 2026. The workflow only passes it to the
   pipeline when the run is meant to spend, and never prints it.
 * `GITHUB_TOKEN`: provided automatically by Actions (commits and
   pending-review issues).
@@ -140,7 +141,14 @@ git-ignored.
 
 ## API costs
 
-Estimates at list prices (details and assumptions in `docs/PIPELINE.md` §7):
+**Measured once:** the paid dry run on GitHub on 12 Nov 2026 cost **$1.12**
+by the run report's estimate at list prices: 40 web searches ($0.40, the
+cap was reached) and about $0.72 of model tokens (40 search calls on Claude
+Haiku 5.5, 16 extractions on Claude Opus 5.5). One run is one data point
+(`docs/PIPELINE.md` §5 and §7).
+
+Estimates at list prices made before that run (details and assumptions in
+`docs/PIPELINE.md` §7):
 
 * About **$1.1 per run**: roughly 30 web searches ($0.30), the search model's
   tokens (about $0.02) and about 10 extractions ($0.80).
@@ -167,17 +175,23 @@ Both are explained step by step in [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md
 
 ## Current limitations
 
-* **The pipeline has not run live yet.** No Anthropic API call has been made:
-  extraction and search are proven only with fakes in the test suite. The
-  workflow itself has run on GitHub in zero-spend mode (see
+* **No live run has written data yet.** Search and extraction have run
+  against the Anthropic API once, as a dry run on GitHub (12 Nov 2026): the
+  key worked, 22 of 33 sources were scanned, 16 documents extracted, 1
+  change would have been published and 5 held. That run exposed four
+  defects, now fixed with tests (`docs/PIPELINE.md` §5). Committing data and
+  redeploying from a pipeline run has not happened yet (see
   `docs/ACCEPTANCE.md`, criterion 10).
 * **The schedule is off** by the owner's choice until `SCHEDULE_ENABLED` is set.
 * **Some sources block or defeat automated access**, so the pipeline relies on
   fallbacks (sitemaps, feeds, search) for them:
-  * PCFC: news and circulars pages answer HTTP 403.
+  * PCFC: news and circulars pages answer HTTP 403 (site search found 6
+    documents on the paid dry run).
   * TECOM Group (tecomgroup.ae): HTTP 403 (the Dubai Industrial City site works).
-  * Aldar: the news page answers HTTP 403 (sitemap fallback).
-  * WAM: listing is rendered by JavaScript, with no article links in the HTML.
+  * Aldar: the news page answered HTTP 403 on 11 Nov and a JavaScript shell
+    on 12 Nov (sitemap fallback both times).
+  * WAM: listing is rendered by JavaScript, with no article links in the HTML
+    (site search found 8 documents on the paid dry run).
   * DP World: listing is rendered by JavaScript (sitemap fallback, which has no publication dates).
   * Jafza: article pages sometimes return a bot-verification page, which is not bypassed.
   * Emirates media centre: the connection was reset on the probe.
