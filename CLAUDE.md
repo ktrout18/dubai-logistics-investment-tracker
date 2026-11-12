@@ -27,7 +27,7 @@ Continue until the requested work is complete and verified. Finish with a concis
 
 Repository layout:
 - `data/`: the canonical register (`register.json`, `changelog.json`, `pending-review.json`, `meta.json`, `sources.json`, and the pipeline's `pipeline-state.json`). Never hand-edit without a ChangeRecord (see `docs/REVIEW_GUIDE.md`).
-- `shared/`: schemas, counting rules (`computeMetrics`, `computePresentedTotals`), validation, transitions, exports. Used by the site, the scripts and the pipeline.
+- `shared/`: schemas, counting rules (`computeMetrics`, `computeBriefing` in `shared/briefing.ts`, definitions in `shared/definitions.ts`), validation, transitions, exports. Used by the site, the scripts and the pipeline.
 - `src/`: the static React site (Vite, hash routing, served by GitHub Pages).
 - `pipeline/`: the ingestion pipeline (`docs/PIPELINE.md`); tests in `pipeline/__tests__/` use fakes only.
 - `scripts/`: `validate-data.ts`, `sync-data.ts` (copies `data/` into `public/data/`, minus `pipeline-state.json`), and `seed/`.
@@ -41,3 +41,4 @@ Rules:
 - Workers stage files by exact path (`git add path/to/file`); never `git add -A` or `git add .`.
 - Do not re-run `scripts/seed/build.ts` once the pipeline has written records: it overwrites `data/register.json` and `data/pending-review.json`.
 - Live Anthropic API runs (an ingest with `--search anthropic` or with extraction on, or the workflow with `search_provider: anthropic` / `extract: true`, or turning on `SCHEDULE_ENABLED`) need the owner's explicit go-ahead. The zero-spend run is `npm run ingest:dry -- --search none --no-extract`.
+- The site's headline, cards, tables and snapshot are computed from the register; never add project-specific wording or totals in `src/`.
