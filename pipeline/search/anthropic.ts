@@ -72,6 +72,9 @@ export class AnthropicSearchProvider implements SearchProvider {
       for (const block of msg.content) {
         if (block.type === 'web_search_tool_result') {
           if (!Array.isArray(block.content)) {
+            // With max_uses: 1 the model sometimes tries a second search; that
+            // attempt fails with max_uses_exceeded but the first one's results stand.
+            if (block.content.error_code === 'max_uses_exceeded') continue;
             throw new SearchError(`web search error: ${block.content.error_code}`);
           }
           for (const r of block.content) {

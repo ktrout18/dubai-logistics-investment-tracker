@@ -334,11 +334,15 @@ export function decide(item: FactItem, ctx: DecideContext): Decision {
   const reasons: string[] = [];
 
   if (!item.groundingOk) reasons.push(...item.failures.map((r) => `grounding: ${r}`));
-  const delivered = statusFromEvent({ type: f.eventType });
-  if (delivered && isDeliveredStatus(delivered) && grounded.eventDate?.from === 'publication_date') {
-    // A results report or round-up published today says nothing about when the
-    // facility opened; the publication date would become a false completion date.
-    reasons.push(`the date of the "${f.eventType}" milestone is not stated; the publication date (${grounded.eventDate.date}) is not used as a completion date`);
+  const implied = statusFromEvent({ type: f.eventType });
+  if (implied && grounded.eventDate?.from === 'publication_date' && !/\btoday\b/i.test(f.eventQuote)) {
+    // A results report or market round-up published today says nothing about
+    // when a facility opened or broke ground; only "today" ties the milestone
+    // to the publication date. Otherwise the date would be invented.
+    const what = isDeliveredStatus(implied) ? 'completion date' : 'milestone date';
+    reasons.push(
+      `the date of the "${f.eventType}" milestone is not stated and the quote does not say "today"; the publication date (${grounded.eventDate.date}) is not used as a ${what}`,
+    );
   }
 
   if (match.kind === 'ambiguous') {

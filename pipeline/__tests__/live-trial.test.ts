@@ -3,10 +3,12 @@
  * 12 Nov 2026): stale summary totals, blocked-article searches starving the
  * search-only sources, and a results report re-read as an opening.
  */
+import type Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
-import type { Project, RegisterFile } from '../../shared/index.ts';
+import type { PendingReviewFile, Project, RegisterFile } from '../../shared/index.ts';
 import type { PipelineSource } from '../sources.ts';
 import { reportDigest } from '../run.ts';
+import { AnthropicSearchProvider } from '../search/anthropic.ts';
 import { FakeExtractor, FakeSearch, acmeProject, article, betaProject, fact, listing, makeDataDir, quietWeb, readBytes, readJson, run, testSources } from './helpers.ts';
 
 const RESULTS_URL = 'https://www.jafza.ae/news/acme-group-half-year-results/';
@@ -130,5 +132,106 @@ describe('live trial: search budget', () => {
     const digest = reportDigest(report).join('\n');
     expect(digest).toMatch(/claude-haiku-5-5: 1 call\(s\), 1000 input \/ 200 output tokens/);
     expect(digest).toContain('Searches: 1/5 via anthropic');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Second live dry run (run 43165141664, 12 Nov 2026)
+// ---------------------------------------------------------------------------
+
+const ROUNDUP_URL = 'https://gulfnews.com/business/warehouse-rents-rise-in-dubai-1.500950';
+const ROUNDUP_TEXT = [
+  'Warehouse rents in Dubai rose in the third quarter, a consultancy said.',
+  'In Dubai, Delta Freight has broken ground on a new logistics centre in Dubai Industrial City, while Omega Storage is building a warehouse in Dubai Investments Park.',
+];
+
+function roundupWeb() {
+  const web = quietWeb();
+  web.set('https://gulfnews.com/news_sitemap.xml', { status: 200, contentType: 'text/xml', body: `<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"><url><loc>${ROUNDUP_URL}</loc><news:news><news:publication_date>2026-11-10T09:00:00+04:00</news:publication_date><news:title>Warehouse rents rise in Dubai logistics market</news:title></news:news></url></urlset>` });
+  web.set(ROUNDUP_URL, { status: 200, body: article({ title: 'Warehouse rents rise in Dubai logistics market', date: '2026-11-10', paragraphs: ROUNDUP_TEXT }) });
+  return web;
+}
+
+const roundupFact = (name: string, party: string, zone: string, quote: string) =>
+  fact({
+    projectName: name, developer: party, partiesQuote: quote, zone, location: zone, locationQuote: zone, emirate: 'Dubai', emirateQuote: 'In Dubai',
+    assetType: 'distribution_centre', sectors: ['modern_warehousing'], eventType: 'construction_start', eventQuote: quote, eventDate: null,
+  });
+
+describe('live trial 2: several claims from one page', () => {
+  it('holds each claim separately instead of dropping all but the first as "already pending"', async () => {
+    const root = await makeDataDir([acmeProject(), betaProject()]);
+    const facts = [
+      roundupFact('Delta Freight logistics centre', 'Delta Freight', 'Dubai Industrial City', 'Delta Freight has broken ground on a new logistics centre in Dubai Industrial City'),
+      roundupFact('Omega Storage warehouse', 'Omega Storage', 'Dubai Investments Park', 'Omega Storage is building a warehouse in Dubai Investments Park'),
+    ];
+    const report = await run(root, { web: roundupWeb(), extractor: new FakeExtractor({ [ROUNDUP_URL]: facts }) });
+    expect(report.published).toEqual([]);
+    expect(report.held).toHaveLength(2);
+    expect(report.skipped.filter((s) => /already pending review/.test(s.reason))).toEqual([]);
+    const pending = await readJson<PendingReviewFile>(root, 'pending-review.json');
+    expect(pending.items).toHaveLength(2);
+
+    // The same page in a later run (e.g. reprocessed) does not add the same claims twice.
+    const again = await run(root, { web: roundupWeb(), extractor: new FakeExtractor({ [ROUNDUP_URL]: facts }) }, { since: '2026-11-04' });
+    expect(again.held).toHaveLength(0);
+    expect((await readJson<PendingReviewFile>(root, 'pending-review.json')).items).toHaveLength(2);
+  });
+
+  it('a milestone with no stated date is held unless the quote says "today"', async () => {
+    const root = await makeDataDir([acmeProject(), betaProject()]);
+    const report = await run(root, {
+      web: roundupWeb(),
+      extractor: new FakeExtractor({ [ROUNDUP_URL]: [roundupFact('Delta Freight logistics centre', 'Delta Freight', 'Dubai Industrial City', 'Delta Freight has broken ground on a new logistics centre in Dubai Industrial City')] }),
+    });
+    expect(report.held[0]!.reasons.join(' | ')).toMatch(/"construction_start" milestone is not stated and the quote does not say "today"; the publication date \(2026-11-10\) is not used as a milestone date/);
+  });
+});
+
+describe('live trial 2: a page cited by one project does not identify every facility it mentions', () => {
+  it('matches a different facility on the same results report by its own name, not by the shared URL', async () => {
+    const root = await makeDataDir([acmeCommissioned(), betaProject()]);
+    const web = resultsWeb();
+    web.set(RESULTS_URL, {
+      status: 200,
+      body: article({ title: 'Acme Group half-year results', date: '2026-11-09', paragraphs: [...RESULTS_TEXT, 'In May 2026, Acme Aviation broke ground on its engineering hangar at Dubai South, Dubai.'] }),
+    });
+    const hangar = fact({
+      projectName: 'Acme Aviation engineering hangar', operator: 'Acme Aviation', partiesQuote: 'Acme Aviation broke ground', zone: 'Dubai South', location: 'Dubai South',
+      locationQuote: 'engineering hangar at Dubai South', emirate: 'Dubai', emirateQuote: 'Dubai South, Dubai', assetType: 'mro_aerospace_facility', sectors: ['aerospace_air_cargo'],
+      eventType: 'construction_start', eventQuote: 'Acme Aviation broke ground on its engineering hangar at Dubai South',
+      eventDate: { date: '2026-05-01', precision: 'month', quote: 'In May 2026' },
+    });
+    const report = await run(root, { web, extractor: new FakeExtractor({ [RESULTS_URL]: [hangar] }) });
+    expect(report.published.filter((p) => p.projectId === 'acme-logistics-jafza-cold-store')).toEqual([]);
+    expect(report.held.filter((h) => h.projectId === 'acme-logistics-jafza-cold-store')).toEqual([]);
+  });
+});
+
+describe('live trial 2: web search max_uses_exceeded', () => {
+  it('keeps the first search results when the model tries a second search', async () => {
+    const msg = {
+      id: 'm', type: 'message', role: 'assistant', model: 'claude-haiku-5-5', stop_reason: 'end_turn', stop_sequence: null, stop_details: null,
+      usage: { input_tokens: 900, output_tokens: 80, server_tool_use: { web_search_requests: 1, web_fetch_requests: 0 } },
+      content: [
+        { type: 'server_tool_use', id: 's1', name: 'web_search', input: { query: 'q' } },
+        { type: 'web_search_tool_result', tool_use_id: 's1', content: [{ type: 'web_search_result', url: 'https://pcfc.ae/en/news/a', title: 'Circular', page_age: 'November 8, 2026', encrypted_content: 'x' }] },
+        { type: 'server_tool_use', id: 's2', name: 'web_search', input: { query: 'q2' } },
+        { type: 'web_search_tool_result', tool_use_id: 's2', content: { type: 'web_search_tool_result_error', error_code: 'max_uses_exceeded' } },
+      ],
+    } as unknown as Anthropic.Message;
+    const p = new AnthropicSearchProvider({ model: 'claude-haiku-5-5', toolType: 'web_search_20250305', create: async () => msg });
+    const r = await p.search({ query: 'PCFC news', site: 'pcfc.ae', max: 5 });
+    expect(r.results.map((x) => x.url)).toEqual(['https://pcfc.ae/en/news/a']);
+  });
+
+  it('still reports other web search errors', async () => {
+    const msg = {
+      id: 'm', type: 'message', role: 'assistant', model: 'claude-haiku-5-5', stop_reason: 'end_turn', stop_sequence: null, stop_details: null,
+      usage: { input_tokens: 900, output_tokens: 80 },
+      content: [{ type: 'web_search_tool_result', tool_use_id: 's1', content: { type: 'web_search_tool_result_error', error_code: 'unavailable' } }],
+    } as unknown as Anthropic.Message;
+    const p = new AnthropicSearchProvider({ model: 'claude-haiku-5-5', toolType: 'web_search_20250305', create: async () => msg });
+    await expect(p.search({ query: 'q', max: 5 })).rejects.toThrow(/unavailable/);
   });
 });

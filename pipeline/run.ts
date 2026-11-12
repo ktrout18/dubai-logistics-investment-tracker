@@ -17,6 +17,7 @@ import {
   fnv1a,
   formatIssue,
   makeReviewId,
+  normaliseText,
   normaliseUrl,
   todayIso,
   validateRegister,
@@ -344,9 +345,18 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
         quote: item.grounded.fact.eventQuote.slice(0, 500),
       },
     ];
-    const dup = pending.find(
-      (p) => p.state === 'open' && p.kind === d.kind && (p.projectId ?? '') === (d.projectId ?? '') && p.evidence.some((e) => normaliseUrl(e.url) === normaliseUrl(item.doc.url)),
-    );
+    // One page can carry several claims (a market round-up named eight projects
+    // on the live run): an open item is the same only if it is about the same claim.
+    const claimKey = (f: { projectName?: unknown; eventType?: unknown } | undefined) =>
+      f ? `${normaliseText(String(f.projectName ?? ''))}|${String(f.eventType ?? '')}` : undefined;
+    const thisClaim = claimKey(item.grounded.fact);
+    const dup = pending.find((p) => {
+      if (p.state !== 'open' || p.kind !== d.kind || (p.projectId ?? '') !== (d.projectId ?? '')) return false;
+      if (!p.evidence.some((e) => normaliseUrl(e.url) === normaliseUrl(item.doc.url))) return false;
+      const other = claimKey((p.proposed as { _fact?: { projectName?: unknown; eventType?: unknown } })._fact);
+      // Items written by hand (no _fact) cover every claim of that page for that project.
+      return other === undefined || other === thisClaim;
+    });
     if (dup) {
       report.skipped.push({ url: item.doc.url, reason: `already pending review as ${dup.id}` });
       return;

@@ -52,10 +52,21 @@ export function scoreProject(fact: CandidateFact, docUrl: string, project: Proje
   let identifying = false;
   const url = normaliseUrl(docUrl);
   const projectUrls = new Set([...project.sources.map((s) => s.url), ...project.events.map((e) => e.sourceUrl)].map(normaliseUrl));
+  const nameSim = jaccard(
+    nameTokens(`${fact.projectName} ${fact.facilityName ?? ''}`),
+    nameTokens(`${project.name} ${project.facilityName ?? ''}`),
+  );
   if (projectUrls.has(url)) {
-    score += 100;
-    identifying = true;
-    reasons.push('source URL already cited by this project');
+    // A results report or market round-up cites many facilities. The shared URL
+    // identifies the project only when the claim is about the same kind of
+    // facility or a similarly named one; otherwise it is just the same document.
+    if (nameSim >= 0.25 || fact.assetType === project.assetType) {
+      score += 100;
+      identifying = true;
+      reasons.push('source URL already cited by this project');
+    } else {
+      reasons.push('source URL cited by this project, but the claim is about a different facility');
+    }
   }
   if (recheckProjectId === project.id) {
     score += 1;
@@ -79,10 +90,7 @@ export function scoreProject(fact: CandidateFact, docUrl: string, project: Proje
     score -= 10;
     reasons.push(`different emirate (${fact.emirate} vs ${project.emirate})`);
   }
-  const sim = jaccard(
-    nameTokens(`${fact.projectName} ${fact.facilityName ?? ''}`),
-    nameTokens(`${project.name} ${project.facilityName ?? ''}`),
-  );
+  const sim = nameSim;
   if (sim >= 0.5) {
     score += 3;
     identifying = true;

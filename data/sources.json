@@ -832,7 +832,7 @@
         "www.reuters.com",
         "reuters.com"
       ],
-      "enabled": true,
+      "enabled": false,
       "accessMethods": [
         {
           "type": "site_search",
@@ -840,11 +840,12 @@
           "query": "Dubai logistics OR warehouse OR Jebel Ali"
         }
       ],
-      "notes": "Reputable wire; search only.",
+      "notes": "Reputable wire; search only. Disabled on 12 Nov 2026: the Anthropic web search tool refuses the domain (HTTP 400 \"The following domains are not accessible to our user agent: ['reuters.com']\"), so the source cannot be scanned and each run spent a search on it. Re-enable only with another search provider.",
       "probe": {
-        "date": "2026-11-11",
+        "date": "2026-11-12",
         "results": [
-          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified"
+          "not probed: host not reachable from the build container (network allowlist); listing URL from desk research, unverified",
+          "paid dry run on GitHub (run 43165141664): site_search failed with HTTP 400, domain not accessible to the Anthropic web search tool"
         ]
       }
     },
