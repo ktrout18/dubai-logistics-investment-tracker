@@ -114,6 +114,8 @@ export function fact(over: Partial<CandidateFact>): CandidateFact {
     locationQuote: null,
     emirate: null,
     emirateQuote: null,
+    country: null,
+    claimKind: 'facility',
     assetType: 'warehouse',
     sectors: ['modern_warehousing'],
     eventType: 'announcement',
@@ -322,7 +324,7 @@ export const TEST_CONFIG: PipelineConfig = { ...structuredClone(DEFAULT_CONFIG),
 
 export async function run(
   root: string,
-  deps: { web: FakeWeb; search?: SearchProvider; extractor?: Extractor; issues?: IssueTracker },
+  deps: { web: FakeWeb; search?: SearchProvider; extractor?: Extractor; issues?: IssueTracker; config?: Partial<PipelineConfig> },
   opts: Partial<RunOptions> = {},
 ): Promise<RunReport> {
   const clock = new FakeClock();
@@ -344,7 +346,7 @@ export async function run(
       issues: deps.issues ?? new FakeIssues(),
       clock,
       logger: silentLogger,
-      config: TEST_CONFIG,
+      config: { ...TEST_CONFIG, ...deps.config },
     },
   );
 }

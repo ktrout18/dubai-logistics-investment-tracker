@@ -14,9 +14,12 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import {
   collectUsedIds,
+  companyKey,
   fnv1a,
   formatIssue,
+  jaccard,
   makeReviewId,
+  nameTokens,
   normaliseText,
   normaliseUrl,
   todayIso,
@@ -33,14 +36,16 @@ import { CostTracker, type CostReport } from './cost.ts';
 import { addDays } from './dates.ts';
 import { decide, type Decision, type FactItem } from './decide.ts';
 import { fetchArticles, scanSource, type DiscoveryContext, type DocOutcome } from './discovery.ts';
-import { extractFacts, looksRelevant } from './extraction.ts';
+import { extractFacts, looksRelevant, type CandidateFact } from './extraction.ts';
 import { groundFact } from './grounding.ts';
+import { factParties } from './match.ts';
+import { triageFact, type TriageReason } from './triage.ts';
 import { normaliseWhitespace } from './html.ts';
 import { applyPatch, creationRecord, type PatchMeta } from './patch.ts';
 import { recheckSearch, selectRecheck } from './recheck.ts';
 import { SearchBudget } from './search/budget.ts';
 import { parseSources, type PipelineSource } from './sources.ts';
-import { preserveRaw, rawJson, readSnapshot, writeAtomically, nodeFs, type DataSnapshot, type PipelineState, type RunSummary, type WriteFs } from './store.ts';
+import { preserveRaw, rawJson, readSnapshot, writeAtomically, nodeFs, type DataSnapshot, type PipelineState, type RegionalMention, type RunSummary, type WriteFs } from './store.ts';
 import type { Clock, DocumentRecord, Extractor, Fetcher, IssueTracker, Logger, SearchProvider, SourceScanResult } from './types.ts';
 
 export interface RunOptions {
@@ -74,6 +79,8 @@ export interface HeldReport {
   url: string;
   /** What the extraction claimed (event type, project, quote), for reviewers reading the log. */
   claim?: string;
+  /** Other pages reporting the same story in this run, attached as extra evidence. */
+  alsoReportedBy?: string[];
   reasons: string[];
   issueUrl?: string;
 }
@@ -93,6 +100,13 @@ export interface RunReport {
   published: { kind: string; projectId: string; reason: string; url: string; claim?: string }[];
   held: HeldReport[];
   skipped: { url: string; reason: string }[];
+  /** Claims removed from the review queue before the decision (pipeline/triage.ts), each with its reason. */
+  triage: {
+    skipped: { url: string; projectName: string; reason: TriageReason; detail: string }[];
+    regional: { url: string; projectName: string; emirate: string; claim: string }[];
+    /** Held claims merged into another item of this run (same story, another outlet). */
+    mergedHolds: { url: string; intoReviewId: string }[];
+  };
   recheck: { projectId: string; results: number; error?: string }[];
   searches: { used: number; cap: number; provider: string; log: SearchBudget['log'] };
   cost: CostReport;
@@ -107,6 +121,38 @@ export function describeClaim(item: Pick<FactItem, 'grounded'>): string {
   const date = item.grounded.eventDate ? ` ${item.grounded.eventDate.date}${item.grounded.eventDate.from === 'publication_date' ? ' (publication date)' : ''}` : '';
   const quote = f.eventQuote ? ` — "${f.eventQuote.replace(/\s+/g, ' ').slice(0, 160)}"` : '';
   return `${f.eventType}${date}: ${f.projectName || 'unnamed'}${quote}`;
+}
+
+/** Two held claims from different pages describe the same story (the Floward case). */
+export function sameStory(a: CandidateFact, b: CandidateFact): boolean {
+  if (a.eventType !== b.eventType) return false;
+  const sim = jaccard(nameTokens(`${a.projectName} ${a.facilityName ?? ''}`), nameTokens(`${b.projectName} ${b.facilityName ?? ''}`));
+  if (sim >= 0.6) return true;
+  const keys = new Set(factParties(a).map(companyKey).filter(Boolean));
+  const shared = factParties(b).some((x) => keys.has(companyKey(x)));
+  return shared && sim >= 0.3;
+}
+
+/** Add this run's regional mentions to the state list, de-duplicated by name and emirate. */
+export function mergeRegionalMentions(
+  existing: readonly RegionalMention[],
+  seen: readonly { name: string; emirate: string; claim: string; url: string }[],
+  day: string,
+  max: number,
+): RegionalMention[] {
+  const out = existing.map((m) => ({ ...m }));
+  for (const s of seen) {
+    const key = `${normaliseText(s.name)}|${s.emirate}`;
+    const m = out.find((x) => `${normaliseText(x.name)}|${x.emirate}` === key);
+    if (!m) {
+      out.push({ name: s.name, emirate: s.emirate, claim: s.claim, url: s.url, firstSeen: day, lastSeen: day });
+      continue;
+    }
+    m.lastSeen = day;
+    const urls = [m.url, ...(m.otherUrls ?? [])].map(normaliseUrl);
+    if (!urls.includes(normaliseUrl(s.url))) m.otherUrls = [...(m.otherUrls ?? []), s.url].slice(-5);
+  }
+  return out.slice(-max);
 }
 
 function runIdFor(now: Date): string {
@@ -151,6 +197,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     published: [],
     held: [],
     skipped: [],
+    triage: { skipped: [], regional: [], mergedHolds: [] },
     recheck: [],
     searches: { used: 0, cap: opts.maxSearches ?? config.maxSearchesPerRun, provider: deps.search.name, log: [] },
     cost: cost.report(),
@@ -218,11 +265,19 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   const recheckN = opts.recheck ?? config.recheckPerRun;
   const plannedRechecks = !opts.sourceIds?.length && recheckN > 0 ? recheckN : 0;
   const usesSearch = (s: PipelineSource) => s.enabled && s.accessMethods.some((m) => m.type === 'site_search');
+  const searchOnly = (s: PipelineSource) => s.accessMethods.length > 0 && s.accessMethods.every((m) => m.type === 'site_search');
+  const switchedOff = (s: PipelineSource) => !config.searchOnlySources && searchOnly(s);
   for (const [i, source] of selected.entries()) {
     // Searches for blocked articles may not eat into the searches that later
     // sources (site_search) and the rotating recheck still need.
-    ctx.articleSearchReserve = selected.slice(i + 1).filter(usesSearch).length + plannedRechecks;
+    ctx.articleSearchReserve = selected.slice(i + 1).filter((s) => usesSearch(s) && !switchedOff(s)).length + plannedRechecks;
     logger.info(`scan ${source.id} …`);
+    if (source.enabled && switchedOff(source)) {
+      const note = 'search-only source, not scanned: searchOnlySources is off (PIPELINE_SEARCH_ONLY_SOURCES=on to scan it)';
+      report.sources.push({ sourceId: source.id, name: source.name, status: 'skipped', documents: 0, attempts: [], note });
+      logger.info(`  skipped: ${note}`);
+      continue;
+    }
     const { scan, items } = await scanSource(source, ctx);
     if (scan.status === 'ok' || scan.status === 'fallback_used') {
       const found = await fetchArticles(source, items, scan.method ?? 'listing', ctx, report.documents.outcomes);
@@ -324,6 +379,24 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   report.candidates = items.length;
   if (fatal) report.errors.push(fatal);
 
+  // ---- Triage: outside the UAE, not a facility, restatements, other emirates ----
+  const regionalSeen: { name: string; emirate: string; claim: string; url: string }[] = [];
+  const kept = items.filter((item) => {
+    const t = triageFact(item, snap.register.projects, config);
+    const f = item.grounded.fact;
+    if (t.action === 'skip') {
+      report.triage.skipped.push({ url: item.doc.url, projectName: f.projectName, reason: t.reason, detail: t.detail });
+      return false;
+    }
+    if (t.action === 'regional') {
+      const claim = describeClaim(item);
+      report.triage.regional.push({ url: item.doc.url, projectName: f.projectName, emirate: t.emirate, claim });
+      regionalSeen.push({ name: f.projectName, emirate: t.emirate, claim, url: item.doc.url });
+      return false;
+    }
+    return true;
+  });
+
   // ---- Decide + apply (each change validated) -------------------------------
   let projects: Project[] = structuredClone(snap.register.projects);
   let changes: ChangeRecord[] = structuredClone(snap.changelog.changes);
@@ -364,6 +437,20 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
       report.skipped.push({ url: item.doc.url, reason: `already pending review as ${dup.id}` });
       return;
     }
+    // The same story from another outlet in this run: one item, extra evidence.
+    const story = pending.find((p) => {
+      if (!newReviewIds.includes(p.id) || p.kind !== d.kind || (p.projectId ?? '') !== (d.projectId ?? '')) return false;
+      if (p.evidence.some((e) => normaliseUrl(e.url) === normaliseUrl(item.doc.url))) return false;
+      const other = (p.proposed as { _fact?: CandidateFact })._fact;
+      return !!other && sameStory(other, item.grounded.fact);
+    });
+    if (story) {
+      story.evidence = [...story.evidence, ...evidence];
+      report.triage.mergedHolds.push({ url: item.doc.url, intoReviewId: story.id });
+      const h = report.held.find((x) => x.reviewId === story.id);
+      if (h) h.alsoReportedBy = [...(h.alsoReportedBy ?? []), item.doc.url];
+      return;
+    }
     const base = { createdAt: nowIso, evidence, proposed: d.proposed };
     const id = makeReviewId(base, pending.map((p) => p.id));
     const reasonHeld = d.reasons.join('; ');
@@ -375,7 +462,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     report.held.push({ reviewId: id, kind: d.kind, ...(d.projectId ? { projectId: d.projectId } : {}), url: item.doc.url, claim: describeClaim(item), reasons: d.reasons });
   };
 
-  for (const item of orderItems(items)) {
+  for (const item of orderItems(kept)) {
     const usedIds = collectUsedIds({ projects, changelog: changes, pending });
     const d = decide(item, { projects, usedIds, today, nowIso, allItems: items });
     if (d.action === 'skip') {
@@ -460,6 +547,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   // forget which URLs were processed so the next run looks at them again.
   if (report.status === 'failed') {
     state.processed = snap.state.processed;
+    regionalSeen.length = 0;
     projects = snap.register.projects;
     changes = snap.changelog.changes;
     pending = snap.pendingReview.items;
@@ -504,8 +592,13 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     held: report.held.length,
     searches: search.searchesUsed,
     estimatedCostUsd: cost.report().totalUsd,
+    skipped: report.triage.skipped.length,
+    regional: report.triage.regional.length,
   };
   state.runs = [...state.runs, summary].slice(-config.runHistoryLength);
+  if (regionalSeen.length || state.regionalMentions) {
+    state.regionalMentions = mergeRegionalMentions(state.regionalMentions ?? [], regionalSeen, today, config.triage.maxRegionalMentions);
+  }
 
   if (opts.dryRun) {
     logger.info('dry run: no data files written, no issues opened');
@@ -593,6 +686,14 @@ export function buildSummary(r: RunReport): string {
   const ok = scanned.length - r.failedSources.length;
   lines.push(`${ok} source(s) scanned (${scanned.filter((s) => s.status === 'fallback_used').length} via a fallback method); ${r.documents.fetched} new document(s); ${r.documents.extracted} extracted; ${r.candidates} candidate fact(s).`);
   lines.push(`${r.published.length} change(s) published; ${r.held.length} held for review; searches used ${r.searches.used}/${r.searches.cap}; estimated cost $${r.cost.totalUsd.toFixed(4)}.`);
+  const t = r.triage;
+  if (t.skipped.length || t.regional.length || t.mergedHolds.length) {
+    const by = (reason: TriageReason) => t.skipped.filter((x) => x.reason === reason).length;
+    lines.push(
+      `Set aside before review (counted, not queued): ${by('outside_uae')} outside the UAE, ${by('not_a_facility')} not a facility, ${by('restates_recorded_milestone')} already recorded; ` +
+        `${t.regional.length} regional mention(s) in other emirates; ${t.mergedHolds.length} held claim(s) merged as the same story.`,
+    );
+  }
   // Documents that reached the extraction step but were not analysed: never claim "nothing new" over them.
   const notAnalysed = r.documents.outcomes.filter((o) => /^(extraction_failed|extraction_error|deferred_extraction_cap|not_extracted_run_aborted|too_long_not_sent)/.test(o.outcome));
   if (notAnalysed.length) {
@@ -637,6 +738,9 @@ export function reportDigest(r: RunReport): string[] {
     }
   }
   for (const s of r.skipped) lines.push(`  skipped ${s.url}: ${s.reason}`);
+  for (const x of r.triage.skipped) lines.push(`  set aside (${x.reason}) ${x.projectName}: ${x.detail} — ${x.url}`);
+  for (const x of r.triage.regional) lines.push(`  regional (${x.emirate}) ${x.claim} — ${x.url}`);
+  for (const x of r.triage.mergedHolds) lines.push(`  merged into ${x.intoReviewId}: ${x.url}`);
   return lines;
 }
 

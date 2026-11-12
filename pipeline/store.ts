@@ -36,10 +36,29 @@ export const RunSummarySchema = z
     held: z.number(),
     searches: z.number(),
     estimatedCostUsd: z.number(),
+    /** Claims removed by triage (outside the UAE, not a facility, restatements). */
+    skipped: z.number().optional(),
+    /** Claims recorded as regional mentions (other emirates). */
+    regional: z.number().optional(),
     note: z.string().optional(),
   })
   .strict();
 export type RunSummary = z.infer<typeof RunSummarySchema>;
+
+/** A claim about a facility in another emirate, kept for the owner (never in the register automatically). */
+export const RegionalMentionSchema = z
+  .object({
+    name: z.string(),
+    emirate: z.string(),
+    claim: z.string(),
+    url: z.string(),
+    /** Further pages reporting the same mention. */
+    otherUrls: z.array(z.string()).optional(),
+    firstSeen: z.string(),
+    lastSeen: z.string(),
+  })
+  .strict();
+export type RegionalMention = z.infer<typeof RegionalMentionSchema>;
 
 export const PipelineStateSchema = z
   .object({
@@ -57,6 +76,8 @@ export const PipelineStateSchema = z
     /** projectId → last time the rotating recheck searched for it. */
     recheck: z.record(z.string()),
     runs: z.array(RunSummarySchema),
+    /** Claims in other emirates, de-duplicated by name and emirate (newest last). */
+    regionalMentions: z.array(RegionalMentionSchema).optional(),
   })
   .strict();
 export type PipelineState = z.infer<typeof PipelineStateSchema>;

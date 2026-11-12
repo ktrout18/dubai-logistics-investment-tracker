@@ -480,7 +480,7 @@ describe('g. area bases and forecast dates', () => {
 });
 
 describe('h. non-Dubai announcements', () => {
-  it('stores a Sharjah project as regional context, never in Dubai totals; holds one with no emirate', async () => {
+  it('records a Sharjah project as a regional mention only (never in the register or Dubai totals); holds one with no emirate', async () => {
     const root = await makeDataDir([acmeProject()]);
     const URL = 'https://www.saif-zone.example/news/acme-opens-saif-warehouse';
     const URL2 = 'https://www.saif-zone.example/news/unnamed-place';
@@ -509,14 +509,15 @@ describe('h. non-Dubai announcements', () => {
     const before = computeMetrics((await readJson<RegisterFile>(root, 'register.json')).projects, 2026);
     const report = await run(root, { web, extractor: new FakeExtractor({ [URL]: [sharjah], [URL2]: [noEmirate] }) });
     const reg = await readJson<RegisterFile>(root, 'register.json');
-    const saif = reg.projects.find((p) => p.emirate === 'Sharjah')!;
-    expect(saif).toBeDefined();
-    expect(saif.status).toBe('operational');
+    // Other emirates never enter the register automatically (owner's decision, 12 Nov 2026):
+    // the claim is kept as a regional mention in the run report and the pipeline state.
+    expect(reg.projects.find((p) => p.emirate === 'Sharjah')).toBeUndefined();
+    expect(report.published).toEqual([]);
+    expect(report.triage.regional).toEqual([expect.objectContaining({ url: URL, emirate: 'Sharjah', projectName: 'Acme Logistics SAIF Zone Warehouse' })]);
+    const state = await readJson<{ regionalMentions?: { name: string; emirate: string; url: string }[] }>(root, 'pipeline-state.json');
+    expect(state.regionalMentions).toEqual([expect.objectContaining({ name: 'Acme Logistics SAIF Zone Warehouse', emirate: 'Sharjah', url: URL })]);
     const m = computeMetrics(reg.projects, 2026);
-    expect(m.scope.regionalProjectIds).toContain(saif.id);
-    expect(m.scope.includedProjectIds).not.toContain(saif.id);
     expect(m.otherModernDelivered.areas.warehouse_gfa.totalM2).toBe(before.otherModernDelivered.areas.warehouse_gfa.totalM2);
-    expect(m.regionalContext.deliveredInYear.areas.warehouse_gfa.totalM2).toBe(12000);
     expect(report.held).toEqual([expect.objectContaining({ url: URL2, reasons: expect.arrayContaining(['emirate not stated in the source']) })]);
   });
 });

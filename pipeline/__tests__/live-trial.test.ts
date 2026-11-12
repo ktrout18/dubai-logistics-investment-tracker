@@ -107,7 +107,7 @@ describe('live trial: search budget', () => {
         ? blocked.map((url, i) => ({ url, title: `PCFC circular ${i + 1}`, pageAge: '2026-11-08' })) // no snippets
         : [],
     );
-    const report = await run(root, { web, search }, { sourceIds: ['pcfc', 'carrier-a', 'carrier-b'], maxSearches: 4 });
+    const report = await run(root, { web, search, config: { searchOnlySources: true } }, { sourceIds: ['pcfc', 'carrier-a', 'carrier-b'], maxSearches: 4 });
 
     const status = (id: string) => report.sources.find((s) => s.sourceId === id)?.status;
     expect(status('pcfc')).toBe('fallback_used');
@@ -122,7 +122,7 @@ describe('live trial: search budget', () => {
 
   it('reports the final search count and cost in the summary and the digest', async () => {
     const root = await makeDataDir([acmeProject()], [...testSources(), searchOnly('carrier-a')]);
-    const report = await run(root, { web: quietWeb(), search: new FakeSearch() }, { sourceIds: ['carrier-a'], maxSearches: 5 });
+    const report = await run(root, { web: quietWeb(), search: new FakeSearch(), config: { searchOnlySources: true } }, { sourceIds: ['carrier-a'], maxSearches: 5 });
 
     expect(report.searches.used).toBe(1);
     expect(report.cost.totalUsd).toBeGreaterThan(0);

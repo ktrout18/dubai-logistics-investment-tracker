@@ -5,7 +5,8 @@ name: Ingest announcements
 # Scheduled runs are OFF until the repository variable SCHEDULE_ENABLED is set
 # to exactly 'true' (Settings → Secrets and variables → Actions → Variables).
 # A scheduled run is a full live run: Anthropic search + extraction, writes
-# data/, commits, deploys. It costs money (about $1.1 per run, see README).
+# data/, commits, deploys. It costs money (measured $1.10 a run before the 13 Nov
+# 2026 search change; about $0.86 a run estimated after it, see README).
 #
 # Manual runs (Actions → Ingest announcements → Run workflow) always run. Their
 # DEFAULTS are zero-spend: dry run, no search provider, extraction off. In that

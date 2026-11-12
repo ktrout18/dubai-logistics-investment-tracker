@@ -32,7 +32,7 @@ export interface PipelineConfig {
   webSearchPricePerSearch: number;
   /** Search backend: anthropic (Claude + server web search), brave, or none (direct fetch only). */
   searchProvider: 'anthropic' | 'brave' | 'none';
-  /** Hard cap on searches per run (all purposes). */
+  /** Hard cap on searches per run (all purposes). 20 covers the site-search fallbacks of blocked primary sources (about 5 a run), 5 rechecks and blocked-article fallbacks. */
   maxSearchesPerRun: number;
   /** Hard cap on extraction (LLM) calls per run. Extra documents wait for the next run. */
   maxExtractionsPerRun: number;
@@ -56,6 +56,24 @@ export interface PipelineConfig {
   };
   /** Number of past run summaries kept in data/pipeline-state.json. */
   runHistoryLength: number;
+  /**
+   * Scan sources whose only access method is site search. Off by default: in
+   * three paid runs (12 Nov 2026) none of their results reached extraction.
+   * Site search stays on as a fallback for sources with a direct method, and
+   * for the rotating recheck. Env: PIPELINE_SEARCH_ONLY_SOURCES=on.
+   */
+  searchOnlySources: boolean;
+  /** Claims removed from the review queue before the decision (pipeline/triage.ts). */
+  triage: {
+    /** Claim kinds that are not register material; skipped and counted in the run report. */
+    skipClaimKinds: string[];
+    /** Places outside the UAE; a claim naming one (and nothing in Dubai or an emirate) is skipped. */
+    foreignPlaces: string[];
+    /** Places in other emirates not covered by the known zones in shared/normalise.ts. */
+    otherEmiratePlaces: Record<string, 'Abu Dhabi' | 'Sharjah' | 'Fujairah' | 'Ajman' | 'Ras Al Khaimah' | 'Umm Al Quwain'>;
+    /** Most regional mentions kept in data/pipeline-state.json (oldest dropped first). */
+    maxRegionalMentions: number;
+  };
 }
 
 const DEFAULT_PRICES: Record<string, ModelPrice> = {
@@ -71,7 +89,7 @@ export const DEFAULT_CONFIG: PipelineConfig = {
   prices: DEFAULT_PRICES,
   webSearchPricePerSearch: 10 / 1000,
   searchProvider: 'anthropic',
-  maxSearchesPerRun: 40,
+  maxSearchesPerRun: 20,
   maxExtractionsPerRun: 25,
   resultsPerSearch: 8,
   maxArticlesPerSource: 8,
@@ -86,6 +104,23 @@ export const DEFAULT_CONFIG: PipelineConfig = {
     maxBodyBytes: 4 * 1024 * 1024,
   },
   runHistoryLength: 30,
+  searchOnlySources: false,
+  triage: {
+    skipClaimKinds: ['corridor_or_route', 'service', 'market_commentary'],
+    foreignPlaces: [
+      'Saudi Arabia', 'KSA', 'Riyadh', 'Jeddah', 'Dammam', 'NEOM', 'Oman', 'Muscat', 'Sohar', 'Duqm', 'Salalah', 'Qatar', 'Doha', 'Bahrain', 'Kuwait',
+      'Egypt', 'Cairo', 'Iraq', 'Jordan', 'Turkey', 'Azerbaijan', 'Baku', 'Alat', 'Kazakhstan', 'Uzbekistan', 'Pakistan', 'Karachi', 'India', 'Mumbai', 'Delhi',
+      'China', 'Hong Kong', 'Singapore', 'Australia', 'Sydney', 'Melbourne', 'New Zealand', 'United Kingdom', 'UK', 'London', 'England', 'Ireland', 'Germany',
+      'Netherlands', 'Rotterdam', 'Belgium', 'France', 'Italy', 'Spain', 'Switzerland', 'Zurich', 'United States', 'USA', 'Canada', 'Brazil', 'Kenya', 'Nigeria',
+      'South Africa', 'Morocco', 'Senegal', 'Africa', 'Europe',
+    ],
+    otherEmiratePlaces: {
+      'Abu Dhabi': 'Abu Dhabi', 'Al Ain': 'Abu Dhabi', 'Khalifa Port': 'Abu Dhabi', 'Al Dhafra': 'Abu Dhabi', 'Ruwais': 'Abu Dhabi', 'Mussafah': 'Abu Dhabi',
+      'Sharjah': 'Sharjah', 'Khor Fakkan': 'Sharjah', 'Fujairah': 'Fujairah', 'Dibba': 'Fujairah', 'Ajman': 'Ajman', 'Ras Al Khaimah': 'Ras Al Khaimah',
+      'RAK': 'Ras Al Khaimah', 'Umm Al Quwain': 'Umm Al Quwain',
+    },
+    maxRegionalMentions: 300,
+  },
 };
 
 function intEnv(env: NodeJS.ProcessEnv, key: string, fallback: number): number {
@@ -117,6 +152,11 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): PipelineConfig
   c.recheckPerRun = intEnv(env, 'PIPELINE_RECHECK', c.recheckPerRun);
   c.maxArticlesPerSource = intEnv(env, 'PIPELINE_MAX_ARTICLES_PER_SOURCE', c.maxArticlesPerSource);
   c.http.minIntervalMs = intEnv(env, 'PIPELINE_MIN_INTERVAL_MS', c.http.minIntervalMs);
+  if (env.PIPELINE_SEARCH_ONLY_SOURCES) {
+    const v = env.PIPELINE_SEARCH_ONLY_SOURCES.toLowerCase();
+    if (v !== 'on' && v !== 'off') throw new Error('PIPELINE_SEARCH_ONLY_SOURCES must be on or off');
+    c.searchOnlySources = v === 'on';
+  }
   if (env.PIPELINE_USER_AGENT) c.http.userAgent = env.PIPELINE_USER_AGENT;
   else if (env.GITHUB_REPOSITORY) {
     c.http.userAgent = c.http.userAgent.replace('(', `(+https://github.com/${env.GITHUB_REPOSITORY}; `);
