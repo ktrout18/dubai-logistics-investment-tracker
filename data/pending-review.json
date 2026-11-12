@@ -438,8 +438,10 @@
         }
       ],
       "reasonHeld": "grounding: investment currency AUD is not one the pipeline can verify; the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-05) is not used as a milestone date; emirate not stated in the source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/1"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/1",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:27Z",
+      "resolutionNote": "Outside the UAE: dnata cargo facility at Western Sydney International Airport, Australia."
     },
     {
       "id": "rev-20261112-5f601748",
@@ -515,8 +517,10 @@
         }
       ],
       "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-05) is not used as a milestone date; emirate not stated in the source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/2"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/2",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:28Z",
+      "resolutionNote": "Outside the UAE: planned dnata investment in Alat, Azerbaijan."
     },
     {
       "id": "rev-20261112-fbd6a667",
@@ -613,8 +617,10 @@
         }
       ],
       "reasonHeld": "the date of the \"construction_start\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; identity ambiguous: possible matches gallega-global-logistics-jafza-3pl-hub (6.0), dp-world-lintara-jafza-dg-logistics-centre (6.0), dp-world-al-awir-inland-container-depot (3.0), dp-world-dubai-food-district-al-aweer (3.0)",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/3"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/3",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:28Z",
+      "resolutionNote": "Already in the register as dp-world-lintara-jafza-dg-logistics-centre (groundbreaking 30 Jun 2026); the round-up adds no date, area or new fact."
     },
     {
       "id": "rev-20261112-f9e9a821",
@@ -675,8 +681,10 @@
         }
       ],
       "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; no company named as developer/operator/investor/owner; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/4"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/4",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:29Z",
+      "resolutionNote": "Already in the register as terralogix-logistics-park-warsan / terralogix-logistics-park-phase-1; the round-up gives no milestone (calls the park upcoming)."
     },
     {
       "id": "rev-20261112-c0563e0f",
@@ -736,8 +744,10 @@
         }
       ],
       "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; no company named as developer/operator/investor/owner; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/5"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/5",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:30Z",
+      "resolutionNote": "Too vague: unnamed multi-unit warehouses in Dubai Investments Park, with no developer, size or date."
     },
     {
       "id": "rev-20261112-e861e37a",
@@ -886,8 +896,10 @@
         }
       ],
       "reasonHeld": "the date of the \"agreement_signed\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/6"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/6",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:31Z",
+      "resolutionNote": "Other emirate: the Kezad-JD.com warehousing is in Abu Dhabi."
     },
     {
       "id": "rev-20261112-185030c0",
@@ -1022,8 +1034,10 @@
         }
       ],
       "reasonHeld": "grounding: area[0]: unit sqm is not stated in its quote; the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/7"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/7",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:31Z",
+      "resolutionNote": "Other emirate: Axione's cold-chain facility is at the Abu Dhabi Food Hub, Abu Dhabi."
     },
     {
       "id": "rev-20261112-df92adb6",
@@ -1167,8 +1181,10 @@
         }
       ],
       "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/8"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/8",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:32Z",
+      "resolutionNote": "Other emirate: Kezad KLP7 is in Abu Dhabi."
     },
     {
       "id": "rev-20261112-45c61430",
@@ -1228,8 +1244,10 @@
         }
       ],
       "reasonHeld": "emirate not stated in the source; no company named as developer/operator/investor/owner; no location or zone stated; milestone type \"other\" cannot start a new project record; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/9"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/9",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:33Z",
+      "resolutionNote": "Not a facility: the AD Ports-Etihad Rail bonded corridor, named in market commentary."
     },
     {
       "id": "rev-20261112-370be44d",
@@ -1360,8 +1378,10 @@
         }
       ],
       "reasonHeld": "grounding: emirate Abu Dhabi is not named (directly or via a known zone) in its quote; the date of the \"opened\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a completion date; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/10"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/10",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:33Z",
+      "resolutionNote": "Other emirate: Floward's fulfilment centre is in Al Ain, Abu Dhabi."
     },
     {
       "id": "rev-20261112-e06f7213",
@@ -1490,8 +1510,10 @@
         }
       ],
       "reasonHeld": "grounding: emirate Abu Dhabi is not named (directly or via a known zone) in its quote; the date of the \"opened\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a completion date; single secondary source (Gulf News); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/11"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/11",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:34Z",
+      "resolutionNote": "Other emirate (Al Ain, Abu Dhabi); duplicate of #10 (rev-20261112-370be44d), same story from Gulf News."
     },
     {
       "id": "rev-20261112-659f6ecf",
@@ -1586,8 +1608,10 @@
         }
       ],
       "reasonHeld": "grounding: event date 2026-05-01 (month) is not stated in its quote; grounding: emirate Dubai is not named (directly or via a known zone) in its quote; identity ambiguous: possible matches emirates-engineering-complex-dubai-south (4.0), dnata-logistics-dubai-south-warehouse (3.0), emirates-snack-foods-cold-store-dubai-south (3.0)",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/12"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/12",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:34Z",
+      "resolutionNote": "Already in the register as emirates-engineering-complex-dubai-south (groundbreaking 18 May 2026); this release is already cited there."
     },
     {
       "id": "rev-20261112-75c71b33",
@@ -1652,8 +1676,10 @@
         }
       ],
       "reasonHeld": "grounding: event date 2026-07-01 (month) is not stated in its quote; milestone date unknown; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/13"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/13",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:35Z",
+      "resolutionNote": "Not Dubai: DP World's Al Rugaylat container terminal on the UAE east coast."
     },
     {
       "id": "rev-20261112-a0574797",
@@ -1717,8 +1743,10 @@
         }
       ],
       "reasonHeld": "grounding: event date 2026-07-01 (month) is not stated in its quote; milestone date unknown; single secondary source (Khaleej Times); needs an official source or a second independent source",
-      "state": "open",
-      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/14"
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/14",
+      "state": "rejected",
+      "resolvedAt": "2026-11-12T09:38:36Z",
+      "resolutionNote": "Not Dubai: DP World's Dibba General Cargo Terminal on the UAE east coast."
     }
   ]
 }
