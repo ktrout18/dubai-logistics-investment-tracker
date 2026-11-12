@@ -2,7 +2,8 @@
 
 The owner's ten acceptance criteria, with the status of each and the exact
 evidence. Checked on 11 November 2026; criteria 8–10 updated on 12 November
-2026 after two paid dry runs and the first live (non-dry) run.
+2026 after two paid dry runs and the first live (non-dry) run; review outcome
+and the noise-reduction changes recorded on 13 November 2026.
 
 Status values: **met** (shown on real data or on GitHub), **met offline only**
 (proven by automated tests with fakes, not yet on a live run), **not yet
@@ -27,8 +28,8 @@ the production build (`dist/`), on the real register.
 | 6 | A repeated article makes no duplicate | met offline only |
 | 7 | MoU → signed agreement updates the existing project | met offline only |
 | 8 | A blocked source triggers fallback research | met (live dry run: PCFC 403 → site search; WAM, Dubai Trade, DHL, DSV via site search) |
-| 9 | Unverified claims are held for review | met (live run 43181920655: 14 claims held in `pending-review.json`, a GitHub issue for each, register unchanged) |
-| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | partly met: a manually started live run (43181920655) validated, committed (`902cca6`) and redeployed the site from that commit; it changed run metadata and the review queue, not the register (nothing was published); no **scheduled** run yet (schedule off by the owner's choice) |
+| 9 | Unverified claims are held for review | met (live run 43181920655: 14 claims held in `pending-review.json`, a GitHub issue for each, register unchanged; all 14 then rejected in review) |
+| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | partly met: a manually started live run (43181920655) validated, committed (`902cca6`) and redeployed the site from that commit; it changed run metadata and the review queue, not the register (nothing was published); no **scheduled** run yet (schedule off by the owner's decision) |
 
 ---
 
@@ -309,12 +310,30 @@ What **is** shown:
     issues were retitled). Before the run (`2572951`): the seed build now
     refuses to overwrite data once the pipeline has written records, and
     new holds get issues before older items.
+* **Review of the live run's holds (13 Nov 2026).** All 14 items were
+  rejected with `npm run review -- reject <id> --note "…"` (commit
+  `b5ba29c`; register and changelog byte-identical; 14 seed items still
+  open, so the site's open-review count is back to 14) and issues #1–#14
+  were closed (`not planned`) with the same one-line reasons: outside the
+  UAE (2), other emirate (5, one a duplicate of #10), already in the
+  register (3: `dp-world-lintara-jafza-dg-logistics-centre`,
+  `terralogix-logistics-park-warsan`, `emirates-engineering-complex-dubai-south`),
+  not a facility (1), too vague (1), east-coast terminals outside Dubai (2).
+* **Noise reduction (commit `2fb67c4`, offline only).** A triage step sets
+  aside claims outside the UAE, non-facilities and restatements before
+  review, records other-emirate claims as regional mentions, and merges the
+  same story from two pages into one held item; search-only sources are off
+  by default and the search cap is 20 (`docs/PIPELINE.md` §3.1, §3.7a).
+  None of this has run against the API yet.
 
 What is **not** shown yet:
 
 * **No scheduled run has happened**: the schedule (`30 4 * * *`,
-  `30 12 * * *` UTC) is wired but off until the owner sets the repository
-  variable `SCHEDULE_ENABLED` to `true`.
+  `30 12 * * *` UTC) is wired but off by the owner's decision (repository
+  variable `SCHEDULE_ENABLED` not set).
+* **The 13 Nov 2026 changes have not run live**: triage, regional mentions,
+  same-story merging and the reduced search set are proven with fakes only,
+  and the ≈ $0.86 per-run cost is an estimate.
 * **No pipeline-made change to the register** has been published,
   committed and deployed: the live run published nothing, so the path
   "publish → ChangeRecord → validated commit → site totals change" is proven

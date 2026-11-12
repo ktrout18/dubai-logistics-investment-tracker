@@ -12,8 +12,12 @@ when a scan failed.
 > held 14 claims, published none, committed the review queue and run
 > metadata, and redeployed the site (§5, measured costs in §7). No
 > pipeline-made change to the register has been published yet. All tests use
-> fakes. The scheduled workflow does nothing until the repository variable
-> `SCHEDULE_ENABLED` is set to `true`.
+> fakes. The schedule is **off by the owner's decision**; scheduled runs do
+> nothing until the repository variable `SCHEDULE_ENABLED` is set to `true`.
+> Since 13 Nov 2026 claims outside the UAE, non-facilities and restatements
+> are set aside before review, other emirates become regional mentions
+> (§3.7a), and search-only sources are off (§3.1); these changes are tested
+> offline and have not yet run against the API.
 
 Contracts: `docs/DATA_MODEL.md` (schemas, validation, ids, transitions,
 metrics). The pipeline imports those `shared/` functions and does not
@@ -114,6 +118,14 @@ wins:
 * `site_search`: a date-restricted, site-restricted query through the search
   provider. It is reported as skipped when the provider is `none` or the cap
   is reached.
+
+**Search-only sources are off by default** (`searchOnlySources: false`;
+`PIPELINE_SEARCH_ONLY_SOURCES=on` turns them on). A source whose only method
+is `site_search` (13 company and media sources) is reported as `skipped`, not
+`failed`, and costs nothing. Across three paid runs none of their results
+reached extraction (undated, old or blocked pages). Site search stays on as
+the fallback for sources that have a direct method (PCFC, WAM, Dubai Trade,
+DHL, DSV …) and for the rotating recheck.
 
 The scan status goes into `meta.sourceScans`: `ok` (the first method worked),
 `fallback_used` (with the `method` that worked and a note on the earlier
@@ -297,9 +309,36 @@ are opened per run: this run's new items first, then older open items
 without an issue (such as the hand-written seed items). Without a token
 the run logs `issues: skipped (no GITHUB_TOKEN …)`.
 
-Non-Dubai findings (Fujairah, Sharjah …) are stored with their emirate, so
-`computeMetrics` shows them as regional context only, or they are held if the
-emirate is not stated. They never enter Dubai totals.
+### 3.7a Triage before the decision (`triage.ts`)
+
+All 14 claims held by the first live run were rejected in review (10 were
+outside Dubai or not facilities). Since 13 Nov 2026 a triage step runs on each
+grounded claim **before** the publication rules. It only removes claims from
+the review queue; it never publishes and never relaxes a rule above. Every
+removed claim is counted by reason in the run report, the summary line
+(`Set aside before review (counted, not queued): …`) and the log.
+
+| Outcome | When | Effect |
+|---|---|---|
+| `outside_uae` | no emirate, and the model states a non-UAE country or the text names a place in `triage.foreignPlaces` | skipped: no pending item, no issue |
+| `not_a_facility` | the model's `claimKind` is in `triage.skipClaimKinds` (corridor or route, service, market commentary) | skipped |
+| `restates_recorded_milestone` | a plausible match (score ≥ 3.5) already records this milestone type, and the claim has no stated date, no area and no investment (so it could never be published) | skipped |
+| regional mention | another emirate: the model's emirate, a known zone of that emirate (`shared/normalise.ts`) or a place in `triage.otherEmiratePlaces` (Al Ain, Khalifa Port, Dibba …) | no pending item, no issue; listed in the run report and in `data/pipeline-state.json` → `regionalMentions` (name, emirate, claim, URL, other URLs, first and last seen), de-duplicated by name and emirate, at most 300 |
+
+A claim that points to Dubai (emirate Dubai, a Dubai zone, or "Dubai",
+"Jebel Ali", "Al Maktoum", "Warsan" in its location) is never classed as
+outside the UAE or regional. Regional mentions never enter the register
+automatically and never count in Dubai totals; the owner can add
+regional-context projects by hand from the list.
+
+The extraction schema has two fields for this: `country` and `claimKind`.
+
+**Same story, two pages.** Within a run, a held claim with the same
+milestone, the same project (or none) and a similar facility name (or a shared
+company and a partly similar name) as an item already held in this run, from
+a different URL, is merged into that item: its URL and quote are added as
+evidence and the report lists it under `mergedHolds`. Two claims from the same
+page are never merged.
 
 ### 3.8 Apply and write (`patch.ts`, `store.ts`, `run.ts`)
 
@@ -579,6 +618,14 @@ step and the deploy job.
   other 4 duplicate register projects or are too vague. Nothing was wrongly
   published, but each hold opens an issue, so a reviewer gets about a dozen
   issues per run that mostly need a one-line rejection.
+* All 14 were rejected with `npm run review -- reject` (commit `b5ba29c`) and
+  issues #1–#14 closed with the same reasons. Under the triage rules of
+  §3.7a (offline replay in `pipeline/__tests__/noise.test.ts`), 12 of them
+  would not have been queued: 2 outside the UAE, 1 not a facility, 5 other
+  emirates (as regional mentions), the second Floward copy merged, and the
+  DP World, Emirates and Terralogix restatements set aside where the match
+  is plausible; the vague Dubai Investments Park item and the east-coast
+  terminals (emirate not stated) would still be held.
 
 ---
 
@@ -593,7 +640,9 @@ All in `pipeline/config.ts`, with environment overrides (see `.env.example`):
 | Web-search tool version | `web_search_20250305` | `PIPELINE_WEB_SEARCH_TOOL` |
 | Extraction effort | `high` | none (edit config) |
 | Search provider | `anthropic` | `PIPELINE_SEARCH_PROVIDER` / `--search` |
-| Searches per run | 40 | `PIPELINE_MAX_SEARCHES` / `--max-searches` |
+| Searches per run | 20 (40 until 13 Nov 2026) | `PIPELINE_MAX_SEARCHES` / `--max-searches` |
+| Scan search-only sources | off | `PIPELINE_SEARCH_ONLY_SOURCES=on` |
+| Triage lists (claim kinds to skip, foreign places, other-emirate places) | see `triage` in `config.ts` | none (edit config) |
 | Extractions per run | 25 | `PIPELINE_MAX_EXTRACTIONS` |
 | Recheck per run | 5 | `PIPELINE_RECHECK` / `--recheck` |
 | Articles per source per run | 8 | `PIPELINE_MAX_ARTICLES_PER_SOURCE` |
@@ -627,9 +676,28 @@ $0.01 each. A model without a configured price is listed under
 All three runs used the full search cap of 40 and 15–16 extractions. Opus 5.5 cost
 about $0.041 per extraction (about 5,900 input and 850 output tokens each),
 half the $0.08 assumed below. Haiku 5.5 read about 16,000 input tokens per
-search call (search results), more than the 6,000 assumed.
+search call (search results), more than the 6,000 assumed. Every extracted
+document came from a directly fetched source.
 
-**Typical run (estimate made before the live run):**
+**After the search change (13 Nov 2026), an ESTIMATE until a paid run
+confirms it.** Search-only sources off, cap 20; extraction unchanged, since no
+extracted document came from a search-only source:
+
+| Item | Basis | USD per run |
+|---|---|---|
+| Searches | at most 20 (about 5 fallbacks for blocked sources, 5 rechecks, the rest for blocked articles) × $0.01 | ≤ 0.20 |
+| Haiku 5.5 | at most 20 calls × measured $0.0021 | ≤ 0.04 |
+| Opus 5.5 | about 15 extractions × measured $0.041 | 0.62 |
+| **Per run** | | **≈ $0.86** (was $1.10 measured) |
+| One run a day, 30 days | | ≈ $26 (was ≈ $33) |
+| Two runs a day, 30 days | | ≈ $52 (was ≈ $66) |
+
+Bounds with the new caps (20 searches, 25 extractions) and the measured
+token use: about $1.27 a run; with long thinking (8,000 output tokens per
+document) about $4.8; theoretical ceiling (32,000 output tokens on every
+extraction) about $17.
+
+**Original estimate (made before any live run, kept for reference):**
 
 | Item | Assumption | USD |
 |---|---|---|
@@ -642,8 +710,8 @@ search call (search results), more than the 6,000 assumed.
 
 **Bounds:**
 
-* With the caps (40 searches, 25 extractions) and about 3k output each, a run
-  costs about **$2.5**.
+* (Original caps.) With 40 searches, 25 extractions and about 3k output
+  each, a run costs about **$2.5**.
 * Long thinking (around 8k output per document) would bring that to about
   **$4.9**.
 * The theoretical ceiling, if every call used its full 32k-token output
@@ -654,7 +722,7 @@ search call (search results), more than the 6,000 assumed.
 * `extractEffort: 'medium'` (the Opus 5.5 default) roughly halves the output tokens.
 * Lower `PIPELINE_MAX_EXTRACTIONS`.
 * `--search none` removes search spend but loses the fallbacks.
-* Disabling some search-only sources trims the search count.
+* Search-only sources are already off by default (13 Nov 2026).
 
 The first live run after a quiet period costs about the same as a typical
 run, because old articles are skipped before any model call.

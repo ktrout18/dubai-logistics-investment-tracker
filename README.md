@@ -5,14 +5,15 @@ construction milestones and openings in Dubai, with a small public website.
 
 **Live site:** https://ktrout18.github.io/dubai-logistics-investment-tracker/
 
-Status: proof of concept. The register and website are live. The automated
-update pipeline is built and tested offline. Its GitHub workflow has run in
-zero-spend mode, twice with paid search and extraction as dry runs, and
-**once as a live run** (12 Nov 2026): it held 14 claims for review, published
+Status: **proof of concept; the schedule is off by the owner's decision.**
+The register and website are live. The automated update pipeline is built
+and tested offline. Its GitHub workflow has run in zero-spend mode, twice
+with paid search and extraction as dry runs, and **once as a live run**
+(12 Nov 2026): it held 14 claims for review (all since rejected), published
 none, committed the review queue and run metadata, and redeployed the site.
-No pipeline-made change to the register has been published yet, and the
-twice-daily schedule is **off**. See
-[Current limitations](#current-limitations).
+No pipeline-made change to the register has been published yet. A short
+summary for decision-makers is in [`docs/POC_SUMMARY.md`](docs/POC_SUMMARY.md).
+See [Current limitations](#current-limitations).
 
 ## How it fits together
 
@@ -157,21 +158,24 @@ estimates at list prices: **$1.12**, **$1.11** (dry runs) and **$1.10** (the
 live run), $3.34 in all. The live run's split: web searches $0.40 (40
 billed; the cap was reached), Claude Haiku 5.5 $0.08 (40 search calls),
 Claude Opus 5.5 $0.62 (15 extractions, about $0.04 each). See
-`docs/PIPELINE.md` §5 and §7. At that rate the schedule (two runs a day)
-would cost about $2.2 a day, about $67 a month.
+`docs/PIPELINE.md` §5 and §7. At that rate one run a day would cost about
+$33 a month and two runs a day about $66.
 
-Estimates at list prices made before those runs (details and assumptions in
-`docs/PIPELINE.md` §7):
+**Since 13 Nov 2026 (estimate until a paid run confirms it):** sources that
+can only be reached through site search are off by default (none of their
+results reached extraction in three runs) and the search cap is 20 instead of
+40. Estimated **about $0.86 per run**: at most $0.20 of searches, at most
+$0.04 of Claude Haiku 5.5 and about $0.62 of Claude Opus 5.5 extraction
+(unchanged). That is about **$26 a month at one run a day** and **$52 at two**.
 
-* About **$1.1 per run**: roughly 30 web searches ($0.30), the search model's
-  tokens (about $0.02) and about 10 extractions ($0.80).
-* About **$2.2 a day** and **$65 a month** with the schedule on (two runs a day).
-* Caps per run: 40 searches and 25 extractions, so a run is bounded at about
-  $2.5 in normal use (about $17 in the theoretical worst case).
-* To lower it: reduce `PIPELINE_MAX_EXTRACTIONS` or `PIPELINE_MAX_SEARCHES`,
-  set extraction effort to `medium` in `pipeline/config.ts`, use
-  `PIPELINE_SEARCH_PROVIDER=none` (loses the search fallbacks), or run once a
-  day by removing one cron line.
+* Caps per run: 20 searches and 25 extractions, so a run is bounded at about
+  $1.3 with the measured token use (about $17 in the theoretical worst case).
+* To lower it further: reduce `PIPELINE_MAX_EXTRACTIONS` or
+  `PIPELINE_MAX_SEARCHES`, set extraction effort to `medium` in
+  `pipeline/config.ts`, use `PIPELINE_SEARCH_PROVIDER=none` (loses the
+  search fallbacks for blocked sources and the rechecks), or run once a day
+  by removing one cron line. `PIPELINE_SEARCH_ONLY_SOURCES=on` brings the
+  search-only sources back (and the earlier cost).
 * Every run report lists actual searches, tokens per model and the estimated
   cost.
 * GitHub Pages and GitHub Actions are free for this public repository.
@@ -196,15 +200,21 @@ Both are explained step by step in [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md
   committed to `data/pending-review.json` with a GitHub issue each; the site
   was redeployed from that commit. The defects the runs exposed are fixed
   with tests (`docs/PIPELINE.md` §5).
-* **Most held items are noise.** Of the live run's 14 holds, 10 are outside
-  Dubai or not a facility and 4 duplicate register projects or are too vague;
-  each still opens an issue.
+* **Most held items were noise.** Of the live run's 14 holds, 10 were outside
+  Dubai or not a facility and 4 duplicated register projects or were too
+  vague; all were rejected. Since 13 Nov 2026 claims outside the UAE,
+  non-facilities and restatements are set aside before review (counted in
+  the run report), claims in other emirates are kept only as "regional
+  mentions" in `data/pipeline-state.json`, and the same story from two pages
+  is one held item (`docs/PIPELINE.md` §3.7a). Tested offline only.
 * **Search finds little that can be analysed.** On run 2 none of the
   documents found through site search reached extraction: most had no
   publication date, were old, or their pages refused the runner. All
   extracted documents came from directly fetched sources (the same on the
   live run).
-* **The schedule is off** by the owner's choice until `SCHEDULE_ENABLED` is set.
+* **The schedule is off** by the owner's decision until `SCHEDULE_ENABLED` is set.
+* **Projects in other emirates are never added automatically.** The pipeline
+  lists them as regional mentions; regional-context projects are added by hand.
 * **Some sources block or defeat automated access**, so the pipeline relies on
   fallbacks (sitemaps, feeds, search) for them:
   * PCFC: news and circulars pages answer HTTP 403 (site search found 6
