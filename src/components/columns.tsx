@@ -1,12 +1,15 @@
 import {
   AREA_BASIS_LABELS,
   DELIVERY_LABELS,
+  INDEXED_EVIDENCE_MARK,
+  INDEXED_EVIDENCE_NOTE,
   INVESTMENT_SCOPE_LABELS,
   MAY_BE_EARLIER_NOTE,
   SECTOR_LABELS,
   completionMayBeEarlier,
   deliveryKindOf,
   describeFacility,
+  indexedDeliveryEvidence,
   investmentScopeOf,
   normaliseZone,
   periodEnd,
@@ -19,6 +22,29 @@ import { BASIS_SHORT, formatDate, formatMeasureM2, formatMoney } from '../lib/fo
 import { hrefFor } from '../lib/router.ts';
 import type { Column } from './ProjectTable.tsx';
 import { ExtLink, GradeBadge, StatusBadge } from './ui.tsx';
+
+/** The search-indexed evidence mark, with its legend as tooltip and screen-reader text. */
+export function IndexedMark() {
+  return (
+    <sup className="ml-0.5 cursor-help font-semibold text-amber-900" title={INDEXED_EVIDENCE_NOTE}>
+      {INDEXED_EVIDENCE_MARK}
+      <span className="sr-only"> {INDEXED_EVIDENCE_NOTE}</span>
+    </sup>
+  );
+}
+
+/** Legend shown under any table that can carry IndexedMark. */
+export function IndexedLegend({ projects }: { projects: readonly Project[] }) {
+  if (!projects.some((p) => indexedDeliveryEvidence(p))) return null;
+  return (
+    <p className="mt-2 text-xs text-ink-muted">
+      <span aria-hidden="true" className="font-semibold text-amber-900">
+        {INDEXED_EVIDENCE_MARK}
+      </span>{' '}
+      {INDEXED_EVIDENCE_NOTE}
+    </p>
+  );
+}
 
 export function AreaCell({ p }: { p: Project }) {
   const m = headlineMeasure(p);
@@ -127,7 +153,10 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     cell: (p) =>
       p.actualCompletion ? (
         <span>
-          <span className="num whitespace-nowrap">{formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)}</span>
+          <span className="num whitespace-nowrap">
+            {formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)}
+            {indexedDeliveryEvidence(p)?.date && <IndexedMark />}
+          </span>
           {completionMayBeEarlier(p) && (
             <span className="block text-xs text-ink-soft" title={MAY_BE_EARLIER_NOTE}>
               date of report; may be earlier
@@ -145,7 +174,14 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     mobile: true,
     cell: (p) => {
       const k = deliveryKindOf(p);
-      return k ? <span className="whitespace-nowrap">{DELIVERY_LABELS[k]}</span> : <span className="text-ink-soft">Not delivered</span>;
+      return k ? (
+        <span className="whitespace-nowrap">
+          {DELIVERY_LABELS[k]}
+          {indexedDeliveryEvidence(p)?.status && <IndexedMark />}
+        </span>
+      ) : (
+        <span className="text-ink-soft">Not delivered</span>
+      );
     },
   };
   const status: Column = {
@@ -153,7 +189,12 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     header: 'Status',
     sort: (p) => statusRank(p.status),
     mobile: true,
-    cell: (p) => <StatusBadge status={p.status} />,
+    cell: (p) => (
+      <span className="whitespace-nowrap">
+        <StatusBadge status={p.status} />
+        {indexedDeliveryEvidence(p)?.status && <IndexedMark />}
+      </span>
+    ),
   };
   const forecast: Column = {
     id: 'forecast',

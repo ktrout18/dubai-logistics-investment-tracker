@@ -35,6 +35,13 @@ import { SOURCES, type SourceKey } from './sources.ts';
 /** Seed timestamp and verification date (the day the seed was assembled). */
 export const SEED_TS = '2026-11-11T12:00:00Z';
 export const SEED_DATE = '2026-11-11';
+/**
+ * Date of the evidence audit (docs/AUDIT_2026-11.md). A record's `lastVerified`
+ * is the latest `accessedDate` of a source it read DIRECTLY (never earlier than
+ * SEED_DATE): records whose sources were re-read on the audit day carry it;
+ * records resting only on search-indexed sources keep SEED_DATE.
+ */
+export const AUDIT_DATE = '2026-11-12';
 
 export interface EventInput {
   date: string;
@@ -237,7 +244,7 @@ export function buildProject(input: ProjectInput): Project {
     ...(forecastCompletion ? { forecastCompletion } : {}),
     ...(actualCompletion ? { actualCompletion } : {}),
     sources: cited.map((k) => src(k)),
-    lastVerified: SEED_DATE,
+    lastVerified: lastDirectRead(cited.map((k) => src(k))),
     confidence: input.confidence,
     unresolvedQuestions: input.unresolvedQuestions ?? [],
     events,
@@ -249,4 +256,12 @@ export function buildProject(input: ProjectInput): Project {
     updatedAt: SEED_TS,
   };
   return project;
+}
+
+/** Latest `accessedDate` of a directly read source, never earlier than SEED_DATE. */
+export function lastDirectRead(sources: readonly { verification: string; accessedDate?: string }[]): string {
+  return sources
+    .filter((s) => s.verification === 'direct' && s.accessedDate)
+    .map((s) => s.accessedDate!)
+    .reduce((a, b) => (b > a ? b : a), SEED_DATE);
 }

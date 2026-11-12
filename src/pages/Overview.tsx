@@ -41,8 +41,8 @@ function Undisclosed({ bucket, context }: { bucket: ProjectBucket; context: stri
   if (!n) return null;
   return (
     <p className="text-xs text-ink-muted">
-      + <CountLink ids={ids} title={`${context} — no floor area disclosed`}>{plural(n, 'further project')}</CountLink>{' '}
-      with no floor area disclosed
+      + <CountLink ids={ids} title={`${context} — no area disclosed`}>{plural(n, 'further project')}</CountLink>{' '}
+      with no area disclosed
     </p>
   );
 }
@@ -128,7 +128,7 @@ function SubGroup({
       <BasisFigures
         floorSpace={bucket.floorSpace}
         context={context}
-        emptyText={bucket.projectCount ? 'No floor area disclosed' : 'None recorded'}
+        emptyText={bucket.projectCount ? 'No area disclosed' : 'None recorded'}
       />
       <Undisclosed bucket={bucket} context={context} />
       {delivered && <DeliverySplit ids={bucket.projectIds} byId={byId} context={context} />}
@@ -174,7 +174,10 @@ function Headline({ year, briefing }: { year: number; briefing: Briefing }) {
               </div>
             ))}
           </dl>
-          <p className="mt-3 max-w-4xl text-sm text-ink-muted">
+          <p className="mt-3 max-w-4xl text-sm text-ink" data-testid="headline-split">
+            {briefing.deliverySplitSentence}
+          </p>
+          <p className="mt-2 max-w-4xl text-sm text-ink-muted">
             {briefing.deliveredFloorSentence} <a href="#/method">Definitions and counting rules</a>.
           </p>
         </>

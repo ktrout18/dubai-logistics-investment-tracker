@@ -1,6 +1,6 @@
 # Dubai Logistics Investment Tracker
 
-A source-verified register of logistics and warehousing investments,
+A source-linked register of logistics and warehousing investments,
 construction milestones and openings in Dubai, with a small public website.
 
 **Live site:** https://ktrout18.github.io/dubai-logistics-investment-tracker/

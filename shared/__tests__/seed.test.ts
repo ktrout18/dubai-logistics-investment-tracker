@@ -35,7 +35,7 @@ const briefing = computeBriefing(projects, 2026, TODAY);
 
 describe('seed register: integrity', () => {
   it('validates with zero errors (today = seed date)', () => {
-    const r = validateRegister({ register: registerJson, pendingReview: pendingJson }, { today: '2026-11-11' });
+    const r = validateRegister({ register: registerJson, pendingReview: pendingJson }, { today: '2026-11-12' });
     expect(r.errors.map((e) => `${e.code} ${e.projectId ?? ''} ${e.path ?? ''}`)).toEqual([]);
   });
 
@@ -243,6 +243,35 @@ describe('seed register: the same record shows the same thing everywhere', () =>
       forecast: 'forecast Q1 2029',
       mayBeEarlier: true,
     });
+  });
+
+  it('delivery evidence seen only via search results is flagged from the verification fields (DSV, CEVA)', () => {
+    expect(briefing.delivered.indexedEvidenceIds.sort()).toEqual([
+      'ceva-logistics-dubai-south-ecommerce-warehouse',
+      'dsv-lintara-jafza-build-to-suit-warehouse',
+    ]);
+    const dsv = briefing.delivered.rows.find((r) => r.id === 'dsv-lintara-jafza-build-to-suit-warehouse')!;
+    expect(dsv.indexedEvidence).toEqual({ status: true, date: true });
+    const sharqi = briefing.delivered.rows.find((r) => r.id === 'al-sharqi-shipping-dic-logistics-hub')!;
+    expect(sharqi.indexedEvidence).toBeUndefined();
+    expect(byId.get('dsv-lintara-jafza-build-to-suit-warehouse')!.confidence).toBe('medium');
+  });
+
+  it('the headline support line states the warehouse / other-infrastructure split and the indexed count', () => {
+    expect(briefing.delivered.openedWarehouseIds).toHaveLength(7);
+    expect(briefing.delivered.openedOtherInfrastructureIds).toHaveLength(4);
+    expect(briefing.deliverySplitSentence).toBe(
+      'Of the 11 opened, 7 are warehouse facilities and 4 other logistics infrastructure. The 3 construction-completed are all warehouse facilities. ' +
+        '2 of the 11 openings rest on search-indexed evidence for the status or date (source page not read directly).',
+    );
+  });
+
+  it('lastVerified is the audit day only where a source was re-read directly that day', () => {
+    for (const p of registerJson.projects) {
+      const reread = p.sources.some((s) => s.verification === 'direct' && s.accessedDate === '2026-11-12');
+      expect(p.lastVerified, p.id).toBe(reread ? '2026-11-12' : '2026-11-11');
+    }
+    expect(byId.get('ceva-logistics-dubai-south-ecommerce-warehouse')!.lastVerified).toBe('2026-11-11');
   });
 
   it('the delivered area sentence does not call basis-not-stated figures floor area', () => {

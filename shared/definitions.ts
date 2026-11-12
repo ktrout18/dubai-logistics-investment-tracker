@@ -6,7 +6,7 @@
  *
  * Pure; no I/O.
  */
-import type { AssetType, Investment, InvestmentScope, Project, ProjectStatus } from './schema.ts';
+import type { AssetType, Investment, InvestmentScope, Project, ProjectEvent, ProjectStatus } from './schema.ts';
 import { ASSET_TYPES, INVESTMENT_SCOPE_LABELS } from './schema.ts';
 import { roundTo } from './units.ts';
 
@@ -44,6 +44,59 @@ const STATUS_TO_DELIVERY: Partial<Record<ProjectStatus, DeliveryKind>> = {
 export function deliveryKindOf(p: Pick<Project, 'status'>): DeliveryKind | undefined {
   return STATUS_TO_DELIVERY[p.status];
 }
+
+// ---------------------------------------------------------------------------
+// Delivery evidence read only through search results
+// ---------------------------------------------------------------------------
+
+/** Marker shown next to a delivery status or date that rests only on search-indexed text. */
+export const INDEXED_EVIDENCE_MARK = '†';
+/** Legend for INDEXED_EVIDENCE_MARK, used by every view that shows the mark. */
+export const INDEXED_EVIDENCE_NOTE = 'From search-indexed text; source page not read directly.';
+
+/** Event types that evidence each delivery kind. */
+const DELIVERY_EVENT_TYPES: Record<DeliveryKind, readonly ProjectEvent['type'][]> = {
+  opened: ['opened'],
+  construction_completed: ['construction_completed', 'commissioned', 'opened'],
+};
+
+export interface IndexedDeliveryEvidence {
+  /** Every event that evidences the delivery status was seen only via search results (not read directly). */
+  status: boolean;
+  /** The source of `actualCompletion` was not read directly. */
+  date: boolean;
+}
+
+/**
+ * For a delivered project (operational or construction completed): whether its
+ * delivery status and/or its delivery date rest only on evidence that was not
+ * read directly (`verification` other than "direct"). Undefined when neither
+ * does, or when the project is not delivered. Derived from the events' and
+ * sources' `verification` fields only.
+ */
+export function indexedDeliveryEvidence(
+  p: Pick<Project, 'status' | 'events' | 'sources' | 'actualCompletion'>,
+): IndexedDeliveryEvidence | undefined {
+  const kind = deliveryKindOf(p);
+  if (!kind) return undefined;
+  const supporting = p.events.filter((e) => DELIVERY_EVENT_TYPES[kind].includes(e.type));
+  const status = supporting.length > 0 && supporting.every((e) => e.verification !== 'direct');
+  const c = p.actualCompletion;
+  const date = c !== undefined && p.sources.find((s) => s.url === c.sourceUrl)?.verification !== 'direct';
+  return status || date ? { status, date } : undefined;
+}
+
+// ---------------------------------------------------------------------------
+// Grade A
+// ---------------------------------------------------------------------------
+
+/** The Grade-A classification rule (method page, docs). */
+export const GRADE_A_RULE: readonly string[] = [
+  'Confirmed: the developer, owner or occupier, or an official body (free zone, government media office), states in its own release or page that this facility is Grade A.',
+  'Probable: Grade A appears only in newspapers relaying the announcement, in search-result snippets, or in programme- or park-level wording that is not specific to this facility.',
+  'Not verified: no source uses the term for this facility, whatever its specification. Not applicable: depots, terminals, MRO and other non-warehouse assets.',
+  'Probable is always shown separately and never merged with confirmed; everything not confirmed or probable is reported as other modern space.',
+];
 
 // ---------------------------------------------------------------------------
 // Asset groups

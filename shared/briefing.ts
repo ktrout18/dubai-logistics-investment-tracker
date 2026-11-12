@@ -12,11 +12,13 @@ import {
   assetGroupOf,
   deliveryKindOf,
   eligibleProjects,
+  indexedDeliveryEvidence,
   investmentScopeOf,
   isWarehouseAsset,
   sumInvestments,
   type AssetGroup,
   type DeliveryKind,
+  type IndexedDeliveryEvidence,
   type InvestmentSums,
 } from './definitions.ts';
 import { AREA_BASIS_SHORT, formatDate, formatM2, formatMeasureM2, formatMoney } from './format.ts';
@@ -284,6 +286,8 @@ export interface BriefingRow {
   statusLabel: string;
   deliveryKind?: DeliveryKind;
   deliveryLabel?: string;
+  /** Set when the delivery status and/or date rests only on search-indexed evidence (shown with INDEXED_EVIDENCE_MARK). */
+  indexedEvidence?: IndexedDeliveryEvidence;
   category: BriefingCategory;
   gradeA: GradeAStatus;
   /** "Grade A (probable)" for probable warehouse rows. */
@@ -321,6 +325,7 @@ export function briefingRowOf(p: Project, today: string): BriefingRow {
   }
   const shown = floor ?? otherArea;
   const dk = deliveryKindOf(p);
+  const ie = indexedDeliveryEvidence(p);
   const inv = p.investment;
   const scope = investmentScopeOf(inv);
   return {
@@ -334,6 +339,7 @@ export function briefingRowOf(p: Project, today: string): BriefingRow {
     status: p.status,
     statusLabel: PROJECT_STATUS_LABELS[p.status],
     ...(dk ? { deliveryKind: dk, deliveryLabel: DELIVERY_LABELS[dk] } : {}),
+    ...(ie ? { indexedEvidence: ie } : {}),
     category: briefingCategoryOf(p),
     gradeA: p.gradeA,
     ...(wh && p.gradeA === 'probable' ? { gradeTag: GRADE_A_PROBABLE_TAG } : {}),
@@ -377,9 +383,19 @@ export interface Briefing {
   year: number;
   /** Computed headline, e.g. "In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction." */
   headline: string;
-  /** Per-basis floor-space sentence for the delivered rows. */
+  /** Per-basis area sentence for the delivered rows. */
   deliveredFloorSentence: string;
-  delivered: BriefingSection & { openedIds: string[]; constructionCompletedIds: string[] };
+  /** Warehouse vs other-infrastructure split of each delivery kind, and how many rest on search-indexed evidence. */
+  deliverySplitSentence: string;
+  delivered: BriefingSection & {
+    openedIds: string[];
+    constructionCompletedIds: string[];
+    /** Opened facilities that are warehouse-type / other logistics infrastructure. */
+    openedWarehouseIds: string[];
+    openedOtherInfrastructureIds: string[];
+    /** Delivered rows whose delivery status or date rests only on search-indexed evidence. */
+    indexedEvidenceIds: string[];
+  };
   beingBuilt: BriefingSection;
   signedOrAnnounced: BriefingSection;
 }
@@ -436,6 +452,44 @@ function floorSentence(s: BriefingSection): string {
 }
 
 /**
+ * "Of the 11 opened, 7 are warehouse facilities and 4 other logistics
+ * infrastructure; the 3 construction-completed are all warehouse facilities.
+ * 2 of the 11 openings rest on search-indexed evidence for the status or date (source page not read directly)."
+ */
+export function deliverySplitSentence(
+  opened: { warehouse: number; other: number; indexed: number },
+  completed: { warehouse: number; other: number; indexed: number },
+): string {
+  const parts: string[] = [];
+  const split = (w: number, o: number) =>
+    !o ? (w === 1 ? 'a warehouse facility' : `all warehouse facilities`) : !w ? (o === 1 ? 'other logistics infrastructure' : 'all other logistics infrastructure') : `${w} ${w === 1 ? 'is a warehouse facility' : 'are warehouse facilities'} and ${o} other logistics infrastructure`;
+  const no = opened.warehouse + opened.other;
+  const nc = completed.warehouse + completed.other;
+  if (no) {
+    const body = split(opened.warehouse, opened.other);
+    parts.push(opened.other && opened.warehouse ? `Of the ${no} opened, ${body}.` : `The ${no} opened ${no === 1 ? 'is' : 'are'} ${body}.`);
+  }
+  if (nc) {
+    const body = split(completed.warehouse, completed.other);
+    parts.push(
+      completed.other && completed.warehouse
+        ? `Of the ${nc} construction-completed, ${body}.`
+        : `The ${nc} construction-completed ${nc === 1 ? 'is' : 'are'} ${body}.`,
+    );
+  }
+  const idx: string[] = [];
+  if (no) idx.push(`${opened.indexed} of the ${no} ${no === 1 ? 'opening' : 'openings'}`);
+  if (nc && completed.indexed) idx.push(`${completed.indexed} of the ${nc} ${nc === 1 ? 'completion' : 'completions'}`);
+  if (idx.length && (opened.indexed || completed.indexed)) {
+    const verb = idx.length === 1 && opened.indexed + completed.indexed === 1 ? 'rests' : 'rest';
+    parts.push(`${idx.join(' and ')} ${verb} on search-indexed evidence for the status or date (source page not read directly).`);
+  } else if (no || nc) {
+    parts.push('Every delivery status and date rests on a source page read directly.');
+  }
+  return parts.join(' ');
+}
+
+/**
  * The briefing for `year`, from eligible records only (Dubai, not an umbrella,
  * not cancelled):
  * - delivered: delivered in `year` (status operational or construction
@@ -455,6 +509,17 @@ export function computeBriefing(projects: readonly Project[], year: number, toda
   const d = section(delivered, today, rowSort);
   const openedIds = delivered.filter((p) => deliveryKindOf(p) === 'opened').map((p) => p.id);
   const constructionCompletedIds = delivered.filter((p) => deliveryKindOf(p) === 'construction_completed').map((p) => p.id);
+  const indexedEvidenceIds = delivered.filter((p) => indexedDeliveryEvidence(p)).map((p) => p.id);
+  const counts = (ids: readonly string[]) => {
+    const ps = delivered.filter((p) => ids.includes(p.id));
+    return {
+      warehouse: ps.filter(isWarehouseAsset).length,
+      other: ps.filter((p) => !isWarehouseAsset(p)).length,
+      indexed: ps.filter((p) => indexedEvidenceIds.includes(p.id)).length,
+    };
+  };
+  const openedWarehouseIds = delivered.filter((p) => openedIds.includes(p.id) && isWarehouseAsset(p)).map((p) => p.id);
+  const openedOtherInfrastructureIds = delivered.filter((p) => openedIds.includes(p.id) && !isWarehouseAsset(p)).map((p) => p.id);
   const byMilestone = (a: BriefingRow, b: BriefingRow) => {
     const pa = projects.find((p) => p.id === a.id)!.latestMilestone.date;
     const pb = projects.find((p) => p.id === b.id)!.latestMilestone.date;
@@ -464,7 +529,8 @@ export function computeBriefing(projects: readonly Project[], year: number, toda
     year,
     headline: deliveryHeadline(year, openedIds.length, constructionCompletedIds.length),
     deliveredFloorSentence: floorSentence(d),
-    delivered: { ...d, openedIds, constructionCompletedIds },
+    deliverySplitSentence: deliverySplitSentence(counts(openedIds), counts(constructionCompletedIds)),
+    delivered: { ...d, openedIds, constructionCompletedIds, openedWarehouseIds, openedOtherInfrastructureIds, indexedEvidenceIds },
     beingBuilt: section(built, today, rowSort),
     signedOrAnnounced: section(signed, today, byMilestone),
   };

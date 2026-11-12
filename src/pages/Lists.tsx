@@ -10,7 +10,7 @@ import {
 } from '../../shared/index.ts';
 import { ExportButtons } from '../components/ExportButtons.tsx';
 import { FilterBar, useFilters } from '../components/FilterBar.tsx';
-import { makeColumns } from '../components/columns.tsx';
+import { IndexedLegend, makeColumns } from '../components/columns.tsx';
 import { ProjectTable } from '../components/ProjectTable.tsx';
 import { EmptyState, Notice, PageHeader } from '../components/ui.tsx';
 import { applyFilters } from '../lib/filters.ts';
@@ -61,6 +61,7 @@ export function Delivered() {
           </EmptyState>
         }
       />
+      <IndexedLegend projects={rows} />
     </div>
   );
 }
@@ -184,6 +185,7 @@ export function Regional() {
         columns={[cols.facility, emirate, cols.companies, cols.location, { ...cols.area, align: 'right' }, cols.status, cols.announced, cols.milestoneEvidence]}
         empty={<EmptyState title="No regional projects match">{pool.length ? 'Clear the filters.' : 'No projects outside Dubai are tracked yet.'}</EmptyState>}
       />
+      <IndexedLegend projects={rows} />
     </div>
   );
 }
@@ -216,6 +218,7 @@ export function IdList() {
         columns={[cols.facility, cols.companies, cols.location, { ...cols.area, align: 'right' }, cols.grade, cols.status, cols.completed, cols.forecast, cols.milestoneEvidence]}
         empty={<EmptyState title="No projects">This figure has no projects behind it.</EmptyState>}
       />
+      <IndexedLegend projects={rows} />
     </div>
   );
 }

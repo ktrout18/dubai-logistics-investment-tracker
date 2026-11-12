@@ -44,7 +44,7 @@ export function Layout({ children, isFixtures }: { children: ReactNode; isFixtur
             </svg>
             <span className="leading-tight">
               <span className="block text-[15px] font-semibold">Dubai Logistics Investment Tracker</span>
-              <span className="hidden text-xs text-ink-soft sm:block">Source-verified register of warehousing and logistics projects</span>
+              <span className="hidden text-xs text-ink-soft sm:block">Source-linked register of warehousing and logistics projects</span>
             </span>
           </a>
           <button

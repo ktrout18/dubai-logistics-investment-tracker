@@ -20,7 +20,7 @@ import {
   validateRegister,
 } from '../../shared/index.ts';
 import { dataPath } from '../data-files.ts';
-import { SEED_TS } from './lib.ts';
+import { AUDIT_DATE, SEED_TS } from './lib.ts';
 import { buildPendingItems } from './pending.ts';
 import { SEED_PROJECTS } from './projects.ts';
 
@@ -32,12 +32,12 @@ async function main(): Promise<number> {
   RegisterFileSchema.parse(register);
   PendingReviewFileSchema.parse(pendingReview);
 
-  const result = validateRegister({ register, pendingReview }, { today: SEED_TS.slice(0, 10) });
+  const result = validateRegister({ register, pendingReview }, { today: AUDIT_DATE });
   for (const i of result.errors) console.error(formatIssue(i));
   for (const i of result.warnings) console.warn(formatIssue(i));
   console.log(`seed: ${SEED_PROJECTS.length} projects, ${pendingReview.items.length} pending — ${result.errors.length} error(s), ${result.warnings.length} warning(s)`);
 
-  const b = computeBriefing(SEED_PROJECTS, 2026, SEED_TS.slice(0, 10));
+  const b = computeBriefing(SEED_PROJECTS, 2026, AUDIT_DATE);
   console.log(`briefing: ${b.headline}`);
   console.log(`briefing: delivered warehouse floor space by basis — ${subtotalsText(b.delivered.floorSubtotals)}`);
   console.log(`briefing: being built warehouse floor space by basis — ${subtotalsText(b.beingBuilt.floorSubtotals)}`);

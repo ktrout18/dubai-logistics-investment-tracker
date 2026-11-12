@@ -17,6 +17,8 @@ import {
   VERIFICATION_LABELS,
   completionMayBeEarlier,
   deliveryKindOf,
+  indexedDeliveryEvidence,
+  INDEXED_EVIDENCE_NOTE,
   eventMayBeEarlier,
   investmentScopeOf,
   isRegional,
@@ -24,6 +26,7 @@ import {
   phasesOf,
   type Project,
 } from '../../shared/index.ts';
+import { IndexedMark } from '../components/columns.tsx';
 import { Dl, EmptyState, ExtLink, GradeBadge, Notice, StatusBadge, VerificationBadge } from '../components/ui.tsx';
 import { useData } from '../lib/data.tsx';
 import { BASIS_SHORT, formatDate, formatDubaiDateTime, formatMeasureM2, formatMoney, formatOriginal } from '../lib/format.ts';
@@ -64,6 +67,7 @@ export function ProjectDetail({ id }: { id: string }) {
   const isUmb = umbrellas.has(p.id);
   const changes = data.changelog.changes.filter((c) => c.projectId === p.id).sort((a, b) => b.appliedAt.localeCompare(a.appliedAt));
   const delivery = deliveryKindOf(p);
+  const indexed = indexedDeliveryEvidence(p);
 
   const parties: [ReactNode, ReactNode][] = [];
   if (p.developer) parties.push(['Developer', p.developer]);
@@ -272,12 +276,25 @@ export function ProjectDetail({ id }: { id: string }) {
           <Section id="completion" title="Completion">
             <Dl
               items={[
-                ['Delivery', delivery ? DELIVERY_LABELS[delivery] : 'Not delivered'],
+                [
+                  'Delivery',
+                  delivery ? (
+                    <span key="d">
+                      {DELIVERY_LABELS[delivery]}
+                      {indexed?.status && <IndexedMark />}
+                      {indexed?.status && <span className="mt-1 block text-xs text-ink-muted">{INDEXED_EVIDENCE_NOTE}</span>}
+                    </span>
+                  ) : (
+                    'Not delivered'
+                  ),
+                ],
                 [
                   'Actual',
                   p.actualCompletion ? (
                     <span key="a">
-                      {formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)} · <ExtLink href={p.actualCompletion.sourceUrl}>evidence</ExtLink>
+                      {formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)}
+                      {indexed?.date && <IndexedMark />} · <ExtLink href={p.actualCompletion.sourceUrl}>evidence</ExtLink>
+                      {indexed?.date && <span className="mt-1 block text-xs text-ink-muted">Date: {INDEXED_EVIDENCE_NOTE.charAt(0).toLowerCase() + INDEXED_EVIDENCE_NOTE.slice(1)}</span>}
                       {completionMayBeEarlier(p) && <span className="mt-1 block text-xs text-ink-muted">{MAY_BE_EARLIER_NOTE}</span>}
                     </span>
                   ) : (

@@ -226,9 +226,9 @@ const row3 = buildProject({
   netNewEvidence: 'Opened 20 May 2026 (DSV). Medium confidence: an 11-month build from Jan 2025 implies the building may have been physically finished around end-2025.',
   actualCompletion: { date: '2026-05-20', precision: 'day', src: 'dsvPress' },
   alsoSources: ['arcapitaDsv2026'],
-  confidence: 'high',
+  confidence: 'medium',
   unresolvedQuestions: [
-    'The opening date (20 May 2026) comes from DSV\'s own press page, seen only through search results (dsv.com not read directly); the directly read joint release is dated 21 May 2026 and says "announce the completion" without dating the completion itself.',
+    'Confidence is medium (verification, 12 Nov 2026): the opening day rests only on search-indexed text. The opening date (20 May 2026) comes from DSV\'s own press page, seen only through search results (dsv.com not read directly); the directly read joint release is dated 21 May 2026 and says "announce the completion" without dating the completion itself.',
     'Date of physical completion or handover is not stated by any source.',
     'Investment amount not disclosed. Pallet capacity is ~75,000 in the joint release and ~74,000 on a DSV page (search results only).',
   ],

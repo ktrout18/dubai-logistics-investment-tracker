@@ -9,6 +9,8 @@ import {
   BRIEFING_CATEGORIES,
   BRIEFING_CATEGORY_LABELS,
   DELIVERY_LABELS,
+  INDEXED_EVIDENCE_MARK,
+  INDEXED_EVIDENCE_NOTE,
   computeBriefing,
   subtotalsText,
   todayIso,
@@ -53,12 +55,12 @@ function SlideFrame({ children, label }: { children: ReactNode; label: string })
 
 function PartnerChips({ names, size = 15 }: { names: string[]; size?: number }) {
   return (
-    <span className="flex min-w-0 flex-wrap gap-1.5 overflow-hidden" style={{ maxHeight: size * 1.7 }}>
+    <span className="flex min-w-0 flex-wrap gap-1">
       {names.map((n) => (
         <span
           key={n}
-          className="max-w-full truncate whitespace-nowrap rounded-full border border-[#C3CED1] bg-[#F2F5F6] px-2.5 py-[1px] font-medium"
-          style={{ fontSize: size, lineHeight: `${Math.round(size * 1.6)}px` }}
+          className="max-w-full rounded-[10px] border border-[#C3CED1] bg-[#F2F5F6] px-2 py-[1px] font-medium"
+          style={{ fontSize: size, lineHeight: `${Math.round(size * 1.3)}px` }}
         >
           {n}
         </span>
@@ -148,6 +150,7 @@ function SlideHeader({ kicker, title, sub }: { kicker: string; title: string; su
 }
 
 function SlideFooter({ notes, sourceLine, asOf }: { notes: ReactNode[]; sourceLine: string; asOf?: string }) {
+  // asOf: the latest `lastVerified` of the projects shown (the day their sources were last checked).
   return (
     <footer className="absolute bottom-0 left-0 right-0 border-t border-line px-14 pb-5 pt-3 text-[13px] leading-snug text-ink-muted">
       {notes.length > 0 && (
@@ -159,14 +162,14 @@ function SlideFooter({ notes, sourceLine, asOf }: { notes: ReactNode[]; sourceLi
       )}
       <p className="flex justify-between gap-6">
         <span>{sourceLine}</span>
-        {asOf && <span className="whitespace-nowrap font-medium text-ink">As of {asOf}</span>}
+        {asOf && <span className="whitespace-nowrap font-medium text-ink">Sources last checked {asOf}</span>}
       </p>
     </footer>
   );
 }
 
 function Subtotals({ subtotals, size = 18 }: { subtotals: readonly FloorSubtotal[]; size?: number }) {
-  if (!subtotals.length) return <span className="text-ink-muted">No warehouse floor area disclosed</span>;
+  if (!subtotals.length) return <span className="text-ink-muted">No warehouse area disclosed</span>;
   return (
     <span className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
       {subtotals.map((s) => (
@@ -191,6 +194,7 @@ function DateText({ row }: { row: BriefingRow }) {
     <span className={row.date.forecastPassed ? 'text-amber-900' : undefined}>
       {row.date.main}
       {row.date.mayBeEarlier && <sup className="ml-0.5 text-ink-soft">*</sup>}
+      {row.date.kind === 'actual' && row.indexedEvidence?.date && <sup className="ml-0.5 font-semibold text-amber-900">{INDEXED_EVIDENCE_MARK}</sup>}
       {row.date.forecast && <> · {row.date.forecast}</>}
     </span>
   );
@@ -199,7 +203,7 @@ function DateText({ row }: { row: BriefingRow }) {
 const anyQualified = (s: BriefingSection) => s.floorSubtotals.some((t) => t.qualifiedIds.length > 0);
 
 export function Snapshot() {
-  const { projects, byId, data, defaultYear, isFixtures } = useData();
+  const { projects, byId, defaultYear, isFixtures } = useData();
   const { params } = useHashLocation();
   const clean = params.get('clean') === '1';
   const yParam = Number(params.get('year'));
@@ -219,8 +223,8 @@ export function Snapshot() {
   const signed = b.signedOrAnnounced;
   const shownProjects = [...d.rows, ...built.rows, ...signed.rows].map((r) => byId.get(r.id)).filter((p): p is Project => Boolean(p));
 
-  const asOfIso = [data.meta.lastSuccessfulRun?.slice(0, 10), data.register.updatedAt?.slice(0, 10), ...shownProjects.map((p) => p.lastVerified)]
-    .filter((x): x is string => Boolean(x))
+  const asOfIso = shownProjects
+    .map((p) => p.lastVerified)
     .sort()
     .pop();
   const asOf = asOfIso ? formatDate(asOfIso) : undefined;
@@ -230,11 +234,11 @@ export function Snapshot() {
   const barMax = (rows: BriefingRow[]) => Math.max(1, ...rows.filter((r) => r.floor?.bar).map((r) => r.floor!.valueM2));
   const max1 = barMax(d.rows);
   const max2 = barMax(built.rows);
-  const rowH = Math.max(26, Math.min(38, Math.floor(430 / Math.max(1, d.rows.length))));
+  const rowH = Math.max(26, Math.min(38, Math.floor(400 / Math.max(1, d.rows.length))));
 
   const areaNote = (
     <>
-      Bars: warehouse floor area on the basis each source states; outlined: basis not stated. Bases are subtotalled separately and never added
+      Bars: warehouse area on the basis each source states; outlined: basis not stated. Bases are subtotalled separately and never added
       together. Areas of other logistics infrastructure are shown as text only.
     </>
   );
@@ -247,6 +251,12 @@ export function Snapshot() {
   const marks1: ReactNode[] = [];
   const mayBeEarlierMark = <>* Month or period in which the source reported the event; it may have happened earlier.</>;
   if (d.rows.some((r) => r.date.mayBeEarlier)) marks1.push(mayBeEarlierMark);
+  const indexedMark = (
+    <>
+      {INDEXED_EVIDENCE_MARK} {INDEXED_EVIDENCE_NOTE}
+    </>
+  );
+  if (d.rows.some((r) => r.indexedEvidence)) marks1.push(indexedMark);
   if (anyQualified(d)) marks1.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
   if (marks1.length) notes1.push(<>{marks1.map((m, i) => <span key={i}>{i > 0 && ' '}{m}</span>)}</>);
   const notes2: ReactNode[] = [<>Completion dates of projects being built are forecasts. {areaNote}</>];
@@ -293,15 +303,15 @@ export function Snapshot() {
           <div className="relative h-full px-14 pt-10">
             <SlideHeader kicker={`Dubai logistics · ${year}`} title={`Openings and completions in ${year}`} sub={b.headline} />
             {d.rows.length ? (
-              <table className="mt-5 w-full table-fixed border-collapse text-[16px]">
+              <table className="mt-3 w-full table-fixed border-collapse text-[16px]">
                 <caption className="sr-only">Openings and completions</caption>
                 <colgroup>
-                  <col style={{ width: 280 }} />
-                  <col style={{ width: 330 }} />
-                  <col style={{ width: 140 }} />
-                  <col style={{ width: 190 }} />
+                  <col style={{ width: 290 }} />
+                  <col style={{ width: 340 }} />
+                  <col style={{ width: 150 }} />
+                  <col style={{ width: 185 }} />
                   <col />
-                  <col style={{ width: 110 }} />
+                  <col style={{ width: 115 }} />
                 </colgroup>
                 <thead>
                   <tr className="border-b-2 border-[#00838F] text-left text-[13px] font-semibold uppercase tracking-wider text-ink-muted">
@@ -309,33 +319,32 @@ export function Snapshot() {
                     <th scope="col" className="pb-1.5">Facility</th>
                     <th scope="col" className="pb-1.5">Location</th>
                     <th scope="col" className="pb-1.5">Delivery</th>
-                    <th scope="col" className="pb-1.5">Floor area, m² (basis)</th>
+                    <th scope="col" className="pb-1.5">Area, m² (basis)</th>
                     <th scope="col" className="pb-1.5 text-right">Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {d.rows.map((r) => (
                     <tr key={r.id} className="border-b border-[#E6EBEC]" style={{ height: rowH }}>
-                      <td className="pr-3">
+                      <td className="py-[2px] pr-3">
                         <span className="flex items-center gap-2">
                           <span aria-hidden="true" className="h-[22px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.category] }} />
-                          <PartnerChips names={r.partners.slice(0, 2)} />
+                          <PartnerChips names={r.partners.slice(0, 2)} size={13} />
                         </span>
                       </td>
-                      <td className="pr-3" title={r.descriptor}>
-                        <span className="flex min-w-0 items-baseline">
-                          <span className="truncate">{r.descriptor}</span>
-                          {r.gradeTag && <span className="ml-1.5 shrink-0 whitespace-nowrap text-[13px] text-ink-muted">· {r.gradeTag}</span>}
-                        </span>
+                      <td className="py-[2px] pr-3 text-[14px] leading-[1.15]">
+                        {r.descriptor}
+                        {r.gradeTag && <span className="whitespace-nowrap text-[13px] text-ink-muted"> · {r.gradeTag}</span>}
                       </td>
-                      <td className="truncate pr-3 text-ink-muted">{r.location}</td>
-                      <td className="truncate pr-3 text-[14px]">
+                      <td className="py-[2px] pr-3 text-[14px] leading-[1.15] text-ink-muted">{r.location}</td>
+                      <td className="whitespace-nowrap pr-3 text-[14px]">
                         <span className={r.deliveryKind === 'construction_completed' ? 'font-medium text-amber-900' : 'text-ink-muted'}>
                           {r.deliveryLabel}
                         </span>
+                        {r.indexedEvidence?.status && <sup className="ml-0.5 font-semibold text-amber-900">{INDEXED_EVIDENCE_MARK}</sup>}
                       </td>
                       <td className="pr-3">
-                        <AreaCell row={r} max={max1} width={150} />
+                        <AreaCell row={r} max={max1} width={130} />
                       </td>
                       <td className="whitespace-nowrap text-right text-[15px] text-ink-muted">
                         <DateText row={r} />
@@ -344,9 +353,9 @@ export function Snapshot() {
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr className="border-t-2 border-ink" style={{ height: 48 }}>
+                  <tr className="border-t-2 border-ink" style={{ height: 42 }}>
                     <th scope="row" colSpan={3} className="pr-3 text-left text-[15px] font-semibold leading-tight">
-                      Warehouse floor area by basis
+                      Warehouse area by basis
                       <span className="block text-[13px] font-normal text-ink-muted">
                         {d.floorDisclosedIds.length} of {plural(d.warehouseIds.length, 'warehouse facility', 'warehouse facilities')} disclosed one;{' '}
                         never added together
@@ -376,13 +385,13 @@ export function Snapshot() {
                   <span className="font-normal text-ink-muted">{plural(built.rows.length, 'project')}</span>
                 </h3>
                 <div className="flex items-baseline justify-between gap-3 border-b border-[#E6EBEC] py-1.5 text-[14px] text-ink-muted">
-                  <span className="shrink-0">Warehouse floor area by basis:</span>
+                  <span className="shrink-0">Warehouse area by basis:</span>
                   <Subtotals subtotals={built.floorSubtotals} size={16} />
                 </div>
                 {built.rows.length ? (
                   <ul>
                     {built.rows.map((r) => (
-                      <li key={r.id} className="border-b border-[#E6EBEC] py-[7px]">
+                      <li key={r.id} className="border-b border-[#E6EBEC] py-[4px]">
                         <div className="flex items-center justify-between gap-3">
                           <span className="flex min-w-0 items-center gap-2">
                             <span aria-hidden="true" className="h-[20px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.category] }} />
@@ -393,10 +402,10 @@ export function Snapshot() {
                           </span>
                         </div>
                         <div className="mt-1 grid grid-cols-[1fr_330px] items-center gap-3 pl-3.5">
-                          <span className="flex min-w-0 items-baseline text-[15px]" title={r.descriptor}>
-                            <span className="truncate">{r.descriptor}</span>
-                            {r.gradeTag && <span className="shrink-0 whitespace-nowrap text-ink-muted">&nbsp;· {r.gradeTag}</span>}
-                            <span className="truncate text-ink-muted">&nbsp;· {r.location}</span>
+                          <span className="text-[15px] leading-[1.2]">
+                            {r.descriptor}
+                            {r.gradeTag && <span className="whitespace-nowrap text-ink-muted"> · {r.gradeTag}</span>}
+                            <span className="text-ink-muted"> · {r.location}</span>
                           </span>
                           <AreaCell row={r} max={max2} width={140} />
                         </div>
@@ -421,13 +430,13 @@ export function Snapshot() {
                         style={{ borderLeft: `5px solid ${CATEGORY_COLORS[r.category]}` }}
                       >
                         <PartnerChips names={r.partners.slice(0, 2)} size={14} />
-                        <p className="mt-1 truncate text-[15px] font-medium" title={r.descriptor}>
+                        <p className="mt-1 text-[15px] font-medium leading-[1.2]">
                           {r.descriptor}
                         </p>
-                        <p className="truncate text-[14px] text-ink-muted">
-                          {r.location} · {r.statusLabel}
+                        <p className="text-[14px] leading-snug text-ink-muted">
+                          {r.location} · <span className="whitespace-nowrap">{r.statusLabel}</span>
                         </p>
-                        <p className="num truncate text-[14px] font-semibold">
+                        <p className="num text-[14px] font-semibold leading-snug">
                           {r.areaText}
                           {r.investment && <span className="font-normal text-ink-muted"> · {r.investment.text}</span>}
                         </p>
@@ -448,7 +457,7 @@ export function Snapshot() {
         </SlideFrame>
       </main>
       <p className="sr-only">
-        Delivered warehouse floor area by basis: {subtotalsText(d.floorSubtotals)}. Being built: {subtotalsText(built.floorSubtotals)}.
+        Delivered warehouse area by basis: {subtotalsText(d.floorSubtotals)}. Being built: {subtotalsText(built.floorSubtotals)}.
       </p>
     </div>
   );

@@ -6,6 +6,9 @@ import {
   DELIVERY_KINDS,
   DELIVERY_LABELS,
   ELIGIBILITY_RULES,
+  GRADE_A_RULE,
+  INDEXED_EVIDENCE_MARK,
+  INDEXED_EVIDENCE_NOTE,
   NET_NEW_BASELINE_DATE,
   NOT_DELIVERED_DEFINITION,
   OTHER_INFRASTRUCTURE_ASSET_TYPES,
@@ -61,15 +64,18 @@ export function Method() {
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5 text-[15px] leading-relaxed">
             <li>
-              <strong>Measurement bases are never mixed.</strong> Each facility has one floor figure, on the basis its source states: gross floor area
+              <strong>Measurement bases are never mixed.</strong> Each facility has one area figure, on the basis its source states: gross floor area
               (GFA), gross leasable area (GLA), built-up area that includes offices or other uses, or an area whose basis the source does not state.
               These are subtotalled separately and never added together. Land, open-yard and district areas are not floor space and appear only in
               their own labelled place. A figure the source gives as &ldquo;over&rdquo; or &ldquo;nearly&rdquo; is shown with that word.
             </li>
             <li>
-              <strong>Grade-A needs evidence.</strong> A facility is Grade-A <em>confirmed</em> only when a source states the grade or its specification
-              (for example clear height, floor loading, certification). <em>Probable</em> Grade-A is shown separately and never merged with confirmed.
-              Everything else is reported as other modern space.
+              <strong>Grade-A needs evidence.</strong>
+              <ul className="mt-1 list-disc space-y-1 pl-5">
+                {GRADE_A_RULE.map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+              </ul>
             </li>
             <li>
               <strong>Delivered means evidenced.</strong> A facility counts as delivered in a year only when a source dates its opening or completion in
@@ -140,6 +146,7 @@ export function Method() {
               ))}
             </ul>
             <p className="mt-3 text-sm text-ink-muted">
+              Where a delivery status or date rests only on search-indexed evidence, every view marks it with {INDEXED_EVIDENCE_MARK}: {INDEXED_EVIDENCE_NOTE}{' '}
               A project counts as verified when at least one of its sources was read directly. Changes found by the automated check are applied only
               with an official source or several independent ones; everything else waits for human review below.
             </p>

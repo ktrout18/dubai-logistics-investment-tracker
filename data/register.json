@@ -129,7 +129,7 @@
           "verification": "indexed"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Park size differs by source and basis: 144,000 m² (July 2024, basis not stated), 148,530 m² GFA (Aldar leasing page), 148,500 sqm (Aldar portfolio page, basis not stated) and \"nearly 150,000 sqm\" (Nov 2025 release, search results only).",
@@ -269,7 +269,7 @@
           "verification": "indexed"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "The 67,000 m² figure is seen only in search results for the Nov 2025 release (WAM page needs JavaScript); its basis (GLA vs GFA) is not stated anywhere read.",
@@ -422,7 +422,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "medium",
       "unresolvedQuestions": [
         "Whether operations have begun: all three copies of the 5 Nov 2026 Emirates Group release (dnata.com, emirates.com, Dubai Media Office; re-read 12 Nov 2026) say \"commissioning its new ... logistics facility\", not \"opened\"; no dnata opening release was found (newsroom checked 11 Nov, search 12 Nov 2026).",
@@ -570,10 +570,10 @@
           "verification": "indexed"
         }
       ],
-      "lastVerified": "2026-11-11",
-      "confidence": "high",
+      "lastVerified": "2026-11-12",
+      "confidence": "medium",
       "unresolvedQuestions": [
-        "The opening date (20 May 2026) comes from DSV's own press page, seen only through search results (dsv.com not read directly); the directly read joint release is dated 21 May 2026 and says \"announce the completion\" without dating the completion itself.",
+        "Confidence is medium (verification, 12 Nov 2026): the opening day rests only on search-indexed text. The opening date (20 May 2026) comes from DSV's own press page, seen only through search results (dsv.com not read directly); the directly read joint release is dated 21 May 2026 and says \"announce the completion\" without dating the completion itself.",
         "Date of physical completion or handover is not stated by any source.",
         "Investment amount not disclosed. Pallet capacity is ~75,000 in the joint release and ~74,000 on a DSV page (search results only)."
       ],
@@ -690,7 +690,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Whether the 40,000 sq ft basement is inside the 280,000 sq ft built-up storage figure.",
@@ -880,7 +880,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Whether the Feb 2026 \"Aftermarket Hub\" (215K sq ft) and the May 2026 \"3PL Logistics Hub\" (215,000 sq ft) are the same facility: same size and partners, treated here as one project.",
@@ -1002,7 +1002,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "No opening or occupation date: Aldar gives only completion in Q2 2026 and income from the facility (re-read 12 Nov 2026; no opening found by search), so the register status is construction completed rather than operational."
@@ -1123,7 +1123,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Exact inauguration date: the articles were published 14 Jan (Khaleej Times) and 15 Jan 2026 (Gulf News) and do not state the ceremony day."
@@ -1198,7 +1198,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Building developer / landlord.",
@@ -1285,7 +1285,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Whether the PDI warehouse figure is gross or leasable area (\"nearly 11,000-square-foot\")."
@@ -1374,7 +1374,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Storage capacity and site area not disclosed.",
@@ -1443,7 +1443,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Floor area not disclosed.",
@@ -1511,7 +1511,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Inauguration day: the Dubai Media Office item is dated 25 Mar 2026; no source gives the PDF's 24 Mar, and the ceremony day is not stated. Stored with month precision.",
@@ -1589,7 +1589,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "medium",
       "unresolvedQuestions": [
         "Opening date: the 21 Aug 2026 release is the earliest evidence and says only that DP World \"has also opened\" the depot; it may have opened earlier. Stored as August 2026 (month of the release).",
@@ -1710,7 +1710,7 @@
           "verification": "indexed"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "medium",
       "unresolvedQuestions": [
         "Phase 2 status in H2 2026: Aldar's Q3 2026 release (re-read 12 Nov 2026) does not mention phase 2 or the Q1 2027 date.",
@@ -2051,7 +2051,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Groundbreaking day: the release is datelined 21 Jul 2026 and says Talal Group \"has broken ground\"; the ceremony day is not stated."
@@ -2130,7 +2130,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Measurement basis of the ~300,000 sq ft (site or building).",
@@ -2217,7 +2217,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Investment not disclosed.",
@@ -2337,7 +2337,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Completion conflicts between Emirates sources: the 18 May 2026 release says \"expected to be completed by middle of 2030\"; the Emirates Group H1 results (5 Nov 2026, re-read 12 Nov 2026) say \"completion expected in the mid-2030s\". No forecast is stored until clarified.",
@@ -2437,7 +2437,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Investment and incremental (new) area not disclosed.",
@@ -2516,7 +2516,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Site location, investment and timeline not disclosed."
@@ -2721,7 +2721,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Exact signing date (\"The signing ceremony took place during MRO Europe\"; the Dubai South item is dated 30 Oct 2026).",
@@ -2805,7 +2805,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "high",
       "unresolvedQuestions": [
         "Delivery date for The Hive itself: \"Q1 2027 to Q4 2028\" is the window for all of phase two.",
@@ -3019,7 +3019,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "medium",
       "unresolvedQuestions": [
         "Completion was due August 2026; no completion or opening announcement found (Dubai South newsroom 11 Nov, search 12 Nov 2026): overdue, unconfirmed.",
@@ -3226,7 +3226,7 @@
           "verification": "direct"
         }
       ],
-      "lastVerified": "2026-11-11",
+      "lastVerified": "2026-11-12",
       "confidence": "medium",
       "unresolvedQuestions": [
         "Completion was due by the end of Q3 2026; no completion or handover item found (Dubai South newsroom 11 Nov, search 12 Nov 2026): overdue, unconfirmed.",
