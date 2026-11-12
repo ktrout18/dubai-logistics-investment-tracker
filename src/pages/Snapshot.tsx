@@ -189,8 +189,9 @@ function topHosts(projects: readonly Project[], n = 5): string[] {
 function DateText({ row }: { row: BriefingRow }) {
   return (
     <span className={row.date.forecastPassed ? 'text-amber-900' : undefined}>
-      {row.date.text}
+      {row.date.main}
       {row.date.mayBeEarlier && <sup className="ml-0.5 text-ink-soft">*</sup>}
+      {row.date.forecast && <> · {row.date.forecast}</>}
     </span>
   );
 }
@@ -244,11 +245,15 @@ export function Snapshot() {
     </>,
   ];
   const marks1: ReactNode[] = [];
-  if (d.rows.some((r) => r.date.mayBeEarlier)) marks1.push(<>* Month or period in which the source reported the event; it may have happened earlier.</>);
+  const mayBeEarlierMark = <>* Month or period in which the source reported the event; it may have happened earlier.</>;
+  if (d.rows.some((r) => r.date.mayBeEarlier)) marks1.push(mayBeEarlierMark);
   if (anyQualified(d)) marks1.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
   if (marks1.length) notes1.push(<>{marks1.map((m, i) => <span key={i}>{i > 0 && ' '}{m}</span>)}</>);
   const notes2: ReactNode[] = [<>Completion dates of projects being built are forecasts. {areaNote}</>];
-  if (anyQualified(built)) notes2.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
+  const marks2: ReactNode[] = [];
+  if ([...built.rows, ...signed.rows].some((r) => r.date.mayBeEarlier)) marks2.push(mayBeEarlierMark);
+  if (anyQualified(built)) marks2.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
+  if (marks2.length) notes2.push(<>{marks2.map((m, i) => <span key={i}>{i > 0 && ' '}{m}</span>)}</>);
 
   const copy = async () => {
     try {
@@ -317,9 +322,11 @@ export function Snapshot() {
                           <PartnerChips names={r.partners.slice(0, 2)} />
                         </span>
                       </td>
-                      <td className="truncate pr-3" title={r.descriptor}>
-                        {r.descriptor}
-                        {r.gradeTag && <span className="ml-1.5 text-[13px] text-ink-muted">· {r.gradeTag}</span>}
+                      <td className="pr-3" title={r.descriptor}>
+                        <span className="flex min-w-0 items-baseline">
+                          <span className="truncate">{r.descriptor}</span>
+                          {r.gradeTag && <span className="ml-1.5 shrink-0 whitespace-nowrap text-[13px] text-ink-muted">· {r.gradeTag}</span>}
+                        </span>
                       </td>
                       <td className="truncate pr-3 text-ink-muted">{r.location}</td>
                       <td className="truncate pr-3 text-[14px]">
@@ -386,10 +393,10 @@ export function Snapshot() {
                           </span>
                         </div>
                         <div className="mt-1 grid grid-cols-[1fr_330px] items-center gap-3 pl-3.5">
-                          <span className="truncate text-[15px]" title={r.descriptor}>
-                            {r.descriptor}
-                            {r.gradeTag && <span className="text-ink-muted"> · {r.gradeTag}</span>}
-                            <span className="text-ink-muted"> · {r.location}</span>
+                          <span className="flex min-w-0 items-baseline text-[15px]" title={r.descriptor}>
+                            <span className="truncate">{r.descriptor}</span>
+                            {r.gradeTag && <span className="shrink-0 whitespace-nowrap text-ink-muted">&nbsp;· {r.gradeTag}</span>}
+                            <span className="truncate text-ink-muted">&nbsp;· {r.location}</span>
                           </span>
                           <AreaCell row={r} max={max2} width={140} />
                         </div>
@@ -424,7 +431,7 @@ export function Snapshot() {
                           {r.areaText}
                           {r.investment && <span className="font-normal text-ink-muted"> · {r.investment.text}</span>}
                         </p>
-                        <p className="truncate text-[13px] text-ink-muted">
+                        <p className="text-[13px] leading-snug text-ink-muted">
                           <DateText row={r} />
                         </p>
                       </li>

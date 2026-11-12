@@ -65,8 +65,8 @@ export function UnstatedBasisNote({ buckets }: { buckets: { floorSpace: FloorSpa
   if (!buckets.some((b) => b.floorSpace.unspecified.projectIds.length)) return null;
   return (
     <p className="text-xs leading-relaxed text-ink-muted">
-      &ldquo;Basis not stated&rdquo; (outlined): sources give these areas without saying whether they are gross or leasable floor area. Shown on its
-      own and never added to the other figures. <a href="#/method">Method</a>.
+      &ldquo;Basis not stated&rdquo; (outlined): sources give these areas without stating their basis (gross or leasable floor area, or for some a site or
+      open-storage area). Shown on its own and never added to the other figures. <a href="#/method">Method</a>.
     </p>
   );
 }

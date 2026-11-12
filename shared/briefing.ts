@@ -178,19 +178,22 @@ function withinPeriod(iso: string | undefined, date: string, precision: Paramete
 
 /**
  * True when the actual completion is stored at month/quarter/year precision
- * and its source was published inside that same period: the period was then
- * taken from the release, and the event itself may have happened earlier.
+ * and its source was published inside that same period, or the source's
+ * publication date is not recorded (so it cannot be ruled out): the period was
+ * then taken from the release, and the event itself may have happened earlier.
  */
 export function completionMayBeEarlier(p: Pick<Project, 'actualCompletion' | 'sources'>): boolean {
   const c = p.actualCompletion;
   if (!c || c.datePrecision === 'day') return false;
   const src = p.sources.find((s) => s.url === c.sourceUrl);
-  return withinPeriod(src?.publishedDate, c.date, c.datePrecision);
+  if (!src?.publishedDate) return true;
+  return withinPeriod(src.publishedDate, c.date, c.datePrecision);
 }
 
 /** Same test for one event (event types that happen before they are reported). */
 export function eventMayBeEarlier(e: Pick<ProjectEvent, 'type' | 'date' | 'datePrecision' | 'sourcePublishedDate'>): boolean {
   if (e.datePrecision === 'day' || !EVENT_TYPES_DATED_BY_EVENT.includes(e.type)) return false;
+  if (!e.sourcePublishedDate) return true;
   return withinPeriod(e.sourcePublishedDate, e.date, e.datePrecision);
 }
 
@@ -199,7 +202,12 @@ export const MAY_BE_EARLIER_NOTE =
   'The source gives no day for this event; the period shown is when the source reported it, and the event may have happened earlier.';
 
 export interface DateLabel {
+  /** Full wording: `main`, then " · " and `forecast` when there is one. */
   text: string;
+  /** The dated part that `mayBeEarlier` refers to (the "*" goes after this, never after the forecast). */
+  main: string;
+  /** Forecast wording shown after a milestone, e.g. "forecast Q1 2029". */
+  forecast?: string;
   kind: 'actual' | 'forecast' | 'milestone';
   mayBeEarlier: boolean;
   /** Forecast whose period has ended without a sourced completion. */
@@ -209,8 +217,10 @@ export interface DateLabel {
 /** Date wording for any record, from structured fields only. Forecasts are always labelled as forecasts. */
 export function dateLabelOf(p: Project, today: string): DateLabel {
   if (p.actualCompletion) {
+    const text = formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision);
     return {
-      text: formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision),
+      text,
+      main: text,
       kind: 'actual',
       mayBeEarlier: completionMayBeEarlier(p),
       forecastPassed: false,
@@ -220,9 +230,15 @@ export function dateLabelOf(p: Project, today: string): DateLabel {
   const fcPassed = fc ? periodEnd(fc.date, fc.datePrecision) < today : false;
   const fcText = fc ? `forecast ${formatDate(fc.date, fc.datePrecision)}${fcPassed ? ' (date passed)' : ''}` : '';
   if (p.status === 'under_construction') {
-    if (fc) return { text: fcText.charAt(0).toUpperCase() + fcText.slice(1), kind: 'forecast', mayBeEarlier: false, forecastPassed: fcPassed };
+    if (fc) {
+      const text = fcText.charAt(0).toUpperCase() + fcText.slice(1);
+      return { text, main: text, kind: 'forecast', mayBeEarlier: false, forecastPassed: fcPassed };
+    }
     const start = [...p.events].reverse().find((e) => e.type === 'construction_start');
-    if (start) return { text: `Started ${formatDate(start.date, start.datePrecision)}`, kind: 'milestone', mayBeEarlier: eventMayBeEarlier(start), forecastPassed: false };
+    if (start) {
+      const text = `Started ${formatDate(start.date, start.datePrecision)}`;
+      return { text, main: text, kind: 'milestone', mayBeEarlier: eventMayBeEarlier(start), forecastPassed: false };
+    }
   }
   const last = p.events[p.events.length - 1];
   const lm = last
@@ -230,6 +246,8 @@ export function dateLabelOf(p: Project, today: string): DateLabel {
     : `${PROJECT_STATUS_LABELS[p.status]} ${formatDate(p.latestMilestone.date, p.latestMilestone.datePrecision)}`;
   return {
     text: fc ? `${lm} · ${fcText}` : lm,
+    main: lm,
+    ...(fc ? { forecast: fcText } : {}),
     kind: fc ? 'forecast' : 'milestone',
     mayBeEarlier: last ? eventMayBeEarlier(last) : false,
     forecastPassed: fcPassed,
@@ -412,7 +430,7 @@ function floorSentence(s: BriefingSection): string {
   const n = s.warehouseIds.length;
   const k = s.floorDisclosedIds.length;
   if (!n) return 'None of these is a warehouse-type facility, so no warehouse floor space is reported.';
-  const head = `${k} of the ${n} warehouse ${n === 1 ? 'facility' : 'facilities'} disclosed a floor area`;
+  const head = `${k} of the ${n} warehouse ${n === 1 ? 'facility' : 'facilities'} disclosed an area`;
   if (!k) return `${head}.`;
   return `${head}: ${subtotalsText(s.floorSubtotals)}. Each basis is a separate figure; they are never added together.`;
 }

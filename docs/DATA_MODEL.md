@@ -529,7 +529,7 @@ function computeBriefing(projects: readonly Project[], year: number, today: stri
 interface Briefing {
   year: number;
   headline: string;                 // "In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction."
-  deliveredFloorSentence: string;   // "9 of the 10 warehouse facilities disclosed a floor area: 26,013 m² GFA · …"
+  deliveredFloorSentence: string;   // "9 of the 10 warehouse facilities disclosed an area: 26,013 m² GFA · …"
   delivered: BriefingSection & { openedIds: string[]; constructionCompletedIds: string[] };
   beingBuilt: BriefingSection;      // status under_construction
   signedOrAnnounced: BriefingSection;   // committed-not-started + non-binding statuses

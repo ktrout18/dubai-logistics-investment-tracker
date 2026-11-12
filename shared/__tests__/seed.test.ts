@@ -227,6 +227,27 @@ describe('seed register: the same record shows the same thing everywhere', () =>
     expect(toll.date).toMatchObject({ kind: 'forecast', forecastPassed: true });
     expect(toll.date.text).toMatch(/^Forecast Aug 2026/);
   });
+
+  it('a month-precision date whose source has no recorded publication date may be earlier (CEVA, MOL)', () => {
+    const ceva = briefing.delivered.rows.find((r) => r.id === 'ceva-logistics-dubai-south-ecommerce-warehouse')!;
+    expect(ceva.date).toMatchObject({ text: 'Jan 2026', main: 'Jan 2026', kind: 'actual', mayBeEarlier: true });
+    const mol = briefing.signedOrAnnounced.rows.find((r) => r.id === 'dp-world-mol-jebel-ali-vehicle-processing')!;
+    expect(mol.date).toMatchObject({ text: 'Term sheet Oct 2026', mayBeEarlier: true });
+  });
+
+  it('the "may be earlier" mark refers to the milestone, not to a forecast after it (Phoenix)', () => {
+    const phoenix = briefing.signedOrAnnounced.rows.find((r) => r.id === 'phoenix-aviation-mro-centre-mbrah')!;
+    expect(phoenix.date).toMatchObject({
+      text: 'Agreement signed Oct 2026 · forecast Q1 2029',
+      main: 'Agreement signed Oct 2026',
+      forecast: 'forecast Q1 2029',
+      mayBeEarlier: true,
+    });
+  });
+
+  it('the delivered area sentence does not call basis-not-stated figures floor area', () => {
+    expect(briefing.deliveredFloorSentence).toMatch(/^9 of the 10 warehouse facilities disclosed an area: /);
+  });
 });
 
 describe('seed register: investment aggregates use facility-scope amounts only', () => {

@@ -150,7 +150,7 @@ export function Method() {
             </h2>
             <p className="mt-3 text-sm">
               Last run: {meta.lastAttemptedRun ? formatDubaiDateTime(meta.lastAttemptedRun) : 'never'} ({RUN_STATUS_LABELS[meta.lastRunStatus]}). Last
-              success: {meta.lastSuccessfulRun ? formatDubaiDateTime(meta.lastSuccessfulRun) : 'none yet; the data is the verified seed'}.
+              success: {meta.lastSuccessfulRun ? formatDubaiDateTime(meta.lastSuccessfulRun) : 'none yet; the data is the initial seed'}.
             </p>
             {meta.sourceScans.length > 0 && (
               <ul className="mt-3 space-y-1 text-sm text-ink-muted">

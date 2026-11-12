@@ -509,7 +509,7 @@ export function Overview() {
           <p className="text-sm text-ink-muted">
             {meta.lastSuccessfulRun
               ? 'Last successful automated source check.'
-              : `No automated refresh has run yet; the register is the verified seed${
+              : `No automated refresh has run yet; the register is the initial seed${
                   d.data.register.updatedAt ? ` of ${formatDubaiDateTime(d.data.register.updatedAt)}` : ''
                 }.`}
           </p>
