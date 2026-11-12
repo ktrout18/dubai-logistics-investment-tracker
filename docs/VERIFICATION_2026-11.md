@@ -1,8 +1,29 @@
 # Independent verification of the consistency repair (12 November 2026)
 
 Step 3 of 3. Branch `consistency-repair`, starting at `02f74ac` (audit
-`a8485e6` + rebuild `02f74ac`); fixes in `167f964`. `main` was not touched
-(still `ed1f809`). Nothing was deployed, published or merged; no workflow was
+`a8485e6` + rebuild `02f74ac`); first fixes in `167f964`, report `f7d7488`;
+second round of fixes (the items first reported as "not fixed") in `6fe0a6e`
+and `c85010c`; screenshots and docs in the commit that updates this file.
+`main` was not touched (still `ed1f809`).
+
+## Final state as rendered (Overview, 2026)
+
+* Headline: "In 2026, 11 logistics facilities opened in Dubai and 3 more
+  completed construction."
+* Tiles: Opened / operational 11 · Construction completed 3 · Warehouse space
+  facilities 10 · Other logistics infrastructure 4.
+* Support line: "Of the 11 opened, 7 are warehouse facilities and 4 other
+  logistics infrastructure. The 3 construction-completed are all warehouse
+  facilities. 2 of the 11 openings rest on search-indexed evidence for the
+  status or date (source page not read directly)."
+* Area line: "9 of the 10 warehouse facilities disclosed an area: 26,013 m²
+  GFA · 20,000 m² GLA · 10,405 m² Built-up (mixed use) · 204,174 m² Basis not
+  stated. Each basis is a separate figure; they are never added together."
+* Snapshot: same headline; columns "Companies · Facility · Location ·
+  Delivery · Area, m² (basis) · Date"; DSV "Opened / operational† … 20 May
+  2026†", CEVA "Opened / operational† … Jan 2026*†"; legend "† From
+  search-indexed text; source page not read directly."; footer "Sources last
+  checked 12 Nov 2026". Nothing was deployed, published or merged; no workflow was
 triggered and no Anthropic API call was made.
 
 Method: every check below was run by the verifier, not taken from
@@ -22,6 +43,18 @@ lived in the session scratchpad, not in the repo.
 | G. Leftovers | Yes (`src/`, `shared/`, `data/`, `docs/`, `README.md`, `CLAUDE.md`, `dist/`) | **Pass**, one stale line left in `CLAUDE.md` | "262,000", "261,600", "215,260", "81,500", "13 logistics", "completed one more", "differs from sources", "presentation" occur only in the docs that record the old → new changes, a regression test and a code comment. "multi-user" is used only for CEVA, Gallega and DHL, as their sources say. `CLAUDE.md` still lists `computePresentedTotals` (see below). Review queue: 14 open items incl. dnata and Emirates Snack Foods "operational?" conflicts; unresolved questions present for NIP phase 1 opening, Toll DC6 and Sky Support overdue completion, DHL groundbreaking, MOL term-sheet date. "Verified" wording fixed (see defects). |
 | H. Git, CI, deploy | Yes | See the end of this file | Working tree clean; branch pushed; CI on `02f74ac` and `a8485e6` green; no "Deploy to GitHub Pages" run has ever had `head_branch = consistency-repair`; `origin/main` = `ed1f809`. |
 
+### Re-run after the second round (tree of `c85010c` + screenshots/docs)
+
+| Check | Result | Evidence |
+|---|---|---|
+| A | **Pass** | `Tests 226 passed (226)`; `validate: 31 projects — 0 error(s), 7 warning(s), 0 notice(s)`; `✓ built in 2.34s`. |
+| B | **Pass**, no difference | Independent script unchanged: 14 delivered (11 opened, 3 completed); 26,012.85 GFA / 20,000 GLA / 10,405.14 built-up / 204,174.15 unstated; being built 81,000 GLA / 48,136.06 built-up / 101,230.91 unstated; AED 170 m delivered, EUR 120 m committed — equal to `computeMetrics` / `computeBriefing` and the pages. |
+| C | **Pass** | Rendered headline, tiles, support line and area line as quoted at the top; † appears only on DSV and CEVA (Delivered table, list view, project pages, snapshot) with its legend; no other row changed. |
+| E | **Pass** | 2 pages, 1152 × 648 pt; every row's area figure, basis tag, date, forecast, delivery label and Grade A tag and both slides' subtotals found in the PDF text; 5 † marks; no truncation; content ends above the footer on both slides. |
+| F | **Pass** | All routes load at 1440×900 and 390×844, no horizontal overflow, 0 console errors; nav and controls equal `main` except the Delivered table's "Delivery" column (from the first step); filters, sort, URL state, year selector work; CSV 31 rows × 63 columns, JSON 31 projects. |
+| G | **Pass** except `CLAUDE.md` | No "262,000", "261,600", "215,260", "81,500", "13 logistics", "completed one more", "Multiuser", "differs from sources", "Source-verified", "verified seed" or "As of" in `src/`, `shared/`, `data/`, `README.md`, `index.html` or `dist/` (only regression tests, the change-record docs and the source's own "results presentation" title). `CLAUDE.md` still names `computePresentedTotals` (item 7). |
+| H | see end of file | |
+
 ## Defects found
 
 | # | Defect | Conflicting values | Status |
@@ -34,15 +67,30 @@ lived in the session scratchpad, not in the repo.
 | 6 | "the register is the verified seed" (Overview) and "the data is the verified seed" (Method): 5 of the 29 counted projects have no directly read source. | "verified seed" vs data-quality panel "24 of 29" | Fixed `167f964` ("initial seed") |
 | 7 | `CLAUDE.md` project notes name `computePresentedTotals` (removed). | — | **Not fixed**: the verifier does not edit `CLAUDE.md` on another agent's instruction. One-line fix for the owner: replace `computePresentedTotals` with `computeBriefing` (`shared/briefing.ts`) and `shared/definitions.ts`. |
 
-## Not fixed (reported; larger than a targeted fix or a judgement for the owner)
+## Second round (`6fe0a6e`, `c85010c`): items first reported as not fixed
 
-* **Indexed-only evidence is visible only on project pages.** CEVA (opened; both sources indexed, confidence medium) and DSV's 20 May date (dsv.com, indexed) appear in the headline count, tables and snapshot as plain "Opened / operational" with no marker; the verification level and an unresolved question show on the project page. DSV's confidence is `high` although its opening date is indexed-only (its own net-new note says "medium confidence"). DSV's operational status is also supported directly ("I'm excited to open", completion release 21 May).
-* **"11 logistics facilities opened"** includes 4 non-warehouse assets (Petrochem terminal and HQ, Lufthansa Technik painting and grinding centre, MOSOLF vehicle hub, Al Awir container depot). The tiles beside it say 10 warehouse / 4 other infrastructure; the sentence itself does not.
-* **"Floor area" headings** remain on the snapshot column and the "Warehouse floor area by basis" subtotal although the basis-not-stated subtotals (204,174 / 101,231 m²) include figures that may be site or open storage (dnata, Gallega, Hellmann–INDU). MOSOLF's 14,957 m² site and Gargash's 232,258 m² plot appear, tagged "Site / land", in the snapshot's "Floor area, m² (basis)" column (text only, no bar, not subtotalled).
-* **Dates.** All records keep `lastVerified: 2026-11-11` and the snapshot says "As of 11 Nov 2026", though the sources were re-read on 12 Nov (the audit explains the seed test pins the date). Report-month dates are still stored as the event month, marked "may be earlier" everywhere; the event month itself is not known for most 2026 openings.
-* **Method page wording**: "Grade-A confirmed only when a source states the grade or its specification (for example clear height…)" is looser than the audit's rule (an explicit Grade A statement by the developer, owner or an official body). All confirmed records meet the stricter rule.
-* **Header tagline** "Source-verified register" (unchanged from `main`; design) while 5 counted projects rest on search results only.
-* Long descriptors and locations still end in an ellipsis on the slides (full text in the tooltip and on the tracker); screenshots in `docs/screenshots/` predate `167f964`.
+| # | Item | Now |
+|---|---|---|
+| 8 | Search-indexed delivery evidence was visible only on project pages; DSV confidence `high` | `indexedDeliveryEvidence` (shared/definitions.ts, from the events' and sources' `verification`) drives a † mark with the legend "From search-indexed text; source page not read directly." on the Delivered table, the list and regional tables (status and date columns), the project page and the snapshot; only DSV (status and date) and CEVA (status and date) carry it. The headline support line counts them ("2 of the 11 openings…"). DSV confidence is medium, with the reason as its first unresolved question. Tests: `shared/__tests__/definitions.test.ts`, `seed.test.ts`. |
+| 9 | "11 opened" could be read as 11 warehouses | Support line computed by `deliverySplitSentence`: 7 warehouse + 4 other logistics infrastructure; the 3 completed are all warehouse. |
+| 10 | "Floor area" headings over columns holding site and basis-not-stated figures | Snapshot "Area, m² (basis)", "Warehouse area by basis"; size filter "Development size (area)" / "Area not disclosed"; card empty state "No area disclosed". |
+| 11 | Method page Grade A rule looser than the audit's | `GRADE_A_RULE` in shared/definitions.ts, rendered on the method page; all confirmed records meet it. |
+| 12 | `lastVerified` 11 Nov everywhere; snapshot "As of 11 Nov 2026" | `lastVerified` = latest direct-read `accessedDate` (seed `lastDirectRead`): 12 Nov on 25 records, 11 Nov on the 6 resting only on search results (CEVA, Terralogix park and phase 1, Gallega vehicle hub, MOL, DHL) — matches the audit's D/I column. Seed validation and the seed test use 12 Nov. Snapshot footer: "Sources last checked 12 Nov 2026" (latest `lastVerified` of the rows shown). Data regenerated with `scripts/seed/build.ts` after confirming `data/changelog.json` has no changes and `data/pipeline-state.json` does not exist; only `data/register.json` changed (54 lines: `lastVerified`, DSV confidence and question). |
+| 13 | Tagline "Source-verified register" | "Source-linked register…" in the header, `index.html` meta description and README; footer and `<title>` made no such claim. |
+| 14 | Slide names ending in an ellipsis | Descriptors, locations and company chips wrap; nothing on either slide is truncated (DOM check: no element with clipped overflow except the screen-reader caption); both slides' content ends above the footer (739 / 737 px of 756 px in print). |
+| 15 | Screenshots out of date | All `docs/screenshots/real-*` retaken at 1440×900 and 390×844 (full page; error page with a 500 on `register.json`) and reviewed. |
+| 7 | `CLAUDE.md` names `computePresentedTotals` | **Still not fixed.** The conductor relayed authorisation, but the verifier does not edit `CLAUDE.md` on an agent message; the owner should make the edit (replace with `computeBriefing` in `shared/briefing.ts` and `shared/definitions.ts`, and add: "The site's headline, cards, tables and snapshot are computed from the register; never add project-specific wording or totals in `src/`."). |
+
+## Remaining (judgement for the owner)
+
+* Report-month dates are stored as the event month, marked "may be earlier"
+  everywhere; the event month itself is unknown for most 2026 openings.
+* "Basis not stated" subtotals (204,174 m² delivered, 101,231 m² being built)
+  may include site or open-storage area (dnata, Gallega, Hellmann–INDU); the
+  site says so but cannot resolve it.
+* The † mark covers delivery status and dates only; other indexed-only facts
+  (e.g. Aldar phase 2's 81,000 m² GLA, Terralogix's figures) are shown with
+  their verification level on the project page, not marked in tables.
 
 ## Could not verify
 
@@ -55,10 +103,12 @@ lived in the session scratchpad, not in the repo.
 Leadership can repeat each headline and briefing statement and find it, with
 the same number, date, status and basis, in the register: "In 2026, 11
 logistics facilities opened in Dubai and 3 more completed construction"; the
+split (7 warehouse, 4 other infrastructure; 3 completed, all warehouse); the
 per-basis subtotals (never added); DSV as a build-to-suit warehouse for DSV
-opened 20 May 2026; Aldar phase 2 as 81,000 m² GLA. Two caveats to say aloud:
-the 11 include 4 non-warehouse facilities, and two of the 11 (CEVA, and the
-DSV opening day) rest on search results rather than pages read directly.
+opened 20 May 2026; Aldar phase 2 as 81,000 m² GLA. The two caveats that used
+to need saying aloud (non-warehouse openings; CEVA and DSV's opening day on
+search-indexed evidence) are now stated on the page and marked † wherever
+those statuses and dates appear.
 
 ## H. Git and CI
 

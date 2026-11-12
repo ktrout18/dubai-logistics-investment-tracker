@@ -37,11 +37,11 @@ Design, navigation and features are unchanged; no projects were added.
 
 | Old briefing statement | Now (derived, as rendered) |
 |---|---|
-| "Dubai opened 13 logistics facilities and completed one more in 2026, with about 262,000 m² of floor space" | "In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction." |
-| 261,600 m² floor space opened (cross-basis sum) | Warehouse floor area by basis, never added: **26,013 m² GFA · 20,000 m² GLA · 10,405 m² built-up (mixed use) · 204,174 m² basis not stated** — 9 of the 10 warehouse facilities disclosed one |
+| "Dubai opened 13 logistics facilities and completed one more in 2026, with about 262,000 m² of floor space" | "In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction." Support line: "Of the 11 opened, 7 are warehouse facilities and 4 other logistics infrastructure. The 3 construction-completed are all warehouse facilities. 2 of the 11 openings rest on search-indexed evidence for the status or date (source page not read directly)." |
+| 261,600 m² floor space opened (cross-basis sum) | Warehouse area by basis, never added: **26,013 m² GFA · 20,000 m² GLA · 10,405 m² built-up (mixed use) · 204,174 m² basis not stated** — "9 of the 10 warehouse facilities disclosed an area" (basis-not-stated figures may include site or open-storage area) |
 | 215,260 m² being built | **81,000 m² GLA · 48,136 m² built-up (mixed use) · 101,231 m² basis not stated** (8 projects; Emirates complex and Sky Support are other infrastructure) |
 | 14 "openings" all counted as opened | 11 Opened / operational; 3 Construction completed (NIP phase 1, dnata, Emirates Snack Foods) |
-| DSV "Multiuser warehouse · 20 May" | "Build-to-suit warehouse for DSV" · 20 May 2026 · Opened / operational · 30,000 m² basis not stated |
+| DSV "Multiuser warehouse · 20 May" | "Build-to-suit warehouse for DSV" · 20 May 2026† · Opened / operational† · 30,000 m² basis not stated; confidence medium († = from search-indexed text; source page not read directly) |
 | NIP phase 2 "81,500 m²" | 81,000 m² GLA everywhere |
 | Palmon "10,400" | 10,405 m² built-up (mixed use); Grade A (probable) |
 | NIP phase 1 "67,000" | over 67,000 m², basis not stated; Q3 2026; construction completed |
@@ -49,6 +49,41 @@ Design, navigation and features are unchanged; no projects were added.
 | Al Awir "100,000 m² site" charted as yard | 100,000 m² basis not stated, shown as text; other logistics infrastructure; never floor space |
 | AED 300 m Petrochem, USD 5.1 bn Emirates, AED 150 m Talal, USD 11 m Palmon in investment views | Listed under "Not summed" with "More than the logistics facility"; facility-scope sums only (2026 delivered: AED 170 m = dnata + Al Sharqi) |
 | "Briefing differs from sources" badges, "Strictly, sources confirm only completion for 3", "floor space as reported", "Not counted (unconfirmed)" list, † footnotes | Removed. Toll DC6 and Sky Support appear under "Being built" with "Forecast … (date passed)"; DHL under signed/committed |
+
+## Final state after verification (12 November 2026)
+
+Verification (`docs/VERIFICATION_2026-11.md`) added, without changing any
+count or total:
+
+* **Search-indexed delivery evidence is marked everywhere.**
+  `indexedDeliveryEvidence` (`shared/definitions.ts`) flags a delivered record
+  whose status-supporting events, or whose `actualCompletion` source, were not
+  read directly. Every view that shows a delivery status or date (Delivered
+  table, project lists, Regional table, project page, snapshot) marks it with
+  † and the legend "From search-indexed text; source page not read directly."
+  In 2026: DSV (opening day) and CEVA (opening and date). DSV's confidence is
+  now medium.
+* **Headline support line** (`Briefing.deliverySplitSentence`): the
+  warehouse / other-infrastructure split of each delivery kind and the count
+  resting on search-indexed evidence.
+* **"Area", not "floor area"**, for the snapshot column and subtotals
+  ("Area, m² (basis)", "Warehouse area by basis"), because site and
+  basis-not-stated figures appear there.
+* **Dates.** A month or period taken from a report with no recorded
+  publication date is also marked "may be earlier" (CEVA, MOL); the "*" sits
+  after the milestone, not after a forecast. `lastVerified` is 12 Nov 2026 on
+  the 25 records with a source re-read directly that day and 11 Nov 2026 on
+  the 6 resting only on search results (CEVA, Terralogix park and phase 1,
+  Gallega vehicle hub, MOL, DHL). The snapshot footer says "Sources last
+  checked 12 Nov 2026" (latest `lastVerified` of the rows shown).
+* **Grade A rule** on the method page comes from `GRADE_A_RULE` in
+  `shared/definitions.ts` and matches the audit (confirmed only on the
+  developer's, owner's, occupier's or an official body's own statement for
+  this facility).
+* **Snapshot slides**: names wrap to two lines; no status, basis tag,
+  qualifier or date is truncated; both slides fit their 16:9 page in print.
+* Tagline "Source-linked register…" (header, meta description, README);
+  "verified seed" wording replaced by "initial seed".
 
 ## Definitions
 
@@ -94,5 +129,7 @@ Design, navigation and features are unchanged; no projects were added.
   on search results only; Toll DC6 and Sky Support completions are overdue and
   unconfirmed; the DHL groundbreaking and Gallega vehicle-hub go-live are
   unconfirmed.
-* `CLAUDE.md` (project notes) still names `computePresentedTotals`; it was not
-  edited here.
+* CEVA's opening and DSV's opening day rest on search-indexed text only
+  (marked †).
+* `CLAUDE.md` (project notes) still names `computePresentedTotals`; the
+  verifier did not edit it (it needs the owner's own edit).
