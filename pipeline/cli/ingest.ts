@@ -9,7 +9,7 @@ import { REPO_ROOT } from '../../scripts/data-files.ts';
 import { todayIso } from '../../shared/index.ts';
 import { loadConfig } from '../config.ts';
 import { buildFetcher, buildProductionDeps } from '../factory.ts';
-import { runIngest, sinceFromArg } from '../run.ts';
+import { reportDigest, runIngest, sinceFromArg } from '../run.ts';
 import { consoleLogger, systemClock } from '../types.ts';
 import { intFlag, parseArgs } from './args.ts';
 
@@ -66,8 +66,18 @@ async function main(): Promise<number> {
   console.log('');
   console.log(report.summary);
   for (const s of report.failedSources) console.log(`  FAILED ${s.id}: ${s.note}`);
-  for (const h of report.held) console.log(`  HELD ${h.reviewId}: ${h.reasons.join('; ')}`);
-  for (const p of report.published) console.log(`  PUBLISHED ${p.kind} ${p.projectId}: ${p.reason}`);
+  for (const h of report.held) {
+    console.log(`  HELD ${h.reviewId} (${h.kind}${h.projectId ? ` ${h.projectId}` : ''}): ${h.reasons.join('; ')}`);
+    console.log(`       claim: ${h.claim ?? 'n/a'}`);
+    console.log(`       evidence: ${h.url}`);
+  }
+  for (const p of report.published) {
+    console.log(`  PUBLISHED ${p.kind} ${p.projectId}: ${p.reason}`);
+    console.log(`       claim: ${p.claim ?? 'n/a'}`);
+    console.log(`       evidence: ${p.url}`);
+  }
+  // The run report artifact is not always reachable, so the log carries the figures too.
+  for (const line of reportDigest(report)) console.log(line);
   if (report.filesWritten.length) console.log(`Files written: ${report.filesWritten.join(', ')}`);
   console.log(`Report: pipeline-runs/${report.runId}${dryRun ? '-dry' : ''}.json`);
   if (args.flags.has('json')) console.log(JSON.stringify(report, null, 2));

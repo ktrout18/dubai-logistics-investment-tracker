@@ -35,9 +35,22 @@ export class SearchBudget {
     return this.returned;
   }
 
-  async search(q: SearchQuery): Promise<BudgetedSearchResult> {
+  /** Searches left under the cap. */
+  get remaining(): number {
+    return Math.max(0, this.cap - this.used);
+  }
+
+  /**
+   * `reserve`: searches that must stay available for other work (later source
+   * scans, rechecks). A search that would dip into them is skipped.
+   */
+  async search(q: SearchQuery, opts: { reserve?: number } = {}): Promise<BudgetedSearchResult> {
     if (!this.provider.available) return { ok: false, reason: `no search provider (${this.provider.name})`, skipped: true };
     if (this.used >= this.cap) return { ok: false, reason: `search cap reached (${this.cap})`, skipped: true };
+    const reserve = opts.reserve ?? 0;
+    if (reserve > 0 && this.cap - this.used <= reserve) {
+      return { ok: false, reason: `search budget kept for source scans and rechecks (${this.cap - this.used} left, ${reserve} reserved)`, skipped: true };
+    }
     this.used++;
     try {
       const r = await this.provider.search(q);

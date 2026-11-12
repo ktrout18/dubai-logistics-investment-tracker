@@ -253,6 +253,15 @@ export function buildUpdate(
     (e) => e.type === f.eventType && (normaliseUrl(e.sourceUrl) === url || Math.abs(daysBetween(e.date, date.date)) <= SAME_EVENT_WINDOW_DAYS),
   );
   let newStatus = project.status;
+  // A source this project already cites, already recorded as a different
+  // milestone, is being re-read: a human interpreted it once, so a different
+  // reading (e.g. "commissioning" now read as "opened") goes to review.
+  const recordedFromSource = project.events.filter((e) => normaliseUrl(e.sourceUrl) === url);
+  if (!sameEvent && recordedFromSource.length) {
+    conflicts.push(
+      `this source is already recorded for the project as ${recordedFromSource.map((e) => `"${e.type}" (${e.id})`).join(', ')}; the extraction reads it as "${f.eventType}"`,
+    );
+  }
   if (!sameEvent) {
     if (NON_STATUS_EVENTS.includes(f.eventType)) {
       conflicts.push(`milestone type "${f.eventType}" does not imply a status and needs a human summary`);
@@ -325,6 +334,12 @@ export function decide(item: FactItem, ctx: DecideContext): Decision {
   const reasons: string[] = [];
 
   if (!item.groundingOk) reasons.push(...item.failures.map((r) => `grounding: ${r}`));
+  const delivered = statusFromEvent({ type: f.eventType });
+  if (delivered && isDeliveredStatus(delivered) && grounded.eventDate?.from === 'publication_date') {
+    // A results report or round-up published today says nothing about when the
+    // facility opened; the publication date would become a false completion date.
+    reasons.push(`the date of the "${f.eventType}" milestone is not stated; the publication date (${grounded.eventDate.date}) is not used as a completion date`);
+  }
 
   if (match.kind === 'ambiguous') {
     reasons.push(`identity ambiguous: possible matches ${match.candidates.map((c) => `${c.projectId} (${c.score.toFixed(1)})`).join(', ')}`);

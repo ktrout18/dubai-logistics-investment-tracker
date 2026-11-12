@@ -32,6 +32,11 @@ export interface DiscoveryContext {
   /** Window start (inclusive, YYYY-MM-DD). */
   since: string;
   today: string;
+  /**
+   * Searches that per-article fallbacks (blocked pages) must leave untouched,
+   * because later source scans and the rechecks still need them. Default 0.
+   */
+  articleSearchReserve?: number;
 }
 
 /** Per-document outcome, for the run report and the processed-URL state. */
@@ -219,7 +224,14 @@ export async function fetchArticles(
     }
     outcomes.push({ url: it.url, sourceId: owner.id, outcome: `article_${r.outcome}` });
     if (it.snippet) docs.push(indexedDoc(it, owner, foundVia, extra));
-    else {
+    const reserve = ctx.articleSearchReserve ?? 0;
+    if (ctx.search.available && it.title && ctx.search.remaining <= reserve) {
+      // Each blocked article can cost two searches; without this guard a few
+      // blocked sources use up the cap before the search-only sources are scanned.
+      outcomes.push({ url: it.url, sourceId: owner.id, outcome: `fallback_search_skipped: ${ctx.search.remaining} search(es) left, ${reserve} kept for source scans and rechecks` });
+      continue;
+    }
+    if (!it.snippet) {
       // Locate the original via the search index, then look for syndicated copies.
       const located = await locateViaIndex(it, ctx);
       if (located) docs.push({ ...indexedDoc(located, owner, `${foundVia}+index`, extra) });
@@ -247,7 +259,7 @@ function indexedDoc(it: ListItem, source: PipelineSource, foundVia: string, extr
 
 async function locateViaIndex(it: ListItem, ctx: DiscoveryContext): Promise<ListItem | undefined> {
   if (!it.title || !ctx.search.available) return undefined;
-  const r = await ctx.search.search({ query: `"${it.title}"`, site: hostOf(it.url), max: 3 });
+  const r = await ctx.search.search({ query: `"${it.title}"`, site: hostOf(it.url), max: 3 }, { reserve: ctx.articleSearchReserve ?? 0 });
   if (!r.ok) return undefined;
   const hit = r.results.find((x) => normaliseUrl(x.url) === normaliseUrl(it.url)) ?? r.results[0];
   if (!hit || !hit.snippet) return undefined;
@@ -264,7 +276,7 @@ async function syndicatedCopies(
   extra: { recheckProjectId?: string },
 ): Promise<DocumentRecord[]> {
   if (!ctx.search.available) return [];
-  const r = await ctx.search.search({ query: `"${title.slice(0, 120)}"`, after: addDays(ctx.since, -7), max: 5 });
+  const r = await ctx.search.search({ query: `"${title.slice(0, 120)}"`, after: addDays(ctx.since, -7), max: 5 }, { reserve: ctx.articleSearchReserve ?? 0 });
   if (!r.ok) return [];
   const docs: DocumentRecord[] = [];
   for (const hit of r.results) {

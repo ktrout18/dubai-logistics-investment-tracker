@@ -71,6 +71,8 @@ export interface HeldReport {
   kind: string;
   projectId?: string;
   url: string;
+  /** What the extraction claimed (event type, project, quote), for reviewers reading the log. */
+  claim?: string;
   reasons: string[];
   issueUrl?: string;
 }
@@ -87,7 +89,7 @@ export interface RunReport {
   failedSources: { id: string; name: string; note: string }[];
   documents: { fetched: number; httpRequests: number; extracted: number; outcomes: DocOutcome[] };
   candidates: number;
-  published: { kind: string; projectId: string; reason: string; url: string }[];
+  published: { kind: string; projectId: string; reason: string; url: string; claim?: string }[];
   held: HeldReport[];
   skipped: { url: string; reason: string }[];
   recheck: { projectId: string; results: number; error?: string }[];
@@ -96,6 +98,14 @@ export interface RunReport {
   filesWritten: string[];
   validation: { ok: boolean; errors: string[]; warnings: number };
   errors: string[];
+}
+
+/** One-line description of an extracted claim: event type, project and a short quote. */
+export function describeClaim(item: Pick<FactItem, 'grounded'>): string {
+  const f = item.grounded.fact;
+  const date = item.grounded.eventDate ? ` ${item.grounded.eventDate.date}${item.grounded.eventDate.from === 'publication_date' ? ' (publication date)' : ''}` : '';
+  const quote = f.eventQuote ? ` — "${f.eventQuote.replace(/\s+/g, ' ').slice(0, 160)}"` : '';
+  return `${f.eventType}${date}: ${f.projectName || 'unnamed'}${quote}`;
 }
 
 function runIdFor(now: Date): string {
@@ -147,12 +157,14 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     validation: { ok: false, errors: [], warnings: 0 },
     errors: [],
   };
-  const finish = async (): Promise<RunReport> => {
+  const finish = async (rebuildSummary = false): Promise<RunReport> => {
     report.finishedAt = clock.now().toISOString().replace(/\.\d+Z$/, 'Z');
     report.cost = cost.report();
     report.searches.used = search.searchesUsed;
     report.searches.log = search.log;
     report.documents.httpRequests = deps.fetcher.requestCount();
+    // The summary quotes searches and cost, so it is built only after the totals are final.
+    if (rebuildSummary) report.summary = buildSummary(report);
     if (opts.reportDir !== null) {
       const dir = opts.reportDir ?? resolve(opts.root, 'pipeline-runs');
       try {
@@ -200,9 +212,15 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   }
 
   // ---- Discovery -----------------------------------------------------------
-  const ctx: DiscoveryContext = { fetcher: deps.fetcher, search, config, logger, sources, state, since: opts.since, today };
+  const ctx: DiscoveryContext = { fetcher: deps.fetcher, search, config, logger, sources, state, since: opts.since, today, articleSearchReserve: 0 };
   const docs: DocumentRecord[] = [];
-  for (const source of selected) {
+  const recheckN = opts.recheck ?? config.recheckPerRun;
+  const plannedRechecks = !opts.sourceIds?.length && recheckN > 0 ? recheckN : 0;
+  const usesSearch = (s: PipelineSource) => s.enabled && s.accessMethods.some((m) => m.type === 'site_search');
+  for (const [i, source] of selected.entries()) {
+    // Searches for blocked articles may not eat into the searches that later
+    // sources (site_search) and the rotating recheck still need.
+    ctx.articleSearchReserve = selected.slice(i + 1).filter(usesSearch).length + plannedRechecks;
     logger.info(`scan ${source.id} …`);
     const { scan, items } = await scanSource(source, ctx);
     if (scan.status === 'ok' || scan.status === 'fallback_used') {
@@ -215,8 +233,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   }
 
   // ---- Rotating recheck of active projects ---------------------------------
-  const recheckN = opts.recheck ?? config.recheckPerRun;
-  if (!opts.sourceIds?.length && recheckN > 0) {
+  if (plannedRechecks > 0) {
     if (!search.available) {
       report.recheck.push({ projectId: '*', results: 0, error: `skipped: no search provider (${deps.search.name})` });
     } else {
@@ -342,7 +359,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
       { id, createdAt: nowIso, runId, kind: d.kind, ...(d.projectId ? { projectId: d.projectId } : {}), proposed: d.proposed, evidence, reasonHeld, state: 'open' },
     ];
     newReviewIds.push(id);
-    report.held.push({ reviewId: id, kind: d.kind, ...(d.projectId ? { projectId: d.projectId } : {}), url: item.doc.url, reasons: d.reasons });
+    report.held.push({ reviewId: id, kind: d.kind, ...(d.projectId ? { projectId: d.projectId } : {}), url: item.doc.url, claim: describeClaim(item), reasons: d.reasons });
   };
 
   for (const item of orderItems(items)) {
@@ -394,7 +411,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     projects = nextProjects;
     changes = nextChanges;
     for (const id of trialChangeIds) changeIds.add(id);
-    report.published.push({ kind: d.kind, projectId, reason: d.reason, url: item.doc.url });
+    report.published.push({ kind: d.kind, projectId, reason: d.reason, url: item.doc.url, claim: describeClaim(item) });
   }
 
   // ---- Run status, meta, state ---------------------------------------------
@@ -458,8 +475,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   if (!finalCheck.ok) {
     report.status = 'failed';
     report.errors.push('final validation failed: nothing was written');
-    report.summary = buildSummary(report);
-    return finish();
+    return finish(true);
   }
 
   const summary: RunSummary = {
@@ -479,9 +495,8 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   state.runs = [...state.runs, summary].slice(-config.runHistoryLength);
 
   if (opts.dryRun) {
-    report.summary = buildSummary(report);
     logger.info('dry run: no data files written, no issues opened');
-    return finish();
+    return finish(true);
   }
 
   const fs = deps.fs ?? nodeFs;
@@ -490,8 +505,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   } catch (e) {
     report.status = 'failed';
     report.errors.push(`writing data files failed (rolled back): ${(e as Error).message}`);
-    report.summary = buildSummary(report);
-    return finish();
+    return finish(true);
   }
 
   // ---- Issues for pending-review items --------------------------------------
@@ -523,8 +537,7 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
       }
     }
   }
-  report.summary = buildSummary(report);
-  return finish();
+  return finish(true);
 }
 
 function issueTitle(item: PendingReviewItem): string {
@@ -571,6 +584,40 @@ export function buildSummary(r: RunReport): string {
   }
   if (r.errors.length) lines.push(`Errors: ${r.errors.slice(0, 5).join(' | ')}`);
   return lines.join('\n');
+}
+
+/**
+ * Cost by model, searches, rechecks and per-document outcomes as log lines.
+ * The run report artifact is not always reachable, so the log carries these too.
+ */
+export function reportDigest(r: RunReport): string[] {
+  const lines: string[] = [];
+  const c = r.cost;
+  const models = Object.entries(c.byModel).map(([m, t]) => {
+    const cache = t.cacheReadInputTokens || t.cacheCreationInputTokens ? `, ${t.cacheReadInputTokens} cache read, ${t.cacheCreationInputTokens} cache write` : '';
+    return `${m}: ${t.calls} call(s), ${t.inputTokens} input / ${t.outputTokens} output tokens${cache}, $${t.costUsd.toFixed(4)}`;
+  });
+  lines.push(`Cost: $${c.totalUsd.toFixed(4)} in total; web searches billed: ${c.webSearches} ($${c.webSearchCostUsd.toFixed(4)})`);
+  for (const m of models) lines.push(`  ${m}`);
+  if (c.unpricedModels.length) lines.push(`  UNPRICED (not in the total): ${c.unpricedModels.join(', ')}`);
+  const searchErrors = r.searches.log.filter((l) => l.error);
+  const errText = searchErrors.length ? `; ${searchErrors.length} failed: ${[...new Set(searchErrors.map((l) => l.error))].slice(0, 3).join(' | ')}` : '';
+  lines.push(`Searches: ${r.searches.used}/${r.searches.cap} via ${r.searches.provider}${errText}`);
+  if (r.recheck.length) lines.push(`Recheck: ${r.recheck.map((x) => `${x.projectId} ${x.error ? `(${x.error})` : `${x.results} result(s)`}`).join('; ')}`);
+  const counts = new Map<string, number>();
+  for (const o of r.documents.outcomes) {
+    const k = o.outcome.replace(/:.*$/, '');
+    counts.set(k, (counts.get(k) ?? 0) + 1);
+  }
+  const countText = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ');
+  lines.push(`Document outcomes: ${countText || 'none'}`);
+  for (const o of r.documents.outcomes) {
+    if (/^(extracted|extraction_failed|extraction_error|deferred_extraction_cap|too_long_not_sent|fallback_search_skipped)/.test(o.outcome)) {
+      lines.push(`  doc ${o.sourceId}: ${o.outcome} — ${o.url}`);
+    }
+  }
+  for (const s of r.skipped) lines.push(`  skipped ${s.url}: ${s.reason}`);
+  return lines;
 }
 
 /** Default window start for `--since 7d` style values. */
