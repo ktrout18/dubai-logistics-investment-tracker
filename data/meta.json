@@ -1,7 +1,303 @@
 {
   "schemaVersion": 1,
-  "lastRunStatus": "never_run",
-  "sourceScans": [],
+  "lastRunStatus": "success",
+  "sourceScans": [
+    {
+      "sourceId": "aldar",
+      "name": "Aldar news and media",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "sitemap",
+      "note": "1547 sitemap URLs, 391 matching, 391 candidates; earlier: html_list failed: page rendered by JavaScript: no article links in the HTML"
+    },
+    {
+      "sourceId": "arabian-business",
+      "name": "Arabian Business",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.arabianbusiness.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "aramex",
+      "name": "Aramex",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.aramex.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "arcapita",
+      "name": "Arcapita / Lintara insights",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:arcapita.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "ceva",
+      "name": "CEVA Logistics",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.cevalogistics.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "construction-week",
+      "name": "Construction Week Middle East",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.constructionweekonline.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "dhl",
+      "name": "DHL Group press releases",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:group.dhl.com, after 2026-11-05); earlier: html_list failed: no article links matched on the page"
+    },
+    {
+      "sourceId": "dnata",
+      "name": "dnata media centre",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "9 article links, 3 in window"
+    },
+    {
+      "sourceId": "dpworld",
+      "name": "DP World newsroom (UAE releases)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "sitemap",
+      "note": "4275 sitemap URLs, 74 matching, 74 candidates; earlier: html_list failed: page rendered by JavaScript: no article links in the HTML"
+    },
+    {
+      "sourceId": "dsv",
+      "name": "DSV press (UAE)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.dsv.com, after 2026-11-05); earlier: html_list failed: no article links matched on the page"
+    },
+    {
+      "sourceId": "dubai-customs",
+      "name": "Dubai Customs news",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "alt_url",
+      "note": "6 article links, 0 in window"
+    },
+    {
+      "sourceId": "dubai-media-office",
+      "name": "Government of Dubai Media Office",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.mediaoffice.ae, after 2026-11-05); earlier: html_list failed: no article links matched on the page"
+    },
+    {
+      "sourceId": "dubai-south",
+      "name": "Dubai South newsroom",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "12 article links, 0 in window"
+    },
+    {
+      "sourceId": "dubai-trade",
+      "name": "Dubai Trade announcements (DP World notices)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.dubaitrade.ae, after 2026-11-05); earlier: html_list failed: no article links matched on the page"
+    },
+    {
+      "sourceId": "dutco",
+      "name": "Dutco Group",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.dutco.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "emirates",
+      "name": "Emirates / Emirates SkyCargo media centre",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "18 article links, 18 in window"
+    },
+    {
+      "sourceId": "ezdubai",
+      "name": "EZDubai (Dubai South e-commerce zone)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "1 article links, 0 in window"
+    },
+    {
+      "sourceId": "fedex",
+      "name": "FedEx newsroom",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:newsroom.fedex.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "fujairah-port",
+      "name": "Port of Fujairah press releases (corridor context)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "rss",
+      "note": "10 feed items, 0 in window"
+    },
+    {
+      "sourceId": "gulf-news",
+      "name": "Gulf News",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "sitemap",
+      "note": "325 sitemap URLs, 7 matching, 7 candidates"
+    },
+    {
+      "sourceId": "jafza",
+      "name": "Jafza (Jebel Ali Free Zone) news",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "12 article links, 3 in window"
+    },
+    {
+      "sourceId": "khaleej-times",
+      "name": "Khaleej Times",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "sitemap",
+      "note": "239 sitemap URLs, 6 matching, 6 candidates"
+    },
+    {
+      "sourceId": "kuehne-nagel",
+      "name": "Kuehne+Nagel newsroom",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:newsroom.kuehne-nagel.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "logistics-middle-east",
+      "name": "Logistics Middle East",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.logisticsmiddleeast.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "maersk",
+      "name": "Maersk",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.maersk.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "pcfc",
+      "name": "Ports, Customs and Free Zone Corporation (PCFC)",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:pcfc.ae, after 2026-11-05); earlier: html_list failed: blocked (HTTP 403): HTTP 403 | alt_url failed: blocked (HTTP 403): HTTP 403"
+    },
+    {
+      "sourceId": "reuters",
+      "name": "Reuters",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "status": "skipped",
+      "note": "disabled in data/sources.json"
+    },
+    {
+      "sourceId": "sweid-sweid",
+      "name": "Sweid & Sweid / Terralogix",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "3 search results (anthropic, site:terralogix.ae, after 2026-11-05)"
+    },
+    {
+      "sourceId": "tecom-dic",
+      "name": "TECOM Group / Dubai Industrial City press releases",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "html_list",
+      "note": "80 article links, 1 in window"
+    },
+    {
+      "sourceId": "the-national",
+      "name": "The National",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "sitemap",
+      "note": "100 sitemap URLs, 2 matching, 2 candidates"
+    },
+    {
+      "sourceId": "ups",
+      "name": "UPS press room",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:about.ups.com, after 2026-11-05)"
+    },
+    {
+      "sourceId": "wam",
+      "name": "WAM Emirates News Agency",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "fallback_used",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.wam.ae, after 2026-11-05); earlier: html_list failed: no article links matched on the page"
+    },
+    {
+      "sourceId": "zawya",
+      "name": "Zawya (LSEG) press releases",
+      "lastAttempt": "2026-11-12T08:19:52Z",
+      "lastSuccess": "2026-11-12T08:19:52Z",
+      "status": "ok",
+      "method": "site_search",
+      "note": "8 search results (anthropic, site:www.zawya.com, after 2026-11-05)"
+    }
+  ],
   "coverageLimitations": [
     "Seed note (11 Nov 2026): the register was seeded from the projects in the owner's November 2026 briefing PDF and checked against public sources. Since the consistency repair of 12 Nov 2026, every figure, label and date on the site, including the briefing snapshot, is derived from the audited records; the PDF's own wording and totals are not reproduced. See docs/SEED_NOTES.md and docs/CONSISTENCY_REPAIR.md.",
     "Evidence audit (12 Nov 2026): every record was re-checked against its sources and the reviewed evidence now takes precedence over the briefing PDF wherever they differ (docs/AUDIT_2026-11.md). Where a source gives only a release date, opening and completion dates are stored with month precision; the event day is not known.",
@@ -12,5 +308,7 @@
     "Opening and completion dates are often given only as a release date, month, quarter or half-year; precision is recorded with each date.",
     "Private, unannounced and owner-occupier developments are frequently missing from public sources."
   ],
-  "exhaustive": false
+  "exhaustive": false,
+  "lastAttemptedRun": "2026-11-12T08:19:52Z",
+  "lastSuccessfulRun": "2026-11-12T08:19:52Z"
 }

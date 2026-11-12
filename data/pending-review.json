@@ -3,6 +3,7 @@
   "items": [
     {
       "id": "rev-20261111-1264d3e9",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "conflict",
       "projectId": "dnata-logistics-dubai-south-warehouse",
       "proposed": {
@@ -21,11 +22,12 @@
         }
       ],
       "reasonHeld": "Still unresolved after the 12 Nov 2026 audit. The owner's PDF counts the dnata warehouse as opened (Apr to Sep). All three copies of the Emirates Group H1 2026-27 release (dnata.com, emirates.com, Dubai Media Office; re-read 12 Nov 2026) say \"commissioning\", neither \"commissioned\" nor \"opened\"; the dnata newsroom has no opening release (11 Nov) and a search on 12 Nov found none. The register keeps status construction_completed; change to operational only on a source that says operations began.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/15"
     },
     {
       "id": "rev-20261111-812c7ca6",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "conflict",
       "projectId": "emirates-snack-foods-cold-store-dubai-south",
       "proposed": {
@@ -39,11 +41,12 @@
         }
       ],
       "reasonHeld": "Still unresolved after the 12 Nov 2026 audit. The PDF counts the Emirates Snack Foods cold store as opened (Q2). Aldar's Q3 2026 release (re-read 12 Nov 2026) reports completion in Q2 and segment EBITDA from the facility, but no source states that operations began or gives an opening date (search 12 Nov 2026 found none). Status kept at construction_completed.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/16"
     },
     {
       "id": "rev-20261111-86e14937",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "new_project",
       "proposed": {
         "name": "7 Central logistics hub, Dubai Investments Park (Aldar)",
@@ -68,11 +71,12 @@
         }
       ],
       "reasonHeld": "Existing stock acquired by Aldar in January 2024 (not new supply), and no 2026 milestone was found for the adjacent expansion plot; Aldar's Q3 2026 release does not mention it. Add only when an expansion milestone (groundbreaking or completion) is sourced.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/17"
     },
     {
       "id": "rev-20261111-5b7e08a3",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "new_project",
       "proposed": {
         "name": "Arcapita / Lintara Properties GCC logistics development programme",
@@ -90,11 +94,12 @@
         }
       ],
       "reasonHeld": "Held, not a project: no source describing an Arcapita GCC programme (scope, size or value) was found in the research or read while seeding; the two pages above only show Lintara as Arcapita's development platform. Its two Dubai facilities are already in the register (PDF rows 3 and 19). A programme-level total would double count them.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/18"
     },
     {
       "id": "rev-20261111-68d32101",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "new_project",
       "proposed": {
         "name": "Iron Mountain warehousing and logistics facility (Unilever), EZDubai",
@@ -120,11 +125,12 @@
         }
       ],
       "reasonHeld": "Opened per reports dated 9 Nov 2026 (re-searched 12 Nov: WAM, Al Khaleej, TradeArabia, GDN, all search results only), after the PDF. No official page could be read (WAM pages need JavaScript; the item was not in the Dubai South newsroom on 11 Nov), the opening day itself is not stated, and one outlet gave 37,000 sq ft instead of sq m. Add to the register once an official page confirms area and date.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/19"
     },
     {
       "id": "rev-20261111-11d3eeec",
+      "createdAt": "2026-11-11T12:00:00Z",
       "kind": "new_project",
       "proposed": {
         "name": "Aramex regional healthcare and pharmaceutical hub, Dubai South Free Zone",
@@ -150,8 +156,8 @@
         }
       ],
       "reasonHeld": "Identity, location, 5,600 m² and the March 2026 opening are confirmed by Gulf News (read directly), but no official Aramex or Dubai South page was read, and Aramex's own healthcare page refers to a facility in Dubai Logistics City. Not in the PDF. Add to the register once an official page is read.",
-      "createdAt": "2026-11-11T12:00:00Z",
-      "state": "open"
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/20"
     },
     {
       "id": "rev-20261111-54f1c741",
@@ -357,6 +363,1362 @@
       "reasonHeld": "Claim appears only on an aggregator page with inconsistent dating; not corroborated by DHL or Dubai South. Likely unrelated to the DHL Supply Chain warehouse already in the register.",
       "createdAt": "2026-11-11T12:00:00Z",
       "state": "open"
+    },
+    {
+      "id": "rev-20261112-11a0cd79",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "dnata cargo facility at Western Sydney International Airport",
+          "facilityName": null,
+          "developer": "dnata",
+          "operator": "dnata",
+          "investor": "dnata",
+          "owner": null,
+          "partiesQuote": "dnata announced an AU$ 32 million investment to build a new cargo facility at Western Sydney International Airport (WSI)",
+          "location": "Western Sydney International Airport",
+          "zone": null,
+          "locationQuote": "a new cargo facility at Western Sydney International Airport (WSI)",
+          "emirate": null,
+          "emirateQuote": null,
+          "assetType": "air_cargo_terminal",
+          "sectors": [
+            "aerospace_air_cargo"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "dnata announced an AU$ 32 million investment to build a new cargo facility at Western Sydney International Airport (WSI)",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": null,
+          "areas": [],
+          "investment": {
+            "amount": 32000000,
+            "currency": "AUD",
+            "quote": "an AU$ 32 million investment to build a new cargo facility"
+          },
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Facility is outside the UAE.",
+            "No completion date stated for the cargo facility (the 2027 opening refers to the separate catering facility)."
+          ]
+        },
+        "_document": {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "title": "Emirates Group announces half-year profit for 2026-27, despite full six-month impact of regional conflict and high fuel costs",
+          "publisher": "dnata",
+          "tier": "primary",
+          "verification": "direct",
+          "publishedDate": "2026-11-05"
+        },
+        "_possibleMatches": [
+          {
+            "projectId": "dnata-logistics-dubai-south-warehouse",
+            "score": 3,
+            "reasons": [
+              "source URL cited by this project, but the claim is about a different facility",
+              "shared parties: dnata, dnata, dnata"
+            ],
+            "identifying": true
+          }
+        ],
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-05"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "publishedDate": "2026-11-05",
+          "quote": "dnata announced an AU$ 32 million investment to build a new cargo facility at Western Sydney International Airport (WSI)"
+        }
+      ],
+      "reasonHeld": "grounding: investment currency AUD is not one the pipeline can verify; the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-05) is not used as a milestone date; emirate not stated in the source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/1"
+    },
+    {
+      "id": "rev-20261112-5f601748",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "dnata investment in Alat, Azerbaijan",
+          "facilityName": null,
+          "developer": "dnata",
+          "operator": null,
+          "investor": "dnata",
+          "owner": null,
+          "partiesQuote": "progressing strategic developments, including a planned AED 37 million investment in Alat, Azerbaijan",
+          "location": "Alat, Azerbaijan",
+          "zone": null,
+          "locationQuote": "a planned AED 37 million investment in Alat, Azerbaijan",
+          "emirate": null,
+          "emirateQuote": null,
+          "assetType": "other",
+          "sectors": [
+            "other"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "progressing strategic developments, including a planned AED 37 million investment in Alat, Azerbaijan",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [],
+          "investment": {
+            "amount": 37000000,
+            "currency": "AED",
+            "quote": "a planned AED 37 million investment in Alat, Azerbaijan"
+          },
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Facility type not specified; described as part of dnata's global cargo and logistics strategy.",
+            "Located outside the UAE."
+          ]
+        },
+        "_document": {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "title": "Emirates Group announces half-year profit for 2026-27, despite full six-month impact of regional conflict and high fuel costs",
+          "publisher": "dnata",
+          "tier": "primary",
+          "verification": "direct",
+          "publishedDate": "2026-11-05"
+        },
+        "_possibleMatches": [
+          {
+            "projectId": "dnata-logistics-dubai-south-warehouse",
+            "score": 3,
+            "reasons": [
+              "source URL cited by this project, but the claim is about a different facility",
+              "shared parties: dnata, dnata"
+            ],
+            "identifying": true
+          }
+        ],
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-05"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "publishedDate": "2026-11-05",
+          "quote": "progressing strategic developments, including a planned AED 37 million investment in Alat, Azerbaijan"
+        }
+      ],
+      "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-05) is not used as a milestone date; emirate not stated in the source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/2"
+    },
+    {
+      "id": "rev-20261112-fbd6a667",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "DP World Grade A logistics center in Jebel Ali Free Zone",
+          "facilityName": null,
+          "developer": "DP World",
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "DP World has broken ground on a new Grade A logistics center in Jebel Ali Free Zone",
+          "location": "Jebel Ali Free Zone",
+          "zone": "Jebel Ali Free Zone",
+          "locationQuote": "a new Grade A logistics center in Jebel Ali Free Zone",
+          "emirate": "Dubai",
+          "emirateQuote": "In Dubai, DP World has broken ground on a new Grade A logistics center in Jebel Ali Free Zone",
+          "assetType": "distribution_centre",
+          "sectors": [
+            "grade_a_warehousing"
+          ],
+          "eventType": "construction_start",
+          "eventQuote": "DP World has broken ground on a new Grade A logistics center in Jebel Ali Free Zone",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": "a new Grade A logistics center",
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Groundbreaking date not stated; article is a Q3 2026 market report published 11 Nov 2026",
+            "Asset type 'logistics center' mapped to distribution_centre; exact use not specified"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_possibleMatches": [
+          {
+            "projectId": "gallega-global-logistics-jafza-3pl-hub",
+            "score": 6,
+            "reasons": [
+              "shared parties: DP World",
+              "same zone (Jafza)"
+            ],
+            "identifying": true
+          },
+          {
+            "projectId": "dp-world-lintara-jafza-dg-logistics-centre",
+            "score": 6,
+            "reasons": [
+              "shared parties: DP World",
+              "same zone (Jafza)"
+            ],
+            "identifying": true
+          },
+          {
+            "projectId": "dp-world-al-awir-inland-container-depot",
+            "score": 3,
+            "reasons": [
+              "shared parties: DP World"
+            ],
+            "identifying": true
+          },
+          {
+            "projectId": "dp-world-dubai-food-district-al-aweer",
+            "score": 3,
+            "reasons": [
+              "shared parties: DP World"
+            ],
+            "identifying": true
+          }
+        ],
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "DP World has broken ground on a new Grade A logistics center in Jebel Ali Free Zone"
+        }
+      ],
+      "reasonHeld": "the date of the \"construction_start\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; identity ambiguous: possible matches gallega-global-logistics-jafza-3pl-hub (6.0), dp-world-lintara-jafza-dg-logistics-centre (6.0), dp-world-al-awir-inland-container-depot (3.0), dp-world-dubai-food-district-al-aweer (3.0)",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/3"
+    },
+    {
+      "id": "rev-20261112-f9e9a821",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Terralogix park",
+          "facilityName": "Terralogix park",
+          "developer": null,
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "the Terralogix park in Warsan",
+          "location": "Warsan",
+          "zone": null,
+          "locationQuote": "the Terralogix park in Warsan",
+          "emirate": "Dubai",
+          "emirateQuote": "In Dubai, DP World has broken ground on a new Grade A logistics center in Jebel Ali Free Zone, while upcoming developments, including the Terralogix park in Warsan",
+          "assetType": "logistics_park",
+          "sectors": [
+            "modern_warehousing"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "upcoming developments, including the Terralogix park in Warsan and new multi-unit warehouses in Dubai Investments Park, are expected to help ease supply constraints",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Developer not named in the text",
+            "Mentioned only as an upcoming development in a market report"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "upcoming developments, including the Terralogix park in Warsan and new multi-unit warehouses in Dubai Investments Park, are expected to help ease supply constraints"
+        }
+      ],
+      "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; no company named as developer/operator/investor/owner; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/4"
+    },
+    {
+      "id": "rev-20261112-c0563e0f",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "New multi-unit warehouses in Dubai Investments Park",
+          "facilityName": null,
+          "developer": null,
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "new multi-unit warehouses in Dubai Investments Park",
+          "location": "Dubai Investments Park",
+          "zone": "Dubai Investments Park",
+          "locationQuote": "new multi-unit warehouses in Dubai Investments Park",
+          "emirate": "Dubai",
+          "emirateQuote": "new multi-unit warehouses in Dubai Investments Park",
+          "assetType": "warehouse",
+          "sectors": [
+            "modern_warehousing"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "upcoming developments, including the Terralogix park in Warsan and new multi-unit warehouses in Dubai Investments Park, are expected to help ease supply constraints",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Developer not named; may refer to multiple projects"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "upcoming developments, including the Terralogix park in Warsan and new multi-unit warehouses in Dubai Investments Park, are expected to help ease supply constraints"
+        }
+      ],
+      "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; no company named as developer/operator/investor/owner; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/5"
+    },
+    {
+      "id": "rev-20261112-e861e37a",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "project": {
+          "id": "jd-com-kezad-jd-com-automated-warehousing-kezad",
+          "name": "Kezad–JD.com automated warehousing",
+          "summary": "Agreement signed reported by Khaleej Times (2026-11-11): \"including an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing\"",
+          "developer": "Kezad",
+          "operator": "JD.com",
+          "companies": [
+            "Kezad",
+            "JD.com"
+          ],
+          "emirate": "Abu Dhabi",
+          "location": "KEZAD",
+          "zone": "KEZAD",
+          "sectors": [
+            "fashion_luxury_ecommerce",
+            "modern_warehousing"
+          ],
+          "assetType": "warehouse",
+          "status": "signed_agreement",
+          "originalAnnouncement": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+            "sourceTitle": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents"
+          },
+          "latestMilestone": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "description": "Agreement signed reported by Khaleej Times: \"including an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing\"",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents"
+          },
+          "areas": [
+            {
+              "valueM2": 150000,
+              "basis": "warehouse_gfa",
+              "originalValue": 150000,
+              "originalUnit": "sqm",
+              "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "note": "Source: \"150,000 square meters of automated warehousing\""
+            }
+          ],
+          "primaryAreaIndex": 0,
+          "gradeA": "unverified",
+          "netNew": "unknown",
+          "sources": [
+            {
+              "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+              "publisher": "Khaleej Times",
+              "publishedDate": "2026-11-11",
+              "type": "secondary",
+              "accessedDate": "2026-11-12",
+              "verification": "direct"
+            }
+          ],
+          "lastVerified": "2026-11-12",
+          "confidence": "medium",
+          "unresolvedQuestions": [
+            "Investment value not disclosed in the cited source.",
+            "Milestone date is the source publication date; the exact event date was not stated."
+          ],
+          "events": [
+            {
+              "id": "2026-11-11-agreement-signed",
+              "date": "2026-11-11",
+              "datePrecision": "day",
+              "type": "agreement_signed",
+              "statusAfter": "signed_agreement",
+              "summary": "Agreement signed reported by Khaleej Times: \"including an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing\"",
+              "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "sourcePublishedDate": "2026-11-11",
+              "sourceType": "secondary",
+              "verification": "direct"
+            }
+          ],
+          "provenance": "pipeline",
+          "createdAt": "2026-11-12T08:19:52Z",
+          "updatedAt": "2026-11-12T08:19:52Z"
+        },
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Kezad–JD.com automated warehousing",
+          "facilityName": null,
+          "developer": "Kezad",
+          "operator": "JD.com",
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing",
+          "location": null,
+          "zone": "Kezad",
+          "locationQuote": null,
+          "emirate": "Abu Dhabi",
+          "emirateQuote": "Abu Dhabi attracts major logistics investments",
+          "assetType": "warehouse",
+          "sectors": [
+            "fashion_luxury_ecommerce",
+            "modern_warehousing"
+          ],
+          "eventType": "agreement_signed",
+          "eventQuote": "including an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": null,
+          "areas": [
+            {
+              "value": 150000,
+              "unit": "sqm",
+              "basis": "warehouse_gfa",
+              "quote": "150,000 square meters of automated warehousing"
+            }
+          ],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Roles of Kezad (developer/landlord) and JD.com (operator/tenant) inferred from 'agreement between'; type of agreement not specified",
+            "Agreement date not stated",
+            "Specific location within Abu Dhabi not stated"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "including an agreement between Kezad and Chinese e-commerce company JD.com for 150,000 square meters of automated warehousing"
+        }
+      ],
+      "reasonHeld": "the date of the \"agreement_signed\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/6"
+    },
+    {
+      "id": "rev-20261112-185030c0",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "project": {
+          "id": "axione-cold-chain-facility-at-abu-dhabi-food-hub",
+          "name": "Axione cold-chain facility at Abu Dhabi Food Hub",
+          "summary": "Announcement reported by Khaleej Times (2026-11-11): \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub\"",
+          "developer": "Axione",
+          "companies": [
+            "Axione"
+          ],
+          "emirate": "Abu Dhabi",
+          "location": "Abu Dhabi Food Hub",
+          "zone": "Abu Dhabi Food Hub",
+          "sectors": [
+            "food_fmcg_cold_chain"
+          ],
+          "assetType": "cold_store",
+          "status": "proposed",
+          "originalAnnouncement": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+            "sourceTitle": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents"
+          },
+          "latestMilestone": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "description": "Announcement reported by Khaleej Times: \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub\"",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents"
+          },
+          "areas": [],
+          "gradeA": "unverified",
+          "netNew": "unknown",
+          "sources": [
+            {
+              "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+              "publisher": "Khaleej Times",
+              "publishedDate": "2026-11-11",
+              "type": "secondary",
+              "accessedDate": "2026-11-12",
+              "verification": "direct"
+            }
+          ],
+          "lastVerified": "2026-11-12",
+          "confidence": "medium",
+          "unresolvedQuestions": [
+            "Floor area not disclosed in the cited source.",
+            "Investment value not disclosed in the cited source.",
+            "Milestone date is the source publication date; the exact event date was not stated."
+          ],
+          "events": [
+            {
+              "id": "2026-11-11-announcement",
+              "date": "2026-11-11",
+              "datePrecision": "day",
+              "type": "announcement",
+              "statusAfter": "proposed",
+              "summary": "Announcement reported by Khaleej Times: \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub\"",
+              "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "sourcePublishedDate": "2026-11-11",
+              "sourceType": "secondary",
+              "verification": "direct"
+            }
+          ],
+          "provenance": "pipeline",
+          "createdAt": "2026-11-12T08:19:52Z",
+          "updatedAt": "2026-11-12T08:19:52Z"
+        },
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Axione cold-chain facility at Abu Dhabi Food Hub",
+          "facilityName": null,
+          "developer": "Axione",
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub",
+          "location": "Abu Dhabi Food Hub",
+          "zone": "Abu Dhabi Food Hub",
+          "locationQuote": "at the Abu Dhabi Food Hub",
+          "emirate": "Abu Dhabi",
+          "emirateQuote": "Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub",
+          "assetType": "cold_store",
+          "sectors": [
+            "food_fmcg_cold_chain"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [
+            {
+              "value": 37000,
+              "unit": "sqm",
+              "basis": "unspecified",
+              "quote": "37,000-square-metre cold-chain facility"
+            }
+          ],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Area basis (floor vs site) not specified",
+            "Axione's role (developer/operator) not specified"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub"
+        }
+      ],
+      "reasonHeld": "grounding: area[0]: unit sqm is not stated in its quote; the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/7"
+    },
+    {
+      "id": "rev-20261112-df92adb6",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "project": {
+          "id": "kezad-klp7",
+          "name": "Kezad KLP7",
+          "facilityName": "KLP7",
+          "summary": "Announcement reported by Khaleej Times (2026-11-11): \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub and Kezad KLP7, which will add a further 88,135 square meters of space\"",
+          "developer": "Kezad",
+          "companies": [
+            "Kezad"
+          ],
+          "emirate": "Abu Dhabi",
+          "location": "KEZAD",
+          "zone": "KEZAD",
+          "sectors": [
+            "modern_warehousing"
+          ],
+          "assetType": "logistics_park",
+          "status": "proposed",
+          "originalAnnouncement": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+            "sourceTitle": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents"
+          },
+          "latestMilestone": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "description": "Announcement reported by Khaleej Times: \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub and Kezad KLP7, which will add a further 88,135 square meters of space\"",
+            "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents"
+          },
+          "areas": [
+            {
+              "valueM2": 88135,
+              "basis": "unspecified",
+              "originalValue": 88135,
+              "originalUnit": "sqm",
+              "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "note": "Source: \"add a further 88,135 square meters of space\""
+            }
+          ],
+          "gradeA": "unverified",
+          "netNew": "unknown",
+          "sources": [
+            {
+              "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+              "publisher": "Khaleej Times",
+              "publishedDate": "2026-11-11",
+              "type": "secondary",
+              "accessedDate": "2026-11-12",
+              "verification": "direct"
+            }
+          ],
+          "lastVerified": "2026-11-12",
+          "confidence": "medium",
+          "unresolvedQuestions": [
+            "Investment value not disclosed in the cited source.",
+            "Milestone date is the source publication date; the exact event date was not stated."
+          ],
+          "events": [
+            {
+              "id": "2026-11-11-announcement",
+              "date": "2026-11-11",
+              "datePrecision": "day",
+              "type": "announcement",
+              "statusAfter": "proposed",
+              "summary": "Announcement reported by Khaleej Times: \"Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub and Kezad KLP7, which will add a further 88,135 square meters of space\"",
+              "sourceUrl": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+              "sourcePublishedDate": "2026-11-11",
+              "sourceType": "secondary",
+              "verification": "direct"
+            }
+          ],
+          "provenance": "pipeline",
+          "createdAt": "2026-11-12T08:19:52Z",
+          "updatedAt": "2026-11-12T08:19:52Z"
+        },
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Kezad KLP7",
+          "facilityName": "KLP7",
+          "developer": "Kezad",
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "Kezad KLP7, which will add a further 88,135 square meters of space",
+          "location": null,
+          "zone": "Kezad",
+          "locationQuote": null,
+          "emirate": "Abu Dhabi",
+          "emirateQuote": "Abu Dhabi attracts major logistics investments",
+          "assetType": "logistics_park",
+          "sectors": [
+            "modern_warehousing"
+          ],
+          "eventType": "announcement",
+          "eventQuote": "Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub and Kezad KLP7, which will add a further 88,135 square meters of space",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [
+            {
+              "value": 88135,
+              "unit": "sqm",
+              "basis": "unspecified",
+              "quote": "add a further 88,135 square meters of space"
+            }
+          ],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Emirate inferred from Abu Dhabi section of the article",
+            "Asset type and area basis not specified"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "Other planned developments include Axione's 37,000-square-metre cold-chain facility at the Abu Dhabi Food Hub and Kezad KLP7, which will add a further 88,135 square meters of space"
+        }
+      ],
+      "reasonHeld": "the date of the \"announcement\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a milestone date; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/8"
+    },
+    {
+      "id": "rev-20261112-45c61430",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "AD Ports-Etihad Rail Bonded Corridor",
+          "facilityName": null,
+          "developer": null,
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "the AD Ports-Etihad Rail Bonded Corridor",
+          "location": null,
+          "zone": null,
+          "locationQuote": null,
+          "emirate": null,
+          "emirateQuote": null,
+          "assetType": "inland_port_or_rail",
+          "sectors": [
+            "multimodal_container_inland"
+          ],
+          "eventType": "other",
+          "eventQuote": "Major transport projects, including the AD Ports-Etihad Rail Bonded Corridor and the Hafeet Rail link to Oman's Sohar Port, are also expected to improve regional connectivity",
+          "eventIsPlannedOrFuture": true,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Parties' roles and location not stated; status of project not stated"
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "title": "UAE warehouses near full occupancy despite 5.9% rise in Dubai rents",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents",
+          "publishedDate": "2026-11-11",
+          "quote": "Major transport projects, including the AD Ports-Etihad Rail Bonded Corridor and the Hafeet Rail link to Oman's Sohar Port, are also expected to improve regional connectivity"
+        }
+      ],
+      "reasonHeld": "emirate not stated in the source; no company named as developer/operator/investor/owner; no location or zone stated; milestone type \"other\" cannot start a new project record; the text mentions area figures that were not extracted; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/9"
+    },
+    {
+      "id": "rev-20261112-370be44d",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "project": {
+          "id": "floward-al-ain-fulfilment-centre",
+          "name": "Floward Al Ain Fulfilment Centre",
+          "facilityName": "Al Ain Fulfilment Centre",
+          "summary": "Opened reported by Khaleej Times (2026-11-11): \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of 90-minute express delivery in the city.\"",
+          "operator": "Floward",
+          "companies": [
+            "Floward"
+          ],
+          "emirate": "Abu Dhabi",
+          "location": "Al Ain",
+          "sectors": [
+            "fashion_luxury_ecommerce",
+            "other"
+          ],
+          "assetType": "fulfilment_centre",
+          "status": "operational",
+          "latestMilestone": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "description": "Opened reported by Khaleej Times: \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of 90-minute expres…\"",
+            "sourceUrl": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae"
+          },
+          "areas": [],
+          "gradeA": "unverified",
+          "netNew": "unknown",
+          "actualCompletion": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "sourceUrl": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae"
+          },
+          "sources": [
+            {
+              "url": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae",
+              "title": "Floward opens new Al Ain Fulfilment Centre, expands express delivery across UAE",
+              "publisher": "Khaleej Times",
+              "publishedDate": "2026-11-11",
+              "type": "secondary",
+              "accessedDate": "2026-11-12",
+              "verification": "direct"
+            }
+          ],
+          "lastVerified": "2026-11-12",
+          "confidence": "medium",
+          "unresolvedQuestions": [
+            "Floor area not disclosed in the cited source.",
+            "Investment value not disclosed in the cited source.",
+            "Milestone date is the source publication date; the exact event date was not stated."
+          ],
+          "events": [
+            {
+              "id": "2026-11-11-opened",
+              "date": "2026-11-11",
+              "datePrecision": "day",
+              "type": "opened",
+              "statusAfter": "operational",
+              "summary": "Opened reported by Khaleej Times: \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of 90-minute expres…\"",
+              "sourceUrl": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae",
+              "sourcePublishedDate": "2026-11-11",
+              "sourceType": "secondary",
+              "verification": "direct"
+            }
+          ],
+          "provenance": "pipeline",
+          "createdAt": "2026-11-12T08:19:52Z",
+          "updatedAt": "2026-11-12T08:19:52Z"
+        },
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Floward Al Ain Fulfilment Centre",
+          "facilityName": "Al Ain Fulfilment Centre",
+          "developer": null,
+          "operator": "Floward",
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain",
+          "location": "Al Ain",
+          "zone": null,
+          "locationQuote": "has opened a new fulfilment centre in Al Ain",
+          "emirate": "Abu Dhabi",
+          "emirateQuote": "has opened a new fulfilment centre in Al Ain",
+          "assetType": "fulfilment_centre",
+          "sectors": [
+            "fashion_luxury_ecommerce",
+            "other"
+          ],
+          "eventType": "opened",
+          "eventQuote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of 90-minute express delivery in the city.",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Emirate not explicitly stated; Al Ain is a city in the Abu Dhabi emirate.",
+            "Exact opening date not stated; article published 11 Nov 2026 reports the centre as already opened.",
+            "No floor area or investment amount disclosed.",
+            "Sector is online gifting/fresh flowers e-commerce with temperature-controlled last-mile delivery; does not map cleanly to listed sectors."
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae",
+          "title": "Floward opens new Al Ain Fulfilment Centre, expands express delivery across UAE",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae",
+          "publishedDate": "2026-11-11",
+          "quote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of 90-minute express delivery in the city."
+        }
+      ],
+      "reasonHeld": "grounding: emirate Abu Dhabi is not named (directly or via a known zone) in its quote; the date of the \"opened\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a completion date; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/10"
+    },
+    {
+      "id": "rev-20261112-e06f7213",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "project": {
+          "id": "floward-al-ain-fulfilment-centre",
+          "name": "Floward Al Ain fulfilment centre",
+          "summary": "Opened reported by Gulf News (2026-11-11): \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of express delivery within 90 minutes in the city.\"",
+          "operator": "Floward",
+          "companies": [
+            "Floward"
+          ],
+          "emirate": "Abu Dhabi",
+          "location": "Al Ain",
+          "sectors": [
+            "other"
+          ],
+          "assetType": "fulfilment_centre",
+          "status": "operational",
+          "latestMilestone": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "description": "Opened reported by Gulf News: \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of express delivery…\"",
+            "sourceUrl": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379"
+          },
+          "areas": [],
+          "gradeA": "unverified",
+          "netNew": "unknown",
+          "actualCompletion": {
+            "date": "2026-11-11",
+            "datePrecision": "day",
+            "sourceUrl": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379"
+          },
+          "sources": [
+            {
+              "url": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379",
+              "title": "Floward opens new Al Ain fulfilment centre as demand for express delivery grows across the UAE",
+              "publisher": "Gulf News",
+              "publishedDate": "2026-11-11",
+              "type": "secondary",
+              "accessedDate": "2026-11-12",
+              "verification": "direct"
+            }
+          ],
+          "lastVerified": "2026-11-12",
+          "confidence": "medium",
+          "unresolvedQuestions": [
+            "Floor area not disclosed in the cited source.",
+            "Investment value not disclosed in the cited source.",
+            "Milestone date is the source publication date; the exact event date was not stated."
+          ],
+          "events": [
+            {
+              "id": "2026-11-11-opened",
+              "date": "2026-11-11",
+              "datePrecision": "day",
+              "type": "opened",
+              "statusAfter": "operational",
+              "summary": "Opened reported by Gulf News: \"Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of express delivery…\"",
+              "sourceUrl": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379",
+              "sourcePublishedDate": "2026-11-11",
+              "sourceType": "secondary",
+              "verification": "direct"
+            }
+          ],
+          "provenance": "pipeline",
+          "createdAt": "2026-11-12T08:19:52Z",
+          "updatedAt": "2026-11-12T08:19:52Z"
+        },
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Floward Al Ain fulfilment centre",
+          "facilityName": null,
+          "developer": null,
+          "operator": "Floward",
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain",
+          "location": "Al Ain",
+          "zone": null,
+          "locationQuote": "has opened a new fulfilment centre in Al Ain",
+          "emirate": "Abu Dhabi",
+          "emirateQuote": "has opened a new fulfilment centre in Al Ain",
+          "assetType": "fulfilment_centre",
+          "sectors": [
+            "other"
+          ],
+          "eventType": "opened",
+          "eventQuote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of express delivery within 90 minutes in the city.",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": null,
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "The text does not explicitly name the emirate; Abu Dhabi is inferred from the place name Al Ain.",
+            "Opening date not stated; article last updated November 11, 2026.",
+            "No area or investment amount stated.",
+            "Sector is online gifting/fresh flowers, with last-mile delivery using temperature-controlled vehicles; the fit to the listed sectors is unclear.",
+            "This is the fourth UAE fulfilment centre; the centres in Dubai, Abu Dhabi and Sharjah are mentioned but not detailed."
+          ]
+        },
+        "_document": {
+          "url": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379",
+          "title": "Floward opens new Al Ain fulfilment centre as demand for express delivery grows across the UAE",
+          "publisher": "Gulf News",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-11"
+        },
+        "_notes": [
+          "event date taken from the source's publication date 2026-11-11"
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379",
+          "publishedDate": "2026-11-11",
+          "quote": "Floward, the premium online gifting destination across MENA and the UK, has opened a new fulfilment centre in Al Ain, strengthening its delivery capabilities with the introduction of express delivery within 90 minutes in the city."
+        }
+      ],
+      "reasonHeld": "grounding: emirate Abu Dhabi is not named (directly or via a known zone) in its quote; the date of the \"opened\" milestone is not stated and the quote does not say \"today\"; the publication date (2026-11-11) is not used as a completion date; single secondary source (Gulf News); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/11"
+    },
+    {
+      "id": "rev-20261112-659f6ecf",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Emirates engineering and MRO facility at Al Maktoum International Airport",
+          "facilityName": null,
+          "developer": "Emirates",
+          "operator": "Emirates",
+          "investor": "Emirates",
+          "owner": null,
+          "partiesQuote": "Emirates broke ground on its US$ 5.1 billion engineering and Maintenance, Repair, and Overhaul (MRO) facility at Al Maktoum International Airport",
+          "location": "Al Maktoum International Airport",
+          "zone": null,
+          "locationQuote": "MRO) facility at Al Maktoum International Airport",
+          "emirate": "Dubai",
+          "emirateQuote": "MRO) facility at Al Maktoum International Airport",
+          "assetType": "mro_aerospace_facility",
+          "sectors": [
+            "aerospace_air_cargo"
+          ],
+          "eventType": "construction_start",
+          "eventQuote": "in May, Emirates broke ground on its US$ 5.1 billion engineering and Maintenance, Repair, and Overhaul (MRO) facility at Al Maktoum International Airport",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": {
+            "date": "2026-05-01",
+            "precision": "month",
+            "quote": "in May, Emirates broke ground"
+          },
+          "areas": [],
+          "investment": {
+            "amount": 5100000000,
+            "currency": "USD",
+            "quote": "its US$ 5.1 billion engineering and Maintenance, Repair, and Overhaul (MRO) facility"
+          },
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Year of groundbreaking inferred as 2026 from the reporting period (first half of 2026-27); text says only 'in May'.",
+            "Completion expected 'in the mid-2030s' - no specific date.",
+            "Emirate not stated explicitly; Al Maktoum International Airport is a place in Dubai."
+          ]
+        },
+        "_document": {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "title": "Emirates Group announces half-year profit for 2026-27, despite full six-month impact of regional conflict and high fuel costs",
+          "publisher": "dnata",
+          "tier": "primary",
+          "verification": "direct",
+          "publishedDate": "2026-11-05"
+        },
+        "_possibleMatches": [
+          {
+            "projectId": "emirates-engineering-complex-dubai-south",
+            "score": 4,
+            "reasons": [
+              "shared parties: Emirates, Emirates, Emirates",
+              "same asset type"
+            ],
+            "identifying": true
+          },
+          {
+            "projectId": "dnata-logistics-dubai-south-warehouse",
+            "score": 3,
+            "reasons": [
+              "source URL cited by this project, but the claim is about a different facility",
+              "shared parties: Emirates, Emirates, Emirates"
+            ],
+            "identifying": true
+          },
+          {
+            "projectId": "emirates-snack-foods-cold-store-dubai-south",
+            "score": 3,
+            "reasons": [
+              "shared parties: Emirates, Emirates, Emirates"
+            ],
+            "identifying": true
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "url": "https://www.dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs/",
+          "publishedDate": "2026-11-05",
+          "quote": "in May, Emirates broke ground on its US$ 5.1 billion engineering and Maintenance, Repair, and Overhaul (MRO) facility at Al Maktoum International Airport"
+        }
+      ],
+      "reasonHeld": "grounding: event date 2026-05-01 (month) is not stated in its quote; grounding: emirate Dubai is not named (directly or via a known zone) in its quote; identity ambiguous: possible matches emirates-engineering-complex-dubai-south (4.0), dnata-logistics-dubai-south-warehouse (3.0), emirates-snack-foods-cold-store-dubai-south (3.0)",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/12"
+    },
+    {
+      "id": "rev-20261112-75c71b33",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Al Rugaylat container terminal",
+          "facilityName": "Al Rugaylat container",
+          "developer": "DP World",
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "DP World, the Dubai-based multinational logistics company, said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority.",
+          "location": "UAE east coast",
+          "zone": null,
+          "locationQuote": "two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal",
+          "emirate": "Fujairah",
+          "emirateQuote": "after signing a 50-year concession with Fujairah Ports Authority",
+          "assetType": "container_terminal_or_depot",
+          "sectors": [
+            "multimodal_container_inland",
+            "finished_vehicles"
+          ],
+          "eventType": "agreement_signed",
+          "eventQuote": "said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": {
+            "date": "2026-07-01",
+            "precision": "month",
+            "quote": "said in July it will develop two terminals"
+          },
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Year of the July announcement is inferred from the article's 2026 publication date; exact concession signing date not stated.",
+            "Expected operational within the next 18-24 months (from Nov 2026 briefing); no specific date given.",
+            "Emirate inferred from concession with Fujairah Ports Authority; precise location of Al Rugaylat not stated.",
+            "Capacity: up to 2.5 million TEUs, 1.7 million tons general cargo and 190,000 CEUs annually."
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/east-coast-terminals-to-serve-as-alternative-not-replace-jebel-ali-port-says-dp-world-ceo",
+          "title": "East coast terminals to serve as alternative, not replace Jebel Ali port, says DP World GCC CEO",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-10"
+        }
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/east-coast-terminals-to-serve-as-alternative-not-replace-jebel-ali-port-says-dp-world-ceo",
+          "publishedDate": "2026-11-10",
+          "quote": "said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority"
+        }
+      ],
+      "reasonHeld": "grounding: event date 2026-07-01 (month) is not stated in its quote; milestone date unknown; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/13"
+    },
+    {
+      "id": "rev-20261112-a0574797",
+      "createdAt": "2026-11-12T08:19:52Z",
+      "runId": "run-20261112T081952Z",
+      "kind": "new_project",
+      "proposed": {
+        "_fact": {
+          "inScope": true,
+          "outOfScopeReason": null,
+          "projectName": "Dibba General Cargo Terminal",
+          "facilityName": "Dibba General Cargo Terminal",
+          "developer": "DP World",
+          "operator": null,
+          "investor": null,
+          "owner": null,
+          "partiesQuote": "DP World, the Dubai-based multinational logistics company, said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority.",
+          "location": "Dibba, UAE east coast",
+          "zone": null,
+          "locationQuote": "two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal",
+          "emirate": "Fujairah",
+          "emirateQuote": "after signing a 50-year concession with Fujairah Ports Authority",
+          "assetType": "other",
+          "sectors": [
+            "other"
+          ],
+          "eventType": "agreement_signed",
+          "eventQuote": "said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority",
+          "eventIsPlannedOrFuture": false,
+          "eventDate": {
+            "date": "2026-07-01",
+            "precision": "month",
+            "quote": "said in July it will develop two terminals"
+          },
+          "areas": [],
+          "investment": null,
+          "gradeAQuote": null,
+          "forecastCompletion": null,
+          "actualCompletion": null,
+          "ambiguities": [
+            "Year of the July announcement is inferred from the article's 2026 publication date; exact concession signing date not stated.",
+            "Expected operational within the next 18-24 months (from Nov 2026 briefing); no specific date given.",
+            "Emirate inferred from concession with Fujairah Ports Authority.",
+            "Capacity: up to 3.6 million tons of annual general cargo."
+          ]
+        },
+        "_document": {
+          "url": "https://www.khaleejtimes.com/business/east-coast-terminals-to-serve-as-alternative-not-replace-jebel-ali-port-says-dp-world-ceo",
+          "title": "East coast terminals to serve as alternative, not replace Jebel Ali port, says DP World GCC CEO",
+          "publisher": "Khaleej Times",
+          "tier": "secondary",
+          "verification": "direct",
+          "publishedDate": "2026-11-10"
+        }
+      },
+      "evidence": [
+        {
+          "url": "https://www.khaleejtimes.com/business/east-coast-terminals-to-serve-as-alternative-not-replace-jebel-ali-port-says-dp-world-ceo",
+          "publishedDate": "2026-11-10",
+          "quote": "said in July it will develop two terminals on the country's east coast - the Al Rugaylat container and Dibba General Cargo Terminal - after signing a 50-year concession with Fujairah Ports Authority"
+        }
+      ],
+      "reasonHeld": "grounding: event date 2026-07-01 (month) is not stated in its quote; milestone date unknown; single secondary source (Khaleej Times); needs an official source or a second independent source",
+      "state": "open",
+      "issueUrl": "https://github.com/ktrout18/dubai-logistics-investment-tracker/issues/14"
     }
   ]
 }

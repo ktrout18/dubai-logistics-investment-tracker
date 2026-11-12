@@ -1,0 +1,868 @@
+{
+  "schemaVersion": 1,
+  "processed": {
+    "https://dpworld.com/en/news/uae/breakbulk-middle-east-2022-unites-industry-leaders-to-address-post-pandemic-challenges": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "bc9dbf87"
+    },
+    "https://dpworld.com/en/news/uae/zodiac-training-program-developed-by-uae-calibers-to-improve-the-global-supply-chain-efficiency": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ca34a5a7"
+    },
+    "https://dpworld.com/en/news/uae/worlds-largest-dhow": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "4c4a5ff8"
+    },
+    "https://dpworld.com/en/news/uae/world-security-wins-key-projects-in-various-sectors-ranging-from-retail-to-government-institutions": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ce34e53a"
+    },
+    "https://dpworld.com/en/news/uae/world-security-invests-in-development-programmes-to-empower-200-female-professionals": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "df5986de"
+    },
+    "https://dpworld.com/en/news/uae/world-security-expands-its-service-offerings-fuelling-growth": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "2439e058"
+    },
+    "https://dpworld.com/en/news/uae/utilises-the-tremendous-potential-of-jebel-ali-port-and-jafza-to-drive-growth-in-the-fnb--sector": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "6cb2a507"
+    },
+    "https://dpworld.com/en/news/uae/uae-region-recognised-as-hero-of-the-pandemic": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "8b8ec0f9"
+    },
+    "https://jafza.ae/resource-centre/media/news/french-companies-weigh-uae-expansion-as-business-scale-up-uae-holds-paris-edition-at-the-uae-embassy": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "2524af80"
+    },
+    "https://jafza.ae/resource-centre/media/news/jafza-achieves-operational-net-zero-across-its-own-facilities": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "368c11eb"
+    },
+    "https://jafza.ae/resource-centre/media/news/jafza-expands-automotive-ecosystem-with-new-hellmann-indu-logistics-hub": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "73323b93"
+    },
+    "https://dubaiindustrialcity.ae/media/press-release/anabtawi-food-industries-inaugurates-ice-cream-manufacturing-facility-at-dubai-industrial-city": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 1 fact(s)",
+      "contentHash": "70f63491"
+    },
+    "https://dubaitrade.ae/en/news-announcements/dubai-trade/dubai-trade-surpasses-300-million-transactions": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b3d96b30"
+    },
+    "https://dubaitrade.ae/en/news-announcements/show-tags/dubai-trade": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "98b5c1f9"
+    },
+    "https://dubaitrade.ae/en/news-announcements/show-tags/dubai-trade-portal": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "38ba63f0"
+    },
+    "https://dubaitrade.ae/en/news-announcements/dubai-trade/dubai-trade-builds-on-next-generation-digital-delivery-order-platform-with-trade": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "3823b6a9"
+    },
+    "https://dubaitrade.ae/en/news-announcements/show-tags/shipping-agent": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b56999d1"
+    },
+    "https://pcfc.ae/en/Publications%20Files/PCFC%20Newsletter-Issue%2076-min.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "c7d58268"
+    },
+    "https://pcfc.ae/en/Rules%20and%20Regulations/Trakhees/Civil%20Engineering%20Department/Inspection%20&%20Compliance%20(Construction%20Safety)/Circulars/safetyalert036.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "8de74819"
+    },
+    "https://pcfc.ae/en/pages/newsdetails.aspx?newsid=164": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "516043a3"
+    },
+    "https://mediaoffice.ae/en/news/2022/march/30-03/dubai-customs": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ee145bfb"
+    },
+    "https://pcfc.ae/en/Publications%20Files/PCFC%20Newsletter-Issue%2092.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "856a53f6"
+    },
+    "https://wam.ae/en/details/1395302933779": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "a3725057"
+    },
+    "https://mediaoffice.ae/en/news/2021/May/09-05/dubai-south": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "7382e5c2"
+    },
+    "https://wam.ae/en/article/hszrba0n-dubai-commercity-partners-with-hellmann-dhl": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "65bbfa06"
+    },
+    "https://wam.ae/en/article/c1ugpik-uae-expands-logistics-network-boost-supply-chain": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ebef044e"
+    },
+    "https://wam.ae/en/details/1395303020606": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ed3c4e81"
+    },
+    "https://wam.ae/en/article/171a805-world-unveils-dubai-food-district-new-hub-for": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "38efee6c"
+    },
+    "https://wam.ae/en/article/bivkhui-jafza-expands-logistics-park-with-aed90-million": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "b2ad85b9"
+    },
+    "https://wam.ae/en/article/bkgq4bv-aldar-acquires-integrated-logistics-assets": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "815485c2"
+    },
+    "https://wam.ae/en/article/bjvain1-hamdan-bin-mohammed-witnesses-signing-agreement": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "c41ca33e"
+    },
+    "https://mediaoffice.ae/en/news/2025/august/29-08/dubai-south-and-toll-group": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "06f0421b"
+    },
+    "https://mediaoffice.ae/en/news/2024/october/23-10/slg-group": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "d6421e78"
+    },
+    "https://mediaoffice.ae/en/news/2026/may/19-05/dp-world-attracts-over-aed-854-million-in-investments-at-jafaza": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "84f839b7"
+    },
+    "https://mediaoffice.ae/en/news/2024/december/05-12/dnata-logistics-to-expand": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "15cf69ce"
+    },
+    "https://mediaoffice.ae/en/news/2025/march/27-03/jafza": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "d7d76cbf"
+    },
+    "https://mediaoffice.ae/en/news/2023/march/06-03/dubai-industrial-city": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "ed31760d"
+    },
+    "https://mediaoffice.ae/en/news/2023/November/30-11/DP-World-and-RSA": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "949117fd"
+    },
+    "https://mediaoffice.ae/en/news/2021/November/23-11/WenChao-Group-to-set-up-AED-735-million-food-manufacturing-and-logistics-facility": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "f23e6a26"
+    },
+    "https://emirates.com/media-centre/customer-experience": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "78c9d513"
+    },
+    "https://emirates.com/media-centre/operations": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "40384b8a"
+    },
+    "https://emirates.com/media-centre/our-business": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "e6209a64"
+    },
+    "https://emirates.com/media-centre/our-people": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "22c8d613"
+    },
+    "https://emirates.com/media-centre/connecting-tomorrow": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "9492fb54"
+    },
+    "https://emirates.com/media-centre/connecting-communities2": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "dfc104f0"
+    },
+    "https://emirates.com/media-centre/aviations-contribution-to-dubais-economy": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "3070626d"
+    },
+    "https://emirates.com/media-centre/emirates-retrofit-programme": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "83da7184"
+    },
+    "https://dnata.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 4 fact(s)",
+      "contentHash": "13c081f9"
+    },
+    "https://dnata.com/media-centre/dnata-advances-fleet-modernisation-in-italy-with-four-new-electric-buses": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "c9fa0b1e"
+    },
+    "https://dnata.com/media-centre/dnata-takes-off-at-western-sydney-international-bringing-integrated-aviation-services-to-australias-newest-gateway": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "bd77139a"
+    },
+    "https://group.dhl.com/en/media-relations/press-releases/2025/dhl-opens-next-gen-innovation-center-in-dubai.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "1146eea1"
+    },
+    "https://group.dhl.com/content/dam/deutschepostdhl/en/media-relations/press-releases/2025/pr-dhl-dubai-south-investments-20251204.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "fe8a268b"
+    },
+    "https://group.dhl.com/en/media-relations/press-releases/2024/dhl-global-forwarding-completes-acquisition-of-danzas-aei-emirates.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "77f23c56"
+    },
+    "https://group.dhl.com/en/media-relations/press-releases/2021/dhl-launches-first-of-its-kind-mobile-innovation-center-in-dubai-south.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "bc2048f1"
+    },
+    "https://group.dhl.com/content/dam/deutschepostdhl/en/media-relations/press-releases/2021/pr-mobile-mea-ic-dubai-20211027.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "6d434b1c"
+    },
+    "https://group.dhl.com/content/dam/deutschepostdhl/en/media-relations/press-releases/2024/pr-danzas-acquisition-completed-20240124.pdf": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "ed553047"
+    },
+    "https://group.dhl.com/en/media-relations/press-releases/2023/dhl-to-acquire-all-remaining-shares-in-danzas-aei-emirates.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "9ded3529"
+    },
+    "https://newsroom.fedex.com/newsroom/amea/fedex-invests-usd-350-million-to-boost-global-trade-and-strengthen-operations": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "786c84d1"
+    },
+    "https://newsroom.fedex.com/newsroom/middle-east-indian-subcontinent-and-africa/fedex-express-signs-agreement-with-dubai-south-for-new-regional-air-hub": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "2141d07e"
+    },
+    "https://newsroom.fedex.com/newsroom/meisa-english/fedex-express-opens-new-facility-in-dubai-to-meet-increased-shipping-demand": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "6337afc7"
+    },
+    "https://newsroom.fedex.com/newsroom/amea/fedex-drives-economic-impact-across-the-middle-east-through-large-scale-investments": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "166e2a28"
+    },
+    "https://newsroom.fedex.com/newsroom/amea/fedex-wins-express-logistics-company-of-the-year-at-the-logistics-middle-east-awards-2024": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "960013a7"
+    },
+    "https://newsroom.fedex.com/newsroom/middle-east-indian-subcontinent-and-africa/new-global-report-demonstrates-fedex-economic-impact-in-the-middle-east-and-north-africa": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "823c9d78"
+    },
+    "https://newsroom.fedex.com/newsroom/meisa-english/uae-becomes-first-fedex-market-in-the-middle-east-to-deploy-mercedes-benz-esprinter-vans": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "5491a2ff"
+    },
+    "https://newsroom.fedex.com/newsroom/meisa-english/2025-report-highlights-how-fedex-drives-innovation-and-global-economic-impact": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "5d0e39d7"
+    },
+    "https://about.ups.com/ae/en/newsroom/press-releases/customer-first/ups-speeds-up-global-delivery-times-from-asia-pacific.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "e6c0f142"
+    },
+    "https://about.ups.com/ae/en/our-impact/community/ups-delivers-flood-relief-in-pakistan.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "ad5ed1ef"
+    },
+    "https://about.ups.com/cz/cs/newsroom/press-releases/customer-first/ups-survey-82-of-small-and-medium-businesses-in-the-gcc-rely-on-cross-border-trade-as-primary-revenue-generator.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "170ecbd3"
+    },
+    "https://about.ups.com/us/es/our-stories/innovation-driven/all-hands-on-deck-for-expo-2020-dubai.html": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "2f524589"
+    },
+    "https://dsv.com/en-ae/about-dsv/dsv-mena/united-arab-emirates/dsv-dubai-new-warehouse": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "cc44c7e9"
+    },
+    "https://dsv.com/en-ae/about-dsv/press/news/new-dubai-warehouse-opens-2723848": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "424eef2a"
+    },
+    "https://dsv.com/en-ae/about-dsv/press/news/ae/2026/06/new-dubai-warehouse-opens": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "424eef2a"
+    },
+    "https://dsv.com/en/countries/asia/united-arab-emirates/dubai/dsv-logistics-aedxb017": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b15b6760"
+    },
+    "https://dsv.com/en/countries/asia/united-arab-emirates/dubai/dsv-logistics-aedxb016": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b15b6760"
+    },
+    "https://dsv.com/en/countries/asia/united-arab-emirates/dubai/dsv-air-sea-aedxb002": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b15b6760"
+    },
+    "https://dsv.com/en-za/destinations/middle-east-and-africa/united-arab-emirates": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "7d4ed65e"
+    },
+    "https://dsv.com/en/countries/asia/united-arab-emirates/dubai/dsv-logistics-aedxb022": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b15b6760"
+    },
+    "https://cevalogistics.com/fr/actualites-et-medias/liste-des-actualites/communiques-de-presse/ceva-nouvel-entrepot-dubai-2026": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b60d00b0"
+    },
+    "https://cevalogistics.com/en/news-and-media/newsroom/press-release": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "518f8982"
+    },
+    "https://cevalogistics.com/en/en/news-and-media/newsroom/trends-in-supply-chain-optimization": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "5bd1b207"
+    },
+    "https://cevalogistics.com/en/news-and-media/newsroom/breaking-news/ceva-conflict-middle-east": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "d1008ebb"
+    },
+    "https://aramex.com/us/en/investor-relations/news-events/details?contentId=c83e6e88-b3f2-659d-9310-ff0000e7fe0c&module=stories": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "46e8d0f4"
+    },
+    "https://aramex.com/can/en/investor-relations/news-events/details?contentId=d02a5a88-b3f2-659d-9310-ff0000e7fe0c&module=stories&page=1": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "eb7ec2af"
+    },
+    "https://aramex.com/us/en/media-details/news/news-details?contentId=11826288-b3f2-659d-9310-ff0000e7fe0c&module=stories&page=14": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "20fb7ee6"
+    },
+    "https://maersk.com/news/articles/2022/03/17/maersk-inaugurates-its-first-integrated-logistics-centre-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "377b44de"
+    },
+    "https://maersk.com/news/articles/2023/07/05/maersk-strengthens-its-logistics-and-services-in-uae-with-a-new-cold-store-facility": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "e6d65ca7"
+    },
+    "https://maersk.com/news/articles/2022/04/29/make-space-for-growth": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "6164bb1a"
+    },
+    "https://maersk.com/news/articles/2022/09/08/maersk-signs-an-agreement-with-dubai-south": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "401c6381"
+    },
+    "https://maersk.com/news/articles/2023/01/13/maersk-and-dp-world-enter-a-long-term-partnership": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b1575f20"
+    },
+    "https://newsroom.kuehne-nagel.com/ida-foundation-selects-kuehnenagel-to-operate-a-healthcare-hub-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "94e6aeec"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-breaks-ground-for-a-new-e-commerce-fulfilment-centre-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "c2b827d8"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-inaugurates-rolls-royce-engine-fulfilment-centre-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "da765564"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-uae-achieves-emirates-drug-establishment-ede-certification-to-store-raw-pharmaceutical-materials": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "d298fca5"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-assembles-emergency-and-relief-kits-at--dubais-international-humanitarian-city": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "a55edc87"
+    },
+    "https://newsroom.kuehne-nagel.com/aggreko-uae": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "44c97663"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-united-arab-emirates-receives-best-logistics-partner-award-of-international-humanitarian-city-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "b7dd1e6f"
+    },
+    "https://newsroom.kuehne-nagel.com/kuehnenagel-appoints-leon-diradourian-as-managing-director-in-the-middle-east": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "6b68650e"
+    },
+    "https://aldar.com/en/news-and-media/aldar-delivers-robust-q3-performance-with-net-profit-rising-19-to-aed-7-1-billion-in-first-nine-months-of-2026": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "1f219b5d"
+    },
+    "https://aldar.com/en/news-and-media/aldar-signs-to-become-the-first-mena-real-estate-to-secure-sustainability-linked-loan": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "3038754b"
+    },
+    "https://aldar.com/en/news-and-media/aldar-h1-q2-2023-financial-results": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "e408bd2c"
+    },
+    "https://arcapita.com/insights/dsv-expands-in-dubai-with-new-30-000-sqm-logistics-warehouse-in-jebel-ali-free-zone-developed-by-arcapita-s-lintara": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "46d3ada5"
+    },
+    "https://arcapita.com/insights/dp-world-and-arcapita-s-lintara-break-ground-on-20-000-sqm-logistics-centre-in-jafza": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "54c7fa74"
+    },
+    "https://arcapita.com": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "0d424343"
+    },
+    "https://arcapita.com/insights?c=insights": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "facc8758"
+    },
+    "https://arcapita.com/investments/logistics-park": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "c45b49f1"
+    },
+    "https://arcapita.com/investments/logistics-ii": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "eee62562"
+    },
+    "https://arcapita.com/insights/arcapita-and-dsv-partner-to-build-state-of-the-art-sustainable-warehouse-in-dubai-s-jebel-ali-free-zone": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "d1bb36a6"
+    },
+    "https://arcapita.com/sitemap": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "6016e322"
+    },
+    "https://terralogix.ae": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "37763c83"
+    },
+    "https://terralogix.ae/fraud-alert": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "352250fe"
+    },
+    "https://dutco.com/our-businesses/trading-manufacturing-and-logistics/modern-freight-company-llc/modern-freight-company-llc": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "f1bfeaf2"
+    },
+    "https://dutco.com": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "65fd2390"
+    },
+    "https://dutco.com/our-businesses/trading-manufacturing-and-logistics/trading-manufacturing-logist": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "991cc918"
+    },
+    "https://dutco.com/contact-us/contact-us": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "c09a5c91"
+    },
+    "https://dutco.com/about-us/about-us-banner": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "6f742d73"
+    },
+    "https://dutco.com/our-businesses/trading-manufacturing-and-logistics/dutco-tennant-llc-(trading-manufacturing-logistics)/dutco-tennant-llc": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "c5ba1718"
+    },
+    "https://dutco.com/our-businesses/hospitality-tourism/dutco-travels-tourism": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "26429de6"
+    },
+    "https://dutco.com/our-businesses/oil-gas/dutco-energy-ltd": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "0a5a1c2d"
+    },
+    "https://thenationalnews.com/magazine/2026/11/12/how-abu-dhabis-old-airport-terminal-became-a-destination-for-world-leading-designers": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "64d81cdc"
+    },
+    "https://thenationalnews.com/opinion/comment/2026/11/10/uae-gulf-gcc-supply-chains-globalisation-climate": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "b4d7d7b8"
+    },
+    "https://khaleejtimes.com/uae/uae-to-set-up-military-training-academy-for-forces-from-different-countries": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "e6edb0ce"
+    },
+    "https://khaleejtimes.com/business/supply-chain-disruptions-uae-businesses-160-per-cent-hike-logistics-costs": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "9763e050"
+    },
+    "https://khaleejtimes.com/business/uae-warehouses-near-full-occupancy-despite-59-rise-in-dubai-rents": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 8 fact(s)",
+      "contentHash": "ec0dee0a"
+    },
+    "https://khaleejtimes.com/kt-network/floward-opens-new-al-ain-fulfilment-centre-expands-express-delivery-across-uae": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 1 fact(s)",
+      "contentHash": "6ca122af"
+    },
+    "https://khaleejtimes.com/business/east-coast-terminals-to-serve-as-alternative-not-replace-jebel-ali-port-says-dp-world-ceo": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 2 fact(s)",
+      "contentHash": "3ce82d7c"
+    },
+    "https://khaleejtimes.com/business/innovation-city/beyond-borders-the-uae-free-zone-as-a-global-b2b-launchpad": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "1054a764"
+    },
+    "https://gulfnews.com/sport/virat-kohli-fulfils-fans-request-after-heartfelt-plea-1.500744649": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "not_relevant",
+      "contentHash": "63cc745d"
+    },
+    "https://gulfnews.com/business/dubai-south-nakheel-unveiled-palm-springs-community-with-50000-homes-1.500743496": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "fabdd241"
+    },
+    "https://gulfnews.com/business/corporate-news/floward-opens-new-al-ain-fulfilment-centre-as-demand-for-express-delivery-grows-across-the-uae-1.500743379": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 1 fact(s)",
+      "contentHash": "a5b9be98"
+    },
+    "https://gulfnews.com/business/property/dubai-south-homes-dwc-metro-link-adds-a-new-edge-for-buyers-tenants-1.500742881": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "79ace4e3"
+    },
+    "https://gulfnews.com/business/markets/adnoc-logistics-vessel-damaged-in-attack-in-uae-territorial-waters-1.500742780": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "67dd67f8"
+    },
+    "https://gulfnews.com/business/retail/aramex-quarterly-profit-surges-817-as-revenue-hits-record-dh198-billion-1.500742437": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "extracted 0 fact(s)",
+      "contentHash": "74e05571"
+    },
+    "https://gulfnews.com/sport/golf-in-uae/rory-mcilroy-looks-confident-as-he-gets-closer-to-joining-colin-montgomeries-dp-world-tour-club-1.500742322": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "not_relevant",
+      "contentHash": "342a7378"
+    },
+    "https://zawya.com/en/press-release/companies-news/dhl-opens-next-gen-innovation-center-and-builds-a-state-of-the-art-contract-logistics-warehouse-in-dubai-south-uae-w7sn4him": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "883288be"
+    },
+    "https://zawya.com/en/press-release/the-space-14-estate-launches-new-warehousing-and-commercial-development-in-dubai-investments-park-2-430286": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "7363e877"
+    },
+    "https://zawya.com/en/press-release/companies-news/al-sharqi-shipping-strengthens-regional-supply-chains-with-aed-70mln-logistics-hub-in-dubai-1852646": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "b2e005a1"
+    },
+    "https://zawya.com/en/press-release/companies-news/jd-logistics-launches-its-second-warehouse-in-dubai-xmgvfrwt": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "4b24abab"
+    },
+    "https://zawya.com/en/press-release/companies-news/jdcom-opens-new-warehouse-in-the-uae-qrimygzk": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "47b9b494"
+    },
+    "https://zawya.com/en/press-release/companies-news/dutco-sweid-and-sweid-launch-dubais-largest-privately-owned-logistics-park-eqh1s7s8": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "718c24a2"
+    },
+    "https://zawya.com/en/press-release/companies-news/emrill-strengthens-operational-efficiency-and-service-delivery-with-new-central-warehouse-irc323km": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "37ca6a5b"
+    },
+    "https://zawya.com/en/press-release/companies-news/maersk-inaugurates-its-integrated-logistics-centre-in-dubai-uae-mp11azay": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "04628c11"
+    },
+    "https://arabianbusiness.com/real-estate/dubai-warehouse-demand-stays-strong-despite-strait-of-hormuz-disruption-as-businesses-rethink-supply-chains": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "f0b9ac03"
+    },
+    "https://arabianbusiness.com/business/transport/dnata-logistics-invests-27mn-in-cutting-edge-dubai-south-warehouse": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "575ecd04"
+    },
+    "https://arabianbusiness.com/business/agility-logistics-top-10-middle-east-warehouses-343861": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "18861295"
+    },
+    "https://arabianbusiness.com/business/transport/silent-leader-12120": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "1bd383c4"
+    },
+    "https://arabianbusiness.com/industries/transport/top-10-middle-east-warehouse-hubs-14997": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "f680c0d5"
+    },
+    "https://arabianbusiness.com/business/new-260000sqft-logistics-hub-in-dubai-set-to-accelerate-food-distribution": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "9975ddb1"
+    },
+    "https://arabianbusiness.com/real-estate/terralogix-dubais-largest-privately-owned-logistics-park-launched": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "f2153e82"
+    },
+    "https://arabianbusiness.com/business/414350-pharma-giant-sanofi-opens-new-dubai-logistics-hub": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "bb1b0e2b"
+    },
+    "https://logisticsmiddleeast.com/news/dubai-south-opens-dior-regional-distribution-centre": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "27747584"
+    },
+    "https://logisticsmiddleeast.com/warehousing/30682-carrefour-launches-fresh-focused-new-warehouse-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "51072ccb"
+    },
+    "https://logisticsmiddleeast.com/warehousing/article-12945-aswaaq-launches-new-warehouse-to-optimise-supply-chain": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "73387e6b"
+    },
+    "https://logisticsmiddleeast.com/warehousing/34707-landmark-group-opens-272m-distribution-centre-in-dubais-jafza": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "52b33e9e"
+    },
+    "https://logisticsmiddleeast.com/news/dematic-landmark-warehousing": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "982502a1"
+    },
+    "https://logisticsmiddleeast.com/warehousing/article-13261-feature-ikeas-mena-flat-pack-logistics-from-uae": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "565a148c"
+    },
+    "https://logisticsmiddleeast.com/gallery/30740-in-pics-inside-carrefours-massive-new-dubai-distribution-centre": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "7d2d0823"
+    },
+    "https://constructionweekonline.com/projects-tenders/amana-construct-delivers-a-37000m2-green-logistics-centre": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "5b90354d"
+    },
+    "https://constructionweekonline.com/projects-tenders/article-37203-site-visit-mag-group-warehouses-complex-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "7e5e67e7"
+    },
+    "https://constructionweekonline.com/projects-tenders/article-45657-ground-broken-on-11m-3pl-facility-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "e7cef8cd"
+    },
+    "https://constructionweekonline.com/news/aldar-to-develop-logistics-park-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "4ab98626"
+    },
+    "https://constructionweekonline.com/news/dubai-rta-to-build-truck-rest-hubs": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "b01f2e8d"
+    },
+    "https://constructionweekonline.com/projects-tenders/article-42128-uae-gac-breaks-ground-on-dubai-south-warehouse": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "d177aabd"
+    },
+    "https://constructionweekonline.com/business/article-31445-total-freight-logistics-centre-opens-in-dubai": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "64f9dc72"
+    },
+    "https://constructionweekonline.com/projects-tenders/wenchao-group-to-set-up-200m-facility-in-dubai-industrial-city": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "33bc108f"
+    },
+    "https://logisticsmiddleeast.com/news/dhl-opens-mea-innovation-center-and-confirms-major-warehouse-investment-in-dubai-south": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "efdd0ae9"
+    },
+    "https://mediaoffice.ae/en/news/2026/may/20-05/gallega-global-logistics-opens-logistics-hub-at-jafza": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "23cfb766"
+    },
+    "https://logisticsmiddleeast.com/logistics/terralogix-unveiled-as-dubais-largest-private-logistics-park": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "no_publication_date",
+      "contentHash": "24f960ef"
+    },
+    "https://zawya.com/en/projects/construction/dutco-and-sweid-sweid-partner-for-3.3mln-sq-ft-logistics-park-in-northern-dubai-431432": {
+      "at": "2026-11-12T08:19:52Z",
+      "outcome": "outside_window",
+      "contentHash": "331ce96a"
+    }
+  },
+  "recheck": {
+    "dhl-supply-chain-dubai-south-multi-user-warehouse": "2026-11-12T08:19:52Z",
+    "dp-world-mol-jebel-ali-vehicle-processing": "2026-11-12T08:19:52Z",
+    "gallega-finished-vehicles-hub-jafza": "2026-11-12T08:19:52Z",
+    "terralogix-logistics-park-phase-1": "2026-11-12T08:19:52Z",
+    "terralogix-logistics-park-warsan": "2026-11-12T08:19:52Z"
+  },
+  "runs": [
+    {
+      "runId": "run-20261112T081952Z",
+      "startedAt": "2026-11-12T08:19:52Z",
+      "finishedAt": "2026-11-12T08:38:15Z",
+      "status": "success",
+      "dryRun": false,
+      "sourcesOk": 32,
+      "sourcesFailed": [],
+      "documents": 168,
+      "published": 0,
+      "held": 14,
+      "searches": 40,
+      "estimatedCostUsd": 1.102681
+    }
+  ]
+}
