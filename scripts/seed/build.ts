@@ -19,7 +19,8 @@ import {
   SCHEMA_VERSION,
   validateRegister,
 } from '../../shared/index.ts';
-import { dataPath } from '../data-files.ts';
+import { REPO_ROOT, dataPath } from '../data-files.ts';
+import { seedWriteBlockedReason } from './guard.ts';
 import { AUDIT_DATE, SEED_TS } from './lib.ts';
 import { buildPendingItems } from './pending.ts';
 import { SEED_PROJECTS } from './projects.ts';
@@ -51,6 +52,11 @@ async function main(): Promise<number> {
 
   if (!result.ok) return 1;
   if (!check) {
+    const blocked = await seedWriteBlockedReason(REPO_ROOT);
+    if (blocked) {
+      console.error(`refusing to write the seed: ${blocked}. It would overwrite records added since. Use --check to validate only.`);
+      return 1;
+    }
     await writeFile(dataPath('register'), serializeDataFile(register));
     await writeFile(dataPath('pendingReview'), serializeDataFile(pendingReview));
     console.log('wrote data/register.json and data/pending-review.json');

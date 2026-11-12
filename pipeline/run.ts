@@ -526,7 +526,11 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
     if (!opts.issues) logger.info('issues: skipped (--no-issues)');
     else if (!deps.issues.enabled) logger.info('issues: skipped (no GITHUB_TOKEN / GITHUB_REPOSITORY); pending items are in data/pending-review.json');
     else {
-      const needing = pending.filter((p) => p.state === 'open' && !p.issueUrl).slice(0, 20);
+      // This run's new items first, then older open items without an issue
+      // (e.g. hand-written seed items), at most 20 per run.
+      const open = pending.filter((p) => p.state === 'open' && !p.issueUrl);
+      const fresh = new Set(newReviewIds);
+      const needing = [...open.filter((p) => fresh.has(p.id)), ...open.filter((p) => !fresh.has(p.id))].slice(0, 20);
       let updated = false;
       for (const item of needing) {
         try {
