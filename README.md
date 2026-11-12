@@ -7,7 +7,7 @@ construction milestones and openings in Dubai, with a small public website.
 
 Status: proof of concept. The register and website are live. The automated
 update pipeline is built and tested offline. Its GitHub workflow has run in
-zero-spend mode and **once with paid search and extraction as a dry run**
+zero-spend mode and **twice with paid search and extraction as dry runs**
 (12 Nov 2026, nothing written). No live run that writes and commits data has
 been made yet, and the twice-daily schedule is **off**. See
 [Current limitations](#current-limitations).
@@ -129,7 +129,7 @@ runs.
 ## Secrets
 
 * `ANTHROPIC_API_KEY` (repository secret): needed for paid runs. The owner
-  has added it; it authenticated on the paid dry run of 12 Nov 2026. The workflow only passes it to the
+  has added it; it authenticated on the paid dry runs of 12 Nov 2026. The workflow only passes it to the
   pipeline when the run is meant to spend, and never prints it.
 * `GITHUB_TOKEN`: provided automatically by Actions (commits and
   pending-review issues).
@@ -141,13 +141,15 @@ git-ignored.
 
 ## API costs
 
-**Measured once:** the paid dry run on GitHub on 12 Nov 2026 cost **$1.12**
-by the run report's estimate at list prices: 40 web searches ($0.40, the
-cap was reached) and about $0.72 of model tokens (40 search calls on Claude
-Haiku 5.5, 16 extractions on Claude Opus 5.5). One run is one data point
-(`docs/PIPELINE.md` §5 and §7).
+**Measured on two dry runs** on GitHub (12 Nov 2026), by the run reports'
+estimates at list prices: **$1.12** and **$1.11** per run. The second run's
+split: web searches $0.38 (38 billed; the cap of 40 was reached), Claude
+Haiku 5.5 $0.08 (38 search calls), Claude Opus 5.5 $0.65 (16 extractions,
+about $0.04 each). Two runs are two data points (`docs/PIPELINE.md` §5 and
+§7). At that rate the schedule (two runs a day) would cost about $2.2 a day,
+about $67 a month.
 
-Estimates at list prices made before that run (details and assumptions in
+Estimates at list prices made before those runs (details and assumptions in
 `docs/PIPELINE.md` §7):
 
 * About **$1.1 per run**: roughly 30 web searches ($0.30), the search model's
@@ -176,17 +178,25 @@ Both are explained step by step in [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md
 ## Current limitations
 
 * **No live run has written data yet.** Search and extraction have run
-  against the Anthropic API once, as a dry run on GitHub (12 Nov 2026): the
-  key worked, 22 of 33 sources were scanned, 16 documents extracted, 1
-  change would have been published and 5 held. That run exposed four
-  defects, now fixed with tests (`docs/PIPELINE.md` §5). Committing data and
+  against the Anthropic API twice, as dry runs on GitHub (12 Nov 2026). Run
+  1: 22 of 33 sources scanned, 16 documents extracted, 1 change would have
+  been published (wrongly) and 5 held. Run 2, after fixes: 31 of 33 sources
+  scanned, 16 extracted, 0 published, 5 held. The defects both runs exposed
+  are fixed with tests (`docs/PIPELINE.md` §5).
+* **Search finds little that can be analysed.** On run 2 none of the
+  documents found through site search reached extraction: most had no
+  publication date, were old, or their pages refused the runner. All
+  extracted documents came from directly fetched sources. Committing data and
   redeploying from a pipeline run has not happened yet (see
   `docs/ACCEPTANCE.md`, criterion 10).
 * **The schedule is off** by the owner's choice until `SCHEDULE_ENABLED` is set.
 * **Some sources block or defeat automated access**, so the pipeline relies on
   fallbacks (sitemaps, feeds, search) for them:
   * PCFC: news and circulars pages answer HTTP 403 (site search found 6
-    documents on the paid dry run).
+    documents on the first paid dry run; on the second the search failed,
+    since fixed).
+  * Reuters: the Anthropic web search tool refuses the domain (HTTP 400);
+    the source is disabled.
   * TECOM Group (tecomgroup.ae): HTTP 403 (the Dubai Industrial City site works).
   * Aldar: the news page answered HTTP 403 on 11 Nov and a JavaScript shell
     on 12 Nov (sitemap fallback both times).

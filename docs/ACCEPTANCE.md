@@ -2,7 +2,7 @@
 
 The owner's ten acceptance criteria, with the status of each and the exact
 evidence. Checked on 11 November 2026; criteria 8–10 updated on 12 November
-2026 after the first paid dry run.
+2026 after the two paid dry runs.
 
 Status values: **met** (shown on real data or on GitHub), **met offline only**
 (proven by automated tests with fakes, not yet on a live run), **not yet
@@ -27,8 +27,8 @@ the production build (`dist/`), on the real register.
 | 6 | A repeated article makes no duplicate | met offline only |
 | 7 | MoU → signed agreement updates the existing project | met offline only |
 | 8 | A blocked source triggers fallback research | met (live dry run: PCFC 403 → site search; WAM, Dubai Trade, DHL, DSV via site search) |
-| 9 | Unverified claims are held for review | met offline; seen in a live dry run (5 held, nothing written because it was a dry run) |
-| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; paid search and extraction proven in one dry run ($1.12); no run has yet committed data and redeployed; schedule off by the owner's choice |
+| 9 | Unverified claims are held for review | met offline; seen in two live dry runs (5 held each, nothing written because they were dry runs) |
+| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; paid search and extraction proven in two dry runs ($1.12, $1.11); no run has yet committed data and redeployed; schedule off by the owner's choice |
 
 ---
 
@@ -217,18 +217,52 @@ What **is** shown:
     was wrong and is now held; the log did not show claims, evidence URLs
     or tokens.
 
+* **Second paid dry run, after the fixes.** Same inputs, on commit `a81a714`:
+  https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43165141664
+  → **success**.
+  * `Run run-20261112T060136Z (dry run): PARTIAL.` / `31 source(s) scanned
+    (6 via a fallback method); 152 new document(s); 16 extracted; 18
+    candidate fact(s).` / `0 change(s) published; 5 held for review;
+    searches used 40/40; estimated cost $1.1103.`
+  * The first run's fixes held: the dnata results page was not published
+    (`already recorded (milestone already recorded as event
+    2026-01-01-commissioned)`); every search-only source and all 5 rechecks
+    got a search; the summary line shows the true totals.
+  * **Measured cost split:** web searches 38 billed, $0.38;
+    `claude-haiku-5-5` 38 calls, 606,864 input / 35,338 output tokens,
+    $0.0784; `claude-opus-5-5` 16 calls, 94,773 input / 13,643 output
+    tokens, $0.6520.
+  * Not scanned: PCFC (`web search error: max_uses_exceeded`) and Reuters
+    (`HTTP 400 … domains are not accessible to our user agent:
+    ['reuters.com']`).
+  * Held: DP World's Jafza Grade A groundbreaking (already in the register
+    as `dp-world-lintara-jafza-dg-logistics-centre`; identity tied), Floward
+    Al Ain twice (Abu Dhabi), Emirates' engineering/MRO groundbreaking
+    (already in the register, but matched to the wrong project), DP World's
+    Al Rugaylat terminal (not Dubai).
+  * Defects found and fixed in `41adc4a` and `abbbae6` (tests in
+    `pipeline/__tests__/live-trial.test.ts`): seven claims from one Khaleej
+    Times round-up dropped as "already pending review"; a cited URL
+    identifying every facility on that page; `max_uses_exceeded` discarding
+    search results; milestones other than openings dated by the
+    publication date; rechecks keeping back searches for rechecks already
+    run. Reuters disabled in `data/sources.json`.
+
 What is **not** shown yet:
 
 * **No scheduled run has happened**: the schedule (`30 4 * * *`,
   `30 12 * * *` UTC) is wired but off until the owner sets the repository
   variable `SCHEDULE_ENABLED` to `true`.
-* **No live run has written data.** The paid path has run only as a dry
-  run, so no automated data commit has yet gone through validation →
+* **No live run has written data.** The paid path has run only in dry
+  runs, so no automated data commit has yet gone through validation →
   commit → deploy, and the site has not yet shown a pipeline-made change.
-  The fixes from the dry run (search reserve, the two new hold rules) have
-  not yet been exercised against the live API. Next step, with the owner's
+  The fixes made after the second dry run (claim-level dedupe, matching,
+  search error handling, the wider date rule) have been tested only
+  offline. Next step, with the owner's
   go-ahead: a manual run with `dry_run` unticked (about $1.1, judging by the
-  one measured run).
+  two measured runs). Expect it to write mostly held items (and one
+  `pending-review` GitHub issue each) plus the first
+  `data/pipeline-state.json`.
 * The deployed site could not be opened from the build container (its
   network blocks github.io); the browser checks in §1–2 were made on the same
   build served locally.

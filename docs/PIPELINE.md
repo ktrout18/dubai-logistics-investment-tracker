@@ -7,9 +7,9 @@ the change (with a ChangeRecord) or queues it for human review. It never
 invents data, never deletes verified data, and never reports "nothing new"
 when a scan failed.
 
-> **Status (proof of concept).** The paid path has run **once, as a dry run**
-> on GitHub Actions (12 Nov 2026: Anthropic search and extraction, nothing
-> written or committed; measured figures in §5 and §7). No live run that
+> **Status (proof of concept).** The paid path has run **twice, both dry
+> runs**, on GitHub Actions (12 Nov 2026: Anthropic search and extraction,
+> nothing written or committed; measured figures in §5 and §7). No live run that
 > writes and commits data has been made yet. All tests use fakes. The
 > scheduled workflow does nothing until the repository variable
 > `SCHEDULE_ENABLED` is set to `true`.
@@ -235,6 +235,10 @@ A claim that fails any of these checks is never published:
   an identical copy at another URL is skipped.
 * A candidate matches an existing project by a cited source URL, or by shared
   parties plus a compatible zone, a similar facility name and the asset type.
+  A cited URL counts only when the claim is about a similarly named facility
+  or the same asset type: a results report or market round-up mentions many
+  facilities (the second live run matched an Emirates engineering claim to
+  the dnata warehouse because both cite the Emirates Group results).
   Zone or asset type alone never identify a project. A unique, confident match
   updates that project. A tie, or a weak but plausible match, is held as
   ambiguous.
@@ -267,19 +271,25 @@ A change is published automatically only when all of these hold:
 10. **No re-reading of recorded evidence**: if the project already has an
     event from the same page, a milestone of a different type from that page
     is a conflict for review (a human already interpreted that page).
-11. **Delivery dates are stated**: a `construction_completed`,
-    `commissioned` or `opened` milestone whose date is only the page's
-    publication date is held. A results report or round-up says when it was
-    published, not when a facility opened.
+11. **Milestone dates are stated**: a status-bearing milestone whose date is
+    only the page's publication date is held, unless its quote says
+    "today". A results report or market round-up says when it was
+    published, not when a facility broke ground or opened.
 
-Rules 10 and 11 were added after the first live dry run, which would have
+Rules 10 and 11 were added after the live dry runs. The first would have
 read the Emirates Group half-year results ("commissioning its new AED 100
 million … logistics facility in Dubai South", already recorded as dnata's
-`commissioned` event) as an opening dated 5 November 2026.
+`commissioned` event) as an opening dated 5 November 2026; the second
+dated DP World's Jafza groundbreaking (reported in a JLL market round-up) by
+the article's publication date.
 
 Anything else becomes a `PendingReviewItem` (`new_project`, `update` or
 `conflict`) with its evidence and `reasonHeld`. Held items are never dropped
-and never published. When `GITHUB_TOKEN` and `GITHUB_REPOSITORY` are set, a
+and never published. An open item counts as a duplicate only for the same
+page **and** the same claim (project name and milestone type); items written
+by hand without a recorded claim cover their whole page. (Before this, a
+round-up naming eight projects yielded one held item and seven dropped
+claims.) When `GITHUB_TOKEN` and `GITHUB_REPOSITORY` are set, a
 GitHub issue labelled `pending-review` is opened for each held item. The
 review id is in the title, so an existing issue is reused. Without a token
 the run logs `issues: skipped (no GITHUB_TOKEN …)`.
@@ -416,7 +426,14 @@ work through the 74 UAE news URLs, 8 per run (no model calls, since they are
 outside the window) until all are processed. After that only new URLs are
 fetched.
 
-### Live paid dry run on GitHub (12 Nov 2026)
+### Live paid dry runs on GitHub (12 Nov 2026)
+
+Two runs, each approved separately by the owner. Both: `dry_run: true`,
+`search_provider: anthropic`, `extract: true`, other inputs at their
+defaults. Nothing was written or committed by either. Each figure below is
+from one run, not an average.
+
+#### Run 1
 
 One run, with the owner's approval: `dry_run: true`, `search_provider:
 anthropic`, `extract: true`, other inputs at their defaults (`since: 7d`,
@@ -464,6 +481,56 @@ average.
   International Airport" claim whose location quote was not in the page and
   whose date (May 2026) was not in its quote (grounding caught a paraphrase).
 
+#### Run 2 (after the fixes in `dd92de8`)
+
+Run
+https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43165141664
+on commit `a81a714`, **success** (about 17 minutes).
+
+* `Run run-20261112T060136Z (dry run): PARTIAL.` / `31 source(s) scanned (6
+  via a fallback method); 152 new document(s); 16 extracted; 18 candidate
+  fact(s).` / `0 change(s) published; 5 held for review; searches used
+  40/40; estimated cost $1.1103.` The summary line now shows the true
+  totals.
+* The search reserve worked: every search-only source and all 5 rechecks got
+  their search; 64 blocked-article fallback searches were skipped
+  (`fallback_search_skipped`). Two sources were not scanned: **PCFC**
+  (`site_search failed: web search error: max_uses_exceeded`: the model
+  tried a second search and the error discarded the first one's results;
+  fixed) and **Reuters** (`HTTP 400 … The following domains are not
+  accessible to our user agent: ['reuters.com']`; the source is now
+  disabled).
+* Cost by model (from the log): web searches 38 billed, **$0.38**;
+  `claude-haiku-5-5`: 38 calls, 606,864 input / 35,338 output tokens,
+  **$0.0784**; `claude-opus-5-5`: 16 calls, 94,773 input / 13,643 output
+  tokens, **$0.6520** (about $0.041 per extraction). Total **$1.1103**.
+* dnata: the half-year results page was now read as `commissioned` and
+  skipped (`already recorded (milestone already recorded as event
+  2026-01-01-commissioned)`); a second reading of it was skipped as already
+  covered by the hand-written review item `rev-20261111-58466968`. Nothing
+  was published.
+* Held (all correctly not published): DP World's Jafza Grade A groundbreaking
+  from a Khaleej Times/JLL round-up (identity tied between four projects; it
+  is the existing `dp-world-lintara-jafza-dg-logistics-centre`, already
+  `under_construction` since 30 Jun 2026, so it adds nothing); Floward's Al
+  Ain fulfilment centre from Khaleej Times and Gulf News (Abu Dhabi, not
+  Dubai); Emirates' engineering/MRO groundbreaking from the Emirates Group
+  results (already in the register as `emirates-engineering-complex-dubai-south`,
+  but matched to the dnata warehouse through the shared URL; fixed, §3.6);
+  DP World's Al Rugaylat east-coast terminal (not Dubai, date not stated).
+* Defects fixed after run 2 (`41adc4a`, `abbbae6`): seven further claims from
+  the same Khaleej Times round-up were dropped as "already pending review"
+  (§3.7); the shared-URL match; the `max_uses_exceeded` handling; Reuters;
+  publication-date dating of any milestone (rule 11); and the recheck phase
+  keeping back searches for rechecks that had already run.
+* **Coverage:** all 16 extracted documents came from directly fetched
+  sources (Dubai Industrial City, dnata, The National, Khaleej Times, Gulf
+  News). None of the 152 documents found through site search or rechecks
+  reached extraction: `no_publication_date 73`, `article_server_error 37`,
+  `article_blocked 24`, `outside_window 60` (many search results are old,
+  undated corporate pages). The searches (about $0.46 with Haiku) bought
+  little analysable material on this run.
+
 ---
 
 ## 6. Configuration
@@ -500,11 +567,17 @@ read/write tokens per model at the list prices above, plus searches at
 $0.01 each. A model without a configured price is listed under
 `unpricedModels` rather than guessed.
 
-**Measured (one run):** the only paid run so far, a dry run on 12 Nov 2026
-(§5), cost **$1.12** by the report's estimate: 40 searches ($0.40, cap
-reached) and about $0.72 of model tokens for 40 search calls and 16
-extractions. It is one data point: the cap was hit, and a first run sees
-many seed-cited pages as new.
+**Measured (two dry runs, 12 Nov 2026, §5):**
+
+| Run | Searches (billed) | Haiku 5.5 | Opus 5.5 | Total |
+|---|---|---|---|---|
+| 1 (43158953250) | 40 ($0.40) | not split in the log | not split in the log (Haiku + Opus ≈ $0.72) | **$1.1238** |
+| 2 (43165141664) | 38 ($0.38) | 38 calls, 606,864 in / 35,338 out, $0.0784 | 16 extractions, 94,773 in / 13,643 out, $0.6520 | **$1.1103** |
+
+Both runs used the full search cap of 40 and 16 extractions. Opus 5.5 cost
+about $0.041 per extraction (about 5,900 input and 850 output tokens each),
+half the $0.08 assumed below. Haiku 5.5 read about 16,000 input tokens per
+search call (search results), more than the 6,000 assumed.
 
 **Typical run (estimate made before the live run):**
 
