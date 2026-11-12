@@ -1,21 +1,28 @@
 /**
- * Assertions on the REAL seeded register (data/register.json), so the first
- * public view keeps matching the owner's Nov 2026 PDF while the strict data
- * keeps following the sources. Reads the file via a JSON import (no Node APIs).
+ * Assertions on the REAL register (data/register.json): every figure the site
+ * shows (headline, cards, snapshot, CSV) is derived from the audited records
+ * with the shared counting rules. The briefing PDF's own totals are
+ * deliberately not reproduced. Reads the file via a JSON import (no Node APIs).
  */
 import { describe, expect, it } from 'vitest';
 import registerJson from '../../data/register.json';
 import pendingJson from '../../data/pending-review.json';
+import { PDF_ROW_IDS } from '../../scripts/seed/projects.ts';
+import { parseCsv } from './parseCsv.ts';
 import {
   NON_FLOOR_BASES,
   RegisterFileSchema,
   WAREHOUSE_FLOOR_BASES,
+  CSV_COLUMNS,
+  computeBriefing,
   computeMetrics,
-  computePresentedTotals,
+  formatArea,
   normaliseUrl,
+  registerToCsv,
   umbrellaIdSet,
   validateRegister,
   type AreaBasis,
+  type BriefingSection,
   type Project,
 } from '../index.ts';
 
@@ -23,7 +30,8 @@ const register = RegisterFileSchema.parse(registerJson);
 const projects: Project[] = register.projects;
 const byId = new Map(projects.map((p) => [p.id, p]));
 const metrics = computeMetrics(projects, 2026);
-const presented = computePresentedTotals(projects, 2026);
+const TODAY = '2026-11-12';
+const briefing = computeBriefing(projects, 2026, TODAY);
 
 describe('seed register: integrity', () => {
   it('validates with zero errors (today = seed date)', () => {
@@ -35,22 +43,11 @@ describe('seed register: integrity', () => {
     expect(new Set(projects.map((p) => p.id)).size).toBe(projects.length);
   });
 
-  it('contains every PDF row 1–26 exactly once', () => {
-    const refs = projects.map((p) => p.presentation?.pdfRef).filter((r): r is number => r !== undefined);
-    expect([...refs].sort((a, b) => a - b)).toEqual(Array.from({ length: 26 }, (_, i) => i + 1));
-  });
-
-  it('puts PDF rows in the right sections', () => {
-    for (const p of projects) {
-      const ref = p.presentation?.pdfRef;
-      if (ref === undefined) continue;
-      const expected = ref <= 14 ? 'openings' : ref <= 20 ? 'being_built' : 'signed_or_announced';
-      expect(p.presentation!.section, p.id).toBe(expected);
-    }
-  });
-
-  it('never gives an umbrella a presentation', () => {
-    for (const id of umbrellaIdSet(projects)) expect(byId.get(id)?.presentation, id).toBeUndefined();
+  it('contains every project of the briefing PDF (26 rows), with evidence-based values and no PDF labels', () => {
+    expect(PDF_ROW_IDS).toHaveLength(26);
+    expect(new Set(PDF_ROW_IDS).size).toBe(26);
+    for (const id of PDF_ROW_IDS) expect(byId.get(id)?.provenance, id).toBe('seed_pdf');
+    for (const p of registerJson.projects) expect(Object.keys(p), p.id).not.toContain('presentation');
   });
 
   it('has no actualCompletion without a source listed in the project sources', () => {
@@ -71,49 +68,197 @@ describe('seed register: integrity', () => {
   });
 });
 
-describe('seed register: presented totals reproduce the PDF', () => {
-  it('openings: 261,600 m² across ten disclosed facilities', () => {
-    expect(presented.openings.floorAreaM2).toBe(261_600);
-    expect(presented.openings.disclosedFloorCount).toBe(10);
-    expect(presented.openings.rows.map((p) => p.presentation!.pdfRef)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1));
+const DELIVERED_2026 = {
+  constructionCompleted: [
+    'aldar-logistics-centres-nip-phase-1',
+    'dnata-logistics-dubai-south-warehouse',
+    'emirates-snack-foods-cold-store-dubai-south',
+  ],
+  otherInfrastructure: [
+    'dp-world-al-awir-inland-container-depot',
+    'lufthansa-technik-me-painting-grinding-centre-mbrah',
+    'mosolf-automotive-hub-jafza',
+    'petrochem-jebel-ali-terminal-and-hq',
+  ],
+};
+
+describe('seed register: the 2026 headline is derived and true', () => {
+  it('11 opened / operational and 3 construction completed, counted separately', () => {
+    expect(briefing.delivered.openedIds).toHaveLength(11);
+    expect([...briefing.delivered.constructionCompletedIds].sort()).toEqual(DELIVERED_2026.constructionCompleted);
+    expect(briefing.headline).toBe('In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction.');
+    expect(metrics.delivered.opened.count).toBe(11);
+    expect(metrics.delivered.constructionCompleted.count).toBe(3);
+    for (const id of briefing.delivered.openedIds) expect(byId.get(id)!.status).toBe('operational');
   });
 
-  it('openings: 13 opened and one completed only (Aldar NIP phase 1)', () => {
-    expect(presented.openings.openedCount).toBe(13);
-    expect(presented.openings.completedOnlyCount).toBe(1);
-    const completed = presented.openings.rows.filter((p) => p.presentation!.presentedMilestone === 'completed_only');
-    expect(completed.map((p) => p.presentation!.pdfRef)).toEqual([1]);
+  it('separates 10 warehouse facilities from 4 other logistics infrastructure', () => {
+    expect([...briefing.delivered.otherInfrastructureIds].sort()).toEqual(DELIVERED_2026.otherInfrastructure);
+    expect(briefing.delivered.warehouseIds).toHaveLength(10);
+    expect([...metrics.delivered.otherInfrastructure.projectIds].sort()).toEqual(DELIVERED_2026.otherInfrastructure);
+    const warehouseBuckets = [metrics.gradeADelivered, metrics.gradeAProbableDelivered, metrics.otherModernDelivered];
+    for (const id of DELIVERED_2026.otherInfrastructure) for (const b of warehouseBuckets) expect(b.projectIds).not.toContain(id);
   });
 
-  it('openings: rows the PDF calls opened but sources only call completed are flagged', () => {
-    // Strict status differs for dnata ("commissioning") and Emirates Snack Foods ("completion in Q2").
-    const strict = presented.openings.rows.filter((p) => p.status === 'construction_completed').map((p) => p.presentation!.pdfRef);
-    expect(strict).toEqual([1, 2, 7]);
-    expect(presented.openings.statusCompletedOnlyCount).toBe(3);
-    for (const ref of [2, 7]) {
-      const p = presented.openings.rows.find((r) => r.presentation!.pdfRef === ref)!;
-      expect(p.presentation!.differsFromSources, p.id).toMatch(/construction completed/);
+  it('never lets the Al Awir depot area count as warehouse floor space', () => {
+    const id = 'dp-world-al-awir-inland-container-depot';
+    for (const b of [metrics.gradeADelivered, metrics.gradeAProbableDelivered, metrics.otherModernDelivered, metrics.delivered.warehouse]) {
+      expect(b.primaryUnspecified.projectIds).not.toContain(id);
+      for (const t of Object.values(b.floorSpace)) expect(t.projectIds).not.toContain(id);
     }
-  });
-
-  it('being built: 215,260 m² from rows 15–19; Emirates (row 20) not counted', () => {
-    expect(presented.beingBuilt.floorAreaM2).toBe(215_260);
-    const counted = presented.beingBuilt.rows.filter((p) => p.presentation!.countedInPresentedTotal).map((p) => p.presentation!.pdfRef);
-    expect(counted).toEqual([15, 16, 17, 18, 19]);
-  });
-
-  it('lists the three not-counted items and nothing added after the PDF yet', () => {
-    expect(presented.notCounted.rows.map((p) => p.id)).toEqual([
-      'cwt-sml-toll-dc6-dubai-south',
-      'dhl-supply-chain-dubai-south-multi-user-warehouse',
-      'mbrah-sky-support-complex',
-    ]);
-    expect(presented.addedAfterPdf.rows).toEqual([]);
+    for (const s of briefing.delivered.floorSubtotals) expect(s.projectIds).not.toContain(id);
+    const row = briefing.delivered.rows.find((r) => r.id === id)!;
+    expect(row.floor?.bar).toBe(false);
   });
 });
 
-describe('seed register: dnata (PDF row 2)', () => {
-  const dnata = projects.find((p) => p.presentation?.pdfRef === 2)!;
+describe('seed register: per-basis subtotals, never a cross-basis total', () => {
+  const sub = (s: BriefingSection) => Object.fromEntries(s.floorSubtotals.map((t) => [t.basis, t.totalM2]));
+
+  it('delivered 2026: GFA, GLA, built-up and basis-not-stated, side by side', () => {
+    expect(sub(briefing.delivered)).toEqual({
+      warehouse_gfa: 26_012.85,
+      gla: 20_000,
+      mixed_building_area: 10_405.14,
+      unspecified: 204_174.15,
+    });
+    expect(briefing.delivered.floorSubtotals.map((s) => `${s.text} ${s.basisTag}`)).toEqual([
+      '26,013 m² GFA',
+      '20,000 m² GLA',
+      '10,405 m² Built-up (mixed use)',
+      '204,174 m² Basis not stated',
+    ]);
+    expect(briefing.delivered.floorDisclosedIds).toHaveLength(9);
+  });
+
+  it('being built: GLA, built-up and basis-not-stated, side by side', () => {
+    expect(sub(briefing.beingBuilt)).toEqual({ gla: 81_000, mixed_building_area: 48_136.06, unspecified: 101_230.91 });
+  });
+
+  it('subtotals reproduce from the eligible records with no umbrella double counting', () => {
+    const umbrellas = umbrellaIdSet(projects);
+    for (const [section, ids] of [
+      [briefing.delivered, briefing.delivered.warehouseIds],
+      [briefing.beingBuilt, briefing.beingBuilt.warehouseIds],
+    ] as const) {
+      for (const s of section.floorSubtotals) {
+        let total = 0;
+        for (const id of s.projectIds) {
+          expect(umbrellas.has(id), id).toBe(false);
+          expect(ids).toContain(id);
+          const p = byId.get(id)!;
+          const m = p.primaryAreaIndex !== undefined && p.areas[p.primaryAreaIndex]!.basis === s.basis
+            ? p.areas[p.primaryAreaIndex]!
+            : p.areas.find((a) => a.basis === s.basis)!;
+          total += m.valueM2;
+        }
+        expect(Math.round(total * 100) / 100).toBe(s.totalM2);
+        expect(new Set(s.projectIds).size).toBe(s.projectIds.length);
+      }
+      // Each project contributes to at most one basis.
+      const all = section.floorSubtotals.flatMap((s) => s.projectIds);
+      expect(new Set(all).size).toBe(all.length);
+    }
+    // The overview cards use the same figures.
+    for (const s of briefing.delivered.floorSubtotals) expect(metrics.delivered.warehouse.floorSpace[s.basis].totalM2).toBe(s.totalM2);
+  });
+
+  it('no figure in the briefing model is a sum across bases, and the old briefing totals are gone', () => {
+    const json = JSON.stringify(briefing);
+    for (const section of [briefing.delivered, briefing.beingBuilt]) {
+      const vals = section.floorSubtotals.map((s) => s.totalM2);
+      for (let mask = 1; mask < 1 << vals.length; mask++) {
+        const picked = vals.filter((_, i) => mask & (1 << i));
+        if (picked.length < 2) continue;
+        const sum = Math.round(picked.reduce((a, b) => a + b, 0) * 100) / 100;
+        expect(json).not.toContain(`:${sum},`);
+        expect(json).not.toContain(`:${sum}}`);
+      }
+    }
+    for (const old of ['261,600', '261600', '215,260', '215260', '262,000', '81,500', '81500', 'Multiuser']) expect(json).not.toContain(old);
+    expect(Object.keys(briefing.delivered)).not.toContain('floorAreaM2');
+  });
+});
+
+describe('seed register: the same record shows the same thing everywhere', () => {
+  it('DSV: build-to-suit warehouse for DSV, opened 20 May 2026', () => {
+    const row = briefing.delivered.rows.find((r) => r.id === 'dsv-lintara-jafza-build-to-suit-warehouse')!;
+    expect(row.descriptor).toBe('Build-to-suit warehouse for DSV');
+    expect(row.date.text).toBe('20 May 2026');
+    expect(row.date.mayBeEarlier).toBe(false);
+    expect(row.deliveryLabel).toBe('Opened / operational');
+    expect(row.partners).toContain('DSV');
+    expect(row.areaText).toBe('30,000 m² Basis not stated');
+    expect(row.floor?.basisStated).toBe(false);
+  });
+
+  it('NIP phase 2: 81,000 m² GLA in every view model', () => {
+    const id = 'aldar-logistics-centres-nip-phase-2';
+    const p = byId.get(id)!;
+    const row = briefing.beingBuilt.rows.find((r) => r.id === id)!;
+    expect(row.floor).toMatchObject({ valueM2: 81_000, basis: 'gla', figure: '81,000 m²', basisTag: 'GLA', bar: true, basisStated: true });
+    expect(row.areaText).toBe('81,000 m² GLA');
+    expect(metrics.underConstruction.gradeAConfirmed.floorSpace.gla).toMatchObject({ totalM2: 81_000, projectIds: [id] });
+    expect(formatArea(p.areas[p.primaryAreaIndex!]!)).toBe('81,000 m² GLA');
+    const csv = parseCsv(registerToCsv([p]))[1]!;
+    expect(csv[CSV_COLUMNS.indexOf('floor_figure_m2')]).toBe('81000');
+    expect(csv[CSV_COLUMNS.indexOf('floor_figure_basis')]).toBe('gla');
+    expect(row.date.text).toBe('Forecast Q1 2027');
+  });
+
+  it('lower-bound and approximate figures display as such', () => {
+    const p1 = briefing.delivered.rows.find((r) => r.id === 'aldar-logistics-centres-nip-phase-1')!;
+    expect(p1.areaText).toBe('over 67,000 m² Basis not stated');
+    expect(p1.date.text).toBe('Q3 2026');
+    expect(p1.deliveryLabel).toBe('Construction completed');
+    const esf = briefing.delivered.rows.find((r) => r.id === 'emirates-snack-foods-cold-store-dubai-south')!;
+    expect(esf.areaText).toBe('nearly 20,000 m² GLA');
+    expect(esf.category).toBe('grade_a');
+    const palmon = briefing.delivered.rows.find((r) => r.id === 'palmon-manrre-jafza-chemical-storage-hub')!;
+    expect(palmon.areaText).toBe('10,405 m² Built-up (mixed use)');
+    expect(palmon.gradeTag).toBe('Grade A (probable)');
+    expect(palmon.category).toBe('other_modern');
+  });
+
+  it('dates stored from a release say the event may be earlier', () => {
+    const sharqi = briefing.delivered.rows.find((r) => r.id === 'al-sharqi-shipping-dic-logistics-hub')!;
+    expect(sharqi.date).toMatchObject({ text: 'Oct 2026', kind: 'actual', mayBeEarlier: true });
+    const toll = briefing.beingBuilt.rows.find((r) => r.id === 'cwt-sml-toll-dc6-dubai-south')!;
+    expect(toll.date).toMatchObject({ kind: 'forecast', forecastPassed: true });
+    expect(toll.date.text).toMatch(/^Forecast Aug 2026/);
+  });
+});
+
+describe('seed register: investment aggregates use facility-scope amounts only', () => {
+  it('delivered 2026: AED 170 m facility scope; Petrochem and Palmon listed, not summed', () => {
+    const inv = briefing.delivered.investment;
+    expect(inv.facilityByCurrency).toEqual({
+      AED: { total: 170_000_000, projectIds: ['dnata-logistics-dubai-south-warehouse', 'al-sharqi-shipping-dic-logistics-hub'] },
+    });
+    expect(inv.notSummed.map((x) => [x.projectId, x.scope]).sort()).toEqual([
+      ['palmon-manrre-jafza-chemical-storage-hub', 'wider_than_facility'],
+      ['petrochem-jebel-ali-terminal-and-hq', 'wider_than_facility'],
+    ]);
+  });
+
+  it('being built: Emirates USD 5.1 bn and Talal AED 150 m are never summed', () => {
+    const inv = briefing.beingBuilt.investment;
+    expect(inv.facilityByCurrency).toEqual({});
+    expect(inv.notSummed.map((x) => x.projectId).sort()).toEqual([
+      'emirates-engineering-complex-dubai-south',
+      'talal-group-central-distribution-centre-dic',
+    ]);
+  });
+
+  it('every disclosed seed amount has a scope; currencies are never combined', () => {
+    for (const p of projects) if (p.investment?.disclosed) expect(p.investment.scope, p.id).toBeDefined();
+    const signed = briefing.signedOrAnnounced.investment;
+    expect(Object.keys(signed.facilityByCurrency)).toEqual(['EUR']);
+  });
+});
+
+describe('seed register: dnata', () => {
+  const dnata = byId.get('dnata-logistics-dubai-south-warehouse')!;
 
   it('is one project with the Dec 2024 announcement and the Nov 2026 commissioning confirmation', () => {
     expect(projects.filter((p) => p.name.toLowerCase().includes('dnata'))).toHaveLength(1);
@@ -124,9 +269,11 @@ describe('seed register: dnata (PDF row 2)', () => {
     expect(comm?.summary).toContain('commissioning its new AED 100 million');
   });
 
-  it('keeps the strict status at construction_completed and the PDF label "Apr to Sep"', () => {
+  it('is construction completed (not opened), dated 2026 at year precision', () => {
     expect(dnata.status).toBe('construction_completed');
-    expect(dnata.presentation!.dateLabel).toBe('Apr to Sep');
+    const row = briefing.delivered.rows.find((r) => r.id === dnata.id)!;
+    expect(row.date.text).toBe('2026');
+    expect(row.deliveryKind).toBe('construction_completed');
     expect(dnata.netNew).toBe('unknown');
   });
 });
@@ -167,15 +314,6 @@ describe('seed register: strict metrics follow source bases', () => {
     for (const b of buckets) {
       for (const total of Object.values(b.areas)) for (const id of umbrellas) expect(total.projectIds).not.toContain(id);
     }
-  });
-
-  it('strict 2026 delivered warehouse floor space is lower than the PDF\'s 261,600 m²', () => {
-    const delivered = [metrics.gradeADelivered, metrics.gradeAProbableDelivered, metrics.otherModernDelivered];
-    const gfa = delivered.reduce((s, b) => s + b.areas.warehouse_gfa.totalM2, 0);
-    const gla = delivered.reduce((s, b) => s + b.areas.gla.totalM2, 0);
-    expect(gfa).toBeLessThan(261_600);
-    expect(gla).toBeLessThan(261_600);
-    expect(gfa + gla).toBeLessThan(261_600);
   });
 
   it('keeps every project in Dubai (no regional items in the seed)', () => {

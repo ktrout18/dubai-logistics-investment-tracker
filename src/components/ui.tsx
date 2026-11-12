@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 import {
   GRADE_A_LABELS,
   PROJECT_STATUS_LABELS,
+  type BriefingCategory,
   type GradeAStatus,
-  type Presentation,
   type ProjectStatus,
   type VerificationLevel,
 } from '../../shared/index.ts';
-import { CATEGORY_COLORS } from '../lib/presentation.ts';
+import { CATEGORY_COLORS } from '../lib/briefingColors.ts';
 import { hostOf } from '../lib/format.ts';
 
 export function PageHeader({ kicker, title, children }: { kicker?: string; title: string; children?: ReactNode }) {
@@ -80,7 +80,7 @@ export function ExtLink({ href, children, className }: { href: string; children?
   );
 }
 
-export function CategorySwatch({ category, size = 10 }: { category: Presentation['category']; size?: number }) {
+export function CategorySwatch({ category, size = 10 }: { category: BriefingCategory; size?: number }) {
   return (
     <span
       aria-hidden="true"

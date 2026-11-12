@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import {
+  DELIVERY_LABELS,
   NON_BINDING_STATUSES,
   PROJECT_STATUSES,
   isDeliveredStatus,
@@ -39,8 +40,10 @@ export function Delivered() {
   const years = yearChoices(d);
   return (
     <div className="page">
-      <PageHeader kicker="Dubai" title="Delivered and opened">
-        Facilities whose completion or opening is evidenced by a source. Forecast dates never appear here. Area is shown on the basis the source gives.
+      <PageHeader kicker="Dubai" title="Delivered: opened or construction completed">
+        Facilities whose opening or completion is evidenced by a source. {DELIVERY_LABELS.opened} and {DELIVERY_LABELS.construction_completed.toLowerCase()} are
+        separate statuses and are never merged (<a href="#/method">definitions</a>). Forecast dates never appear here. Area is shown on the basis the source
+        gives.
       </PageHeader>
       <FilterBar pool={pool} fields={['q', 'year', 'zone', 'sector', 'grade', 'company', 'size']} years={years} defaultYear={d.defaultYear} />
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
@@ -49,9 +52,9 @@ export function Delivered() {
       </div>
       <ProjectTable
         projects={rows}
-        caption="Delivered and opened facilities in Dubai"
+        caption="Delivered facilities in Dubai: opened or construction completed"
         defaultSort={{ id: 'completed', dir: 'desc' }}
-        columns={[cols.facility, cols.companies, cols.sector, cols.location, { ...cols.area, align: 'right' }, cols.grade, cols.completed, cols.completionEvidence]}
+        columns={[cols.facility, cols.companies, cols.sector, cols.location, { ...cols.area, align: 'right' }, cols.grade, cols.delivery, cols.completed, cols.completionEvidence]}
         empty={
           <EmptyState title="No delivered facilities match">
             {pool.length ? 'Try another year or clear the filters.' : 'No delivered facilities are in the register yet.'}

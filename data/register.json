@@ -211,6 +211,7 @@
           "valueM2": 67000,
           "basis": "unspecified",
           "label": "First building (lower bound)",
+          "qualifier": "over",
           "originalValue": 67000,
           "originalUnit": "sqm",
           "sourceUrl": "https://www.tradingview.com/news/reuters.com,2025-11-24:newsml_Zaw5Xxgcf:0-pressr-aldar-advances-phased-delivery-of-grade-a-logistics-park-at-national-industries-park-in-dubai/",
@@ -312,25 +313,6 @@
       "parentId": "aldar-logistics-centres-nip",
       "phaseLabel": "Phase 1",
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 1,
-        "section": "openings",
-        "partners": [
-          "Aldar",
-          "DP World"
-        ],
-        "descriptor": "Grade A park, phase 1",
-        "locationLabel": "NIP",
-        "areaLabel": "67,000",
-        "presentedAreaM2": 67000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Q3, completed",
-        "category": "grade_a_developer",
-        "sortOrder": 1,
-        "presentedMilestone": "completed_only",
-        "differsFromSources": "The basis of the 67,000 m² figure (GLA or GFA) is not stated in any page read; it appears only in search snippets of Aldar's Nov 2025 release."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -373,6 +355,7 @@
         "amountAed": 100000000,
         "amountAedDerivation": "native_aed",
         "basis": "\"The facility, which represents an investment of AED 100 million (US$ 27 million)\" — the warehouse itself.",
+        "scope": "facility",
         "disclosed": true,
         "sourceUrl": "https://www.dnata.com/media-centre/dnata-logistics-to-expand-uae-footprint-with-new-57000-m-facility-in-dubai-south/"
       },
@@ -494,24 +477,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 2,
-        "section": "openings",
-        "partners": [
-          "dnata Logistics"
-        ],
-        "descriptor": "Automated warehouse, AED 100 m",
-        "locationLabel": "Dubai South",
-        "areaLabel": "57,000",
-        "presentedAreaM2": 57000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Apr to Sep",
-        "category": "other_modern",
-        "sortOrder": 2,
-        "presentedMilestone": "opened",
-        "differsFromSources": "The PDF counts this as opened. The source says dnata was \"commissioning\" the facility during April–September 2026 and does not say operations began, so the register status is construction completed. Basis of 57,000 m² not stated; may predate 2026."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -647,25 +612,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 3,
-        "section": "openings",
-        "partners": [
-          "DSV",
-          "Arcapita Lintara"
-        ],
-        "descriptor": "Multiuser warehouse",
-        "locationLabel": "Jafza",
-        "areaLabel": "30,000",
-        "presentedAreaM2": 30000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "20 May",
-        "category": "grade_a_developer",
-        "sortOrder": 3,
-        "presentedMilestone": "opened",
-        "differsFromSources": "Sources describe a build-to-suit warehouse for DSV on DSV's headquarters plot, not a multi-user warehouse. The completion announcement is dated 21 May 2026, not 20 May."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -699,6 +645,7 @@
         "amountAed": 70000000,
         "amountAedDerivation": "native_aed",
         "basis": "\"The newly launched facility represents an investment of AED 70 million\" — the whole hub (storage, yard, offices, basement).",
+        "scope": "facility",
         "disclosed": true,
         "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/al-sharqi-shipping-inaugurates-aed-70-million-multi-temperature-integrated-logistics-and-distribution-hub-at-dubai-industrial-city"
       },
@@ -763,24 +710,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 4,
-        "section": "openings",
-        "partners": [
-          "Al Sharqi Shipping"
-        ],
-        "descriptor": "Cold and dry hub, AED 70 m",
-        "locationLabel": "DIC",
-        "areaLabel": "26,000",
-        "presentedAreaM2": 26000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "15 Oct",
-        "category": "other_modern",
-        "sortOrder": 4,
-        "presentedMilestone": "opened",
-        "differsFromSources": "The PDF's 26,000 m² is the 280,000 sq ft (26,013 m²) of built-up storage only; the hub also has a 200,000 sq ft open yard, 30,000 sq ft of offices and a 40,000 sq ft basement."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -864,24 +793,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 5,
-        "section": "openings",
-        "partners": [
-          "CEVA Logistics"
-        ],
-        "descriptor": "eCommerce fulfilment warehouse",
-        "locationLabel": "Dubai South",
-        "areaLabel": "23,000",
-        "presentedAreaM2": 23000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "15 Jan",
-        "category": "other_modern",
-        "sortOrder": 5,
-        "presentedMilestone": "opened",
-        "differsFromSources": "Evidence is trade press seen only through search results. The building probably predates 2026 (fitted out in weeks)."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1001,24 +912,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 6,
-        "section": "openings",
-        "partners": [
-          "Gallega Global Logistics"
-        ],
-        "descriptor": "3PL hub with auto parts",
-        "locationLabel": "Jafza",
-        "areaLabel": "20,000",
-        "presentedAreaM2": 20000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "20 May",
-        "category": "other_modern",
-        "sortOrder": 6,
-        "presentedMilestone": "opened",
-        "differsFromSources": "20,000 m² is the 215,000 sq ft (19,974 m²) total; the source does not say it is all enclosed floor space."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1059,6 +952,7 @@
           "valueM2": 20000,
           "basis": "gla",
           "label": "Leasable area",
+          "qualifier": "nearly",
           "originalValue": 20000,
           "originalUnit": "sqm",
           "sourceUrl": "https://www.aldar.com/en/news-and-media/aldar-breaks-ground-on-a-custom-designed-cold-store-facility",
@@ -1138,25 +1032,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 7,
-        "section": "openings",
-        "partners": [
-          "Emirates Snack Foods",
-          "Aldar"
-        ],
-        "descriptor": "Cold store",
-        "locationLabel": "Dubai South",
-        "areaLabel": "20,000",
-        "presentedAreaM2": 20000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Q2",
-        "category": "other_modern",
-        "sortOrder": 7,
-        "presentedMilestone": "opened",
-        "differsFromSources": "Aldar gives ~20,000 m² as leasable area (GLA). Aldar reports completion in Q2 and rental income, but no source gives an opening date, so the register status is construction completed."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1194,6 +1069,7 @@
         "amountAed": 40397500,
         "amountAedDerivation": "usd_peg",
         "basis": "\"approximately $11 million, covering land, construction, compliance, and specialized fitouts\" — includes the land.",
+        "scope": "wider_than_facility",
         "disclosed": true,
         "sourceUrl": "https://www.khaleejtimes.com/business/specialised-chemical-hub-opens-at-jebel-ali-free-zone"
       },
@@ -1266,25 +1142,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 8,
-        "section": "openings",
-        "partners": [
-          "Palmon Group",
-          "GFH Partners"
-        ],
-        "descriptor": "Chemical store, USD 11 m",
-        "locationLabel": "Jafza",
-        "areaLabel": "10,400",
-        "presentedAreaM2": 10400,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "14 Jan",
-        "category": "specialised",
-        "sortOrder": 8,
-        "presentedMilestone": "opened",
-        "differsFromSources": "10,400 m² is the 112,000 sq ft built-up area (incl. offices) on an 180,000 sq ft plot. Owner is GFH Partners Manrre REIT; operator Safe Logistics."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1361,23 +1218,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 9,
-        "section": "openings",
-        "partners": [
-          "Dior"
-        ],
-        "descriptor": "Regional distribution hub",
-        "locationLabel": "Dubai South",
-        "areaLabel": "7,200",
-        "presentedAreaM2": 7200,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "21 Sep",
-        "category": "other_modern",
-        "sortOrder": 9,
-        "presentedMilestone": "opened"
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1418,6 +1258,7 @@
           "valueM2": 1021.93,
           "basis": "unspecified",
           "label": "PDI warehouse",
+          "qualifier": "nearly",
           "originalValue": 11000,
           "originalUnit": "sqft",
           "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/mosolf-launches-automotive-hub-in-jafza-to-expand-vehicle-processing-capacity/",
@@ -1474,24 +1315,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 10,
-        "section": "openings",
-        "partners": [
-          "MOSOLF"
-        ],
-        "descriptor": "Vehicle hub, 15,000 m² site",
-        "locationLabel": "Jafza",
-        "areaLabel": "1,000",
-        "presentedAreaM2": 1000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "March",
-        "category": "specialised",
-        "sortOrder": 10,
-        "presentedMilestone": "opened",
-        "differsFromSources": "1,000 m² is the ~11,000 sq ft PDI warehouse (1,022 m²); 15,000 m² is the 161,000 sq ft site including open vehicle storage."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1512,7 +1335,7 @@
       "sectors": [
         "chemicals_dangerous_goods"
       ],
-      "assetType": "dangerous_goods_store",
+      "assetType": "bulk_liquid_terminal",
       "status": "operational",
       "latestMilestone": {
         "date": "2026-01-01",
@@ -1526,6 +1349,7 @@
         "amountAed": 300000000,
         "amountAedDerivation": "native_aed",
         "basis": "NOT the terminal alone: \"its AED 300 million petrochemical terminal and corporate headquarters\"; \"The development comprises Petrochem's second terminal in the UAE alongside multiple standalone office buildings\". Exclude or qualify in logistics investment totals.",
+        "scope": "wider_than_facility",
         "disclosed": true,
         "sourceUrl": "https://www.dpworld.com/en/news/releases/uae/petrochem-and-dp-world-inaugurate-aed-300-million-terminal-at-jebel-ali-port"
       },
@@ -1571,23 +1395,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 11,
-        "section": "openings",
-        "partners": [
-          "Petrochem",
-          "DP World"
-        ],
-        "descriptor": "Chemical terminal",
-        "locationLabel": "Jebel Ali Port",
-        "areaLabel": "Not disclosed (AED 300 m)",
-        "countedInPresentedTotal": false,
-        "dateLabel": "14 Jan",
-        "category": "specialised",
-        "sortOrder": 11,
-        "presentedMilestone": "opened",
-        "differsFromSources": "AED 300 m covers the terminal plus corporate HQ and offices, not the terminal alone."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1656,23 +1463,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 12,
-        "section": "openings",
-        "partners": [
-          "Hellmann",
-          "Calipar"
-        ],
-        "descriptor": "Healthcare hub",
-        "locationLabel": "Dubai South",
-        "areaLabel": "Not disclosed",
-        "countedInPresentedTotal": false,
-        "dateLabel": "31 Mar",
-        "category": "specialised",
-        "sortOrder": 12,
-        "presentedMilestone": "opened",
-        "differsFromSources": "The PDF gives no colour category for this row; placed under specialised (healthcare distribution with a hazardous-goods chamber). 31 Mar is the release date; the opening date is not given."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1741,22 +1531,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 13,
-        "section": "openings",
-        "partners": [
-          "Lufthansa Technik"
-        ],
-        "descriptor": "Aircraft parts repairs",
-        "locationLabel": "Dubai South",
-        "areaLabel": "Not disclosed",
-        "countedInPresentedTotal": false,
-        "dateLabel": "24 Mar",
-        "category": "specialised",
-        "sortOrder": 13,
-        "presentedMilestone": "opened",
-        "differsFromSources": "The source is dated 25 Mar, not 24 Mar, and describes a painting and grinding centre added to an existing site, supporting structural and composite repairs."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1835,23 +1609,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 14,
-        "section": "openings",
-        "partners": [
-          "DP World"
-        ],
-        "descriptor": "Inland empty-container depot",
-        "locationLabel": "Al Awir",
-        "areaLabel": "Open depot, 100,000 m² site",
-        "presentedAreaM2": 100000,
-        "presentedAreaKind": "yard",
-        "countedInPresentedTotal": false,
-        "dateLabel": "August",
-        "category": "land_site_yard",
-        "sortOrder": 14,
-        "presentedMilestone": "opened"
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -1895,7 +1652,7 @@
           "originalValue": 81000,
           "originalUnit": "sqm",
           "sourceUrl": "https://cdn.aldar.com/-/media/project/aldar-tenant/aldar2/9m-2024-financial-results/aldar-properties-results-presentation-9m-2024_final.pdf?rev=59b0cc6159c84e76b44da261bc75ada9",
-          "note": "Aldar 9M 2024 results presentation, seen only as a search snippet: \"GLA 81k sqm across 2 additional modular buildings\" (a rounded figure; not found again when re-searched 12 Nov 2026). No other source gives a phase 2 figure. The PDF's 81,500 m² is a subtraction across different bases (148,500 total − 67,000 phase 1) and is not a measure."
+          "note": "Aldar 9M 2024 results presentation, seen only as a search snippet: \"GLA 81k sqm across 2 additional modular buildings\" (a rounded figure; not found again when re-searched 12 Nov 2026). No other source gives a phase 2 figure, and none can be derived by subtracting figures on different bases."
         }
       ],
       "primaryAreaIndex": 0,
@@ -1957,7 +1714,7 @@
       "confidence": "medium",
       "unresolvedQuestions": [
         "Phase 2 status in H2 2026: Aldar's Q3 2026 release (re-read 12 Nov 2026) does not mention phase 2 or the Q1 2027 date.",
-        "Area: the only phase-specific figure is \"GLA 81k sqm\" from a 2024 presentation seen as a search snippet; the PDF's 81,500 m² is derived and unsourced.",
+        "Area: the only phase-specific figure is \"GLA 81k sqm\" from a 2024 presentation seen as a search snippet (not found again on 12 Nov 2026).",
         "Exact groundbreaking date (Nov 2025, search results only)."
       ],
       "events": [
@@ -1987,24 +1744,6 @@
       "parentId": "aldar-logistics-centres-nip",
       "phaseLabel": "Phase 2",
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 15,
-        "section": "being_built",
-        "partners": [
-          "Aldar",
-          "DP World"
-        ],
-        "descriptor": "Grade A park, phase 2",
-        "locationLabel": "NIP",
-        "areaLabel": "81,500 m²",
-        "presentedAreaM2": 81500,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Ready Q1 2027",
-        "category": "grade_a_developer",
-        "sortOrder": 15,
-        "differsFromSources": "81,500 m² is derived by the PDF (148,500 total − 67,000 phase 1); no source states it. Aldar's 2024 presentation (search result only) gives ~81,000 m² GLA."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2042,6 +1781,7 @@
           "valueM2": 182000,
           "basis": "gla",
           "label": "Scheme leasable area",
+          "qualifier": "about",
           "originalValue": 182000,
           "originalUnit": "sqm",
           "sourceUrl": "https://terralogix.ae/",
@@ -2235,24 +1975,6 @@
       "parentId": "terralogix-logistics-park-warsan",
       "phaseLabel": "Phase 1",
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 16,
-        "section": "being_built",
-        "partners": [
-          "Sweid & Sweid",
-          "Dutco"
-        ],
-        "descriptor": "Grade A park, phase 1 of 3",
-        "locationLabel": "Warsan",
-        "areaLabel": "53,360 m²",
-        "presentedAreaM2": 53360,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Ready Q4 2026",
-        "category": "grade_a_developer",
-        "sortOrder": 16,
-        "differsFromSources": "Evidence is from search results only. The launch coverage (June 2025) said Q3 2026; the developer site says Q4 2026. The number of phases is not confirmed by sources seen."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2293,6 +2015,7 @@
         "amountAed": 150000000,
         "amountAedDerivation": "native_aed",
         "basis": "\"Representing an investment of AED 150 million\" — the whole campus, including corporate HQ, a cash-and-carry store and a customer service centre, not the logistics space alone.",
+        "scope": "wider_than_facility",
         "disclosed": true,
         "sourceUrl": "https://dubaiindustrialcity.ae/media/press-release/talal-group-breaks-ground-on-aed-150-million-central-distribution-centre-at-dubai-industrial-city"
       },
@@ -2347,23 +2070,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 17,
-        "section": "being_built",
-        "partners": [
-          "Talal Group"
-        ],
-        "descriptor": "AED 150 m distribution centre",
-        "locationLabel": "DIC",
-        "areaLabel": "32,500 m²",
-        "presentedAreaM2": 32500,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Started 21 Jul",
-        "category": "other_modern",
-        "sortOrder": 17,
-        "differsFromSources": "32,500 m² is 350,000 sq ft of built-up area that includes HQ offices, a cash-and-carry store and a customer service centre, not warehouse floor alone."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2402,6 +2108,7 @@
           "valueM2": 27870.91,
           "basis": "unspecified",
           "label": "Site / facility (approx.)",
+          "qualifier": "nearly",
           "originalValue": 300000,
           "originalUnit": "sqft",
           "sourceUrl": "https://www.jafza.ae/resource-centre/media/news/jafza-expands-automotive-ecosystem-with-new-hellmann-indu-logistics-hub/",
@@ -2444,24 +2151,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 18,
-        "section": "being_built",
-        "partners": [
-          "Hellmann",
-          "INDU Group"
-        ],
-        "descriptor": "Auto spare parts hub",
-        "locationLabel": "Jafza",
-        "areaLabel": "27,900 m²",
-        "presentedAreaM2": 27900,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Started 8 Jun",
-        "category": "other_modern",
-        "sortOrder": 18,
-        "differsFromSources": "The release gives \"a total area of nearly 300,000 sq. ft.\" for \"the site\"; this may be site area rather than floor space."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2549,23 +2238,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 19,
-        "section": "being_built",
-        "partners": [
-          "DP World",
-          "Arcapita Lintara"
-        ],
-        "descriptor": "Grade A, dangerous goods",
-        "locationLabel": "Jafza",
-        "areaLabel": "20,000 m²",
-        "presentedAreaM2": 20000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": true,
-        "dateLabel": "Ready Q1 2027",
-        "category": "grade_a_developer",
-        "sortOrder": 19
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2608,6 +2280,7 @@
         "amountAed": 18729750000,
         "amountAedDerivation": "usd_peg",
         "basis": "The whole aviation engineering (MRO) complex — hangars, workshops, paint hangars, administration and storage — not a logistics facility: \"its new US$ 5.1 billion engineering complex\". Supersedes the US$950 million announced in Nov 2023 for a smaller first scope. Exclude or qualify in logistics investment totals.",
+        "scope": "wider_than_facility",
         "disclosed": true,
         "sourceUrl": "https://www.emirates.com/media-centre/emirates-breaks-ground-on-us-51-billion-ultra-modern-engineering-facility-at-dubai-south/"
       },
@@ -2706,21 +2379,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 20,
-        "section": "being_built",
-        "partners": [
-          "Emirates"
-        ],
-        "descriptor": "MRO, 380,000 m² storage",
-        "locationLabel": "Dubai South",
-        "areaLabel": "USD 5.1 bn",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Started 18 May, due mid-2030",
-        "category": "specialised",
-        "sortOrder": 20,
-        "differsFromSources": "The Emirates Group H1 results (5 Nov 2026) say completion is expected in the \"mid-2030s\", not mid-2030. 380,000 m² is storage and logistics capacity in an MRO complex, not warehouse floor space."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2799,23 +2457,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 21,
-        "section": "signed_or_announced",
-        "partners": [
-          "DP World"
-        ],
-        "descriptor": "Food District, starts 2027",
-        "locationLabel": "Al Aweer",
-        "areaLabel": "2,690,000 m²",
-        "presentedAreaM2": 2690000,
-        "presentedAreaKind": "district",
-        "countedInPresentedTotal": false,
-        "dateLabel": "District, 22 Jan",
-        "category": "land_site_yard",
-        "sortOrder": 21,
-        "differsFromSources": "The 2.69 million m² is the whole district including the existing market, not new area."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -2894,24 +2535,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 22,
-        "section": "signed_or_announced",
-        "partners": [
-          "Gargash Prime",
-          "JINGDONG Property"
-        ],
-        "descriptor": "eCommerce and fulfilment hub",
-        "locationLabel": "Dubai",
-        "areaLabel": "232,000 m²",
-        "presentedAreaM2": 232000,
-        "presentedAreaKind": "land",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Land, MoU 15 Oct",
-        "category": "land_site_yard",
-        "sortOrder": 22,
-        "differsFromSources": "The MoU was signed on 13 Oct; 15 Oct is the announcement date. The source calls it a \"regional distribution and fulfilment hub\" and converts 2.5m sq ft as \"~250,000 sqm\"."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3006,23 +2629,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 23,
-        "section": "signed_or_announced",
-        "partners": [
-          "Gallega Global Logistics"
-        ],
-        "descriptor": "Vehicle yard, 6,500 cars",
-        "locationLabel": "Jafza",
-        "areaLabel": "92,900 m²",
-        "presentedAreaM2": 92900,
-        "presentedAreaKind": "yard",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Yard, 15 Apr",
-        "category": "land_site_yard",
-        "sortOrder": 23,
-        "differsFromSources": "Evidence from search results only. Operations were due to start in May 2026, so the hub may already be operating; the \"yard\" basis is not stated by the source."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3135,25 +2741,7 @@
         }
       ],
       "provenance": "seed_pdf",
-      "seedNote": "The PDF row has no separate location cell (\"Q1 2029\" sits where the location would be); the location label here comes from the partner name.",
-      "presentation": {
-        "pdfRef": 24,
-        "section": "signed_or_announced",
-        "partners": [
-          "Dubai South",
-          "Phoenix Aviation"
-        ],
-        "descriptor": "MRO, freighter conversion, Q1 2029",
-        "locationLabel": "Dubai South",
-        "areaLabel": "71,000 m²",
-        "presentedAreaM2": 71000,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Signed 30 Oct",
-        "category": "specialised",
-        "sortOrder": 24,
-        "differsFromSources": "71,000 m² is the sum of four building components (hangar, delivery centre, workshops and stores, offices); the source gives no total."
-      },
+      "seedNote": "Seeded from the owner's Nov 2026 briefing PDF; every field follows the sources.",
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3237,24 +2825,7 @@
         }
       ],
       "provenance": "seed_pdf",
-      "seedNote": "The PDF row has no separate location cell; the location label comes from the partner name.",
-      "presentation": {
-        "pdfRef": 25,
-        "section": "signed_or_announced",
-        "partners": [
-          "Dubai CommerCity"
-        ],
-        "descriptor": "The Hive, ready 2027 to 2028",
-        "locationLabel": "Dubai CommerCity",
-        "areaLabel": "5,600 m²",
-        "presentedAreaM2": 5600,
-        "presentedAreaKind": "floor",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Floor, 4 Oct",
-        "category": "other_modern",
-        "sortOrder": 25,
-        "differsFromSources": "\"Ready 2027 to 2028\" is the delivery window for all of phase two, not The Hive alone."
-      },
+      "seedNote": "Seeded from the owner's Nov 2026 briefing PDF; every field follows the sources.",
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3356,22 +2927,6 @@
         }
       ],
       "provenance": "seed_pdf",
-      "presentation": {
-        "pdfRef": 26,
-        "section": "signed_or_announced",
-        "partners": [
-          "DP World",
-          "Mitsui O.S.K. Lines"
-        ],
-        "descriptor": "Vehicle processing",
-        "locationLabel": "Jebel Ali",
-        "areaLabel": "Not disclosed",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Term sheet 6 Oct",
-        "category": "specialised",
-        "sortOrder": 26,
-        "differsFromSources": "No source found for 6 Oct; trade press (search results only) reports an October 2026 term sheet. No DP World or MOL release located."
-      },
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3485,21 +3040,7 @@
         }
       ],
       "provenance": "manual",
-      "seedNote": "Listed in the PDF as not counted (completion not confirmed). Labels come from the sources, not the PDF.",
-      "presentation": {
-        "section": "not_counted",
-        "partners": [
-          "Toll Group",
-          "CWT-SML"
-        ],
-        "descriptor": "Distribution centre DC6",
-        "locationLabel": "Dubai South",
-        "areaLabel": "15,620 m² building (25,000 m² facility/site)",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Due Aug 2026, not confirmed",
-        "category": "other_modern",
-        "sortOrder": 1
-      },
+      "seedNote": "Found while seeding from the owner's Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.",
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3538,6 +3079,7 @@
         "amount": 120000000,
         "currency": "EUR",
         "basis": "\"DHL Supply Chain is investing EUR 120 million in a 55,000-square-meter multi-user warehouse\" (DHL Group release, search results only). Secondary outlets give USD 120m, about USD 130m or US$140m; the EUR figure is DHL's own and is not converted.",
+        "scope": "facility",
         "disclosed": true,
         "sourceUrl": "https://group.dhl.com/en/media-relations/press-releases/2025/dhl-opens-next-gen-innovation-center-in-dubai.html"
       },
@@ -3611,20 +3153,7 @@
         }
       ],
       "provenance": "manual",
-      "seedNote": "Listed in the PDF as not counted. Labels come from the sources, not the PDF.",
-      "presentation": {
-        "section": "not_counted",
-        "partners": [
-          "DHL Supply Chain"
-        ],
-        "descriptor": "Multi-user warehouse, EUR 120 m",
-        "locationLabel": "Dubai South",
-        "areaLabel": "55,000 m² warehouse",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Groundbreaking planned Q1 2026, not confirmed",
-        "category": "other_modern",
-        "sortOrder": 2
-      },
+      "seedNote": "Found while seeding from the owner's Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.",
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     },
@@ -3728,21 +3257,7 @@
         }
       ],
       "provenance": "manual",
-      "seedNote": "Listed in the PDF as not counted (completion not confirmed). Labels come from the sources, not the PDF.",
-      "presentation": {
-        "section": "not_counted",
-        "partners": [
-          "MBRAH",
-          "Dubai South"
-        ],
-        "descriptor": "Sky Support Complex, 14 units",
-        "locationLabel": "MBRAH, Dubai South",
-        "areaLabel": "16,661 m² (basis not stated)",
-        "countedInPresentedTotal": false,
-        "dateLabel": "Due end Q3 2026, not confirmed",
-        "category": "specialised",
-        "sortOrder": 3
-      },
+      "seedNote": "Found while seeding from the owner's Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.",
       "createdAt": "2026-11-11T12:00:00Z",
       "updatedAt": "2026-11-11T12:00:00Z"
     }

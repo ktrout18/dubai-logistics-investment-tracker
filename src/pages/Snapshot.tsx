@@ -1,20 +1,25 @@
 /**
- * Briefing snapshot: two fixed 16:9 slides mirroring the owner's PDF, for
- * screen capture into PowerPoint or printing. No app chrome on the slides.
+ * Briefing snapshot: two fixed 16:9 slides for screen capture into PowerPoint
+ * or printing. Every sentence, row, chip, figure and subtotal comes from
+ * `computeBriefing` (shared/briefing.ts), i.e. from the audited records and
+ * the shared counting rules. No app chrome on the slides.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  PRESENTATION_CATEGORIES,
-  PRESENTATION_CATEGORY_LABELS,
-  computePresentedTotals,
-  isRegional,
-  sumPresentedArea,
-  type PresentedTotals,
+  BRIEFING_CATEGORIES,
+  BRIEFING_CATEGORY_LABELS,
+  DELIVERY_LABELS,
+  computeBriefing,
+  subtotalsText,
+  todayIso,
+  type BriefingRow,
+  type BriefingSection,
+  type FloorSubtotal,
   type Project,
 } from '../../shared/index.ts';
-import { CATEGORY_COLORS, briefingYearOf, derivePresentation } from '../lib/presentation.ts';
+import { CATEGORY_COLORS } from '../lib/briefingColors.ts';
 import { useData } from '../lib/data.tsx';
-import { formatDate, formatNumber, hostOf } from '../lib/format.ts';
+import { formatDate, hostOf, plural } from '../lib/format.ts';
 import { useHashLocation } from '../lib/router.ts';
 
 const W = 1600;
@@ -46,11 +51,15 @@ function SlideFrame({ children, label }: { children: ReactNode; label: string })
   );
 }
 
-function PartnerChips({ names }: { names: string[] }) {
+function PartnerChips({ names, size = 15 }: { names: string[]; size?: number }) {
   return (
-    <span className="flex flex-wrap gap-1.5">
+    <span className="flex min-w-0 flex-wrap gap-1.5 overflow-hidden" style={{ maxHeight: size * 1.7 }}>
       {names.map((n) => (
-        <span key={n} className="whitespace-nowrap rounded-full border border-[#C3CED1] bg-[#F2F5F6] px-2.5 py-[1px] text-[15px] font-medium leading-6">
+        <span
+          key={n}
+          className="max-w-full truncate whitespace-nowrap rounded-full border border-[#C3CED1] bg-[#F2F5F6] px-2.5 py-[1px] font-medium"
+          style={{ fontSize: size, lineHeight: `${Math.round(size * 1.6)}px` }}
+        >
           {n}
         </span>
       ))}
@@ -58,44 +67,67 @@ function PartnerChips({ names }: { names: string[] }) {
   );
 }
 
+function Swatch({ color, outlined }: { color: string; outlined?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-block h-3 w-3 rounded-sm"
+      style={outlined ? { border: `2px solid ${color}`, background: '#fff' } : { background: color }}
+    />
+  );
+}
+
 function Legend() {
   return (
-    <ul className="flex items-center gap-x-5 whitespace-nowrap text-[14px] text-ink-muted">
-      {PRESENTATION_CATEGORIES.map((c) => (
-        <li key={c} className="flex items-center gap-1.5">
-          <span aria-hidden="true" className="inline-block h-3 w-3 rounded-sm" style={{ background: CATEGORY_COLORS[c] }} />
-          {PRESENTATION_CATEGORY_LABELS[c]}
-        </li>
-      ))}
+    <ul className="flex flex-col items-end gap-y-1 whitespace-nowrap text-[14px] text-ink-muted">
+      <li className="flex items-center gap-x-5">
+        {BRIEFING_CATEGORIES.map((c) => (
+          <span key={c} className="flex items-center gap-1.5">
+            <Swatch color={CATEGORY_COLORS[c]} />
+            {BRIEFING_CATEGORY_LABELS[c]}
+          </span>
+        ))}
+      </li>
+      <li className="flex items-center gap-1.5">
+        <Swatch color={CATEGORY_COLORS.other_modern} outlined />
+        Outlined bar: area basis not stated by the source
+      </li>
     </ul>
   );
 }
 
-interface Row {
-  p: Project;
-  pres: NonNullable<Project['presentation']>;
-}
-
-function AreaBar({ row, max, width }: { row: Row; max: number; width: number }) {
-  const { pres } = row;
-  const isFloor = pres.presentedAreaKind === 'floor' && pres.presentedAreaM2 !== undefined;
-  if (!isFloor) return <span className="text-[15px] italic text-ink-muted">{pres.areaLabel}</span>;
-  const w = Math.max(3, (pres.presentedAreaM2! / max) * width);
+/** A warehouse row's floor figure as a bar (solid when the basis is stated, outlined when not), else text. */
+function AreaCell({ row, max, width }: { row: BriefingRow; max: number; width: number }) {
+  const a = row.floor ?? row.otherArea;
+  if (!a) return <span className="text-[15px] italic text-ink-soft">Not disclosed</span>;
+  const tag = (
+    <span className="ml-1.5 whitespace-nowrap rounded border border-[#CBD5D8] px-1 text-[12px] font-medium uppercase tracking-wide text-ink-muted">
+      {a.basisTag}
+    </span>
+  );
+  if (!a.bar) {
+    return (
+      <span className="flex items-center text-[15px] text-ink-muted" title="Not warehouse floor space: not drawn and not in the subtotals">
+        <span className="num whitespace-nowrap italic">{a.figure}</span>
+        {tag}
+      </span>
+    );
+  }
+  const color = CATEGORY_COLORS[row.category];
+  const w = Math.max(4, (a.valueM2 / max) * width);
   return (
-    <span className="flex items-center gap-2" title={`${pres.areaLabel} m²`}>
+    <span className="flex items-center gap-2" title={`${a.figure} ${a.basisTag}`}>
       <span
         aria-hidden="true"
-        className="block h-[18px] rounded-r-[4px]"
-        style={{
-          width: w,
-          background: CATEGORY_COLORS[pres.category],
-          opacity: pres.countedInPresentedTotal ? 1 : 0.45,
-        }}
+        className="block h-[18px] shrink-0 rounded-r-[4px]"
+        style={
+          a.basisStated
+            ? { width: w, background: color }
+            : { width: w, background: '#fff', border: `2px solid ${color}`, boxSizing: 'border-box' }
+        }
       />
-      <span className="num whitespace-nowrap text-[15px] font-medium">
-        {pres.areaLabel}
-        {!pres.countedInPresentedTotal && <sup className="ml-0.5 text-ink-soft">†</sup>}
-      </span>
+      <span className="num whitespace-nowrap text-[15px] font-medium">{a.figure}</span>
+      {tag}
     </span>
   );
 }
@@ -105,8 +137,8 @@ function SlideHeader({ kicker, title, sub }: { kicker: string; title: string; su
     <header className="flex items-start justify-between gap-8">
       <div className="min-w-0 flex-1">
         <p className="text-[15px] font-semibold uppercase tracking-[0.12em] text-[#00838F]">{kicker}</p>
-        <h2 className="mt-1 text-[38px] font-semibold leading-tight tracking-tight">{title}</h2>
-        {sub && <p className="mt-1 text-[19px] text-ink-muted">{sub}</p>}
+        <h2 className="mt-1 text-[36px] font-semibold leading-tight tracking-tight">{title}</h2>
+        {sub && <p className="mt-1 text-[20px] font-medium text-ink">{sub}</p>}
       </div>
       <div className="shrink-0 pt-2">
         <Legend />
@@ -133,55 +165,45 @@ function SlideFooter({ notes, sourceLine, asOf }: { notes: ReactNode[]; sourceLi
   );
 }
 
-function topHosts(rows: Row[], n = 5): string[] {
+function Subtotals({ subtotals, size = 18 }: { subtotals: readonly FloorSubtotal[]; size?: number }) {
+  if (!subtotals.length) return <span className="text-ink-muted">No warehouse floor area disclosed</span>;
+  return (
+    <span className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+      {subtotals.map((s) => (
+        <span key={s.basis} className="whitespace-nowrap" style={{ fontSize: size }}>
+          <span className="num font-semibold text-[#00838F]">{s.text}</span>{' '}
+          <span className="text-[0.8em] font-medium uppercase tracking-wide text-ink-muted">{s.basisTag}</span>
+          {s.qualifiedIds.length > 0 && <sup className="ml-0.5 text-ink-soft">§</sup>}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function topHosts(projects: readonly Project[], n = 5): string[] {
   const counts = new Map<string, number>();
-  for (const { p } of rows) for (const s of p.sources) counts.set(hostOf(s.url), (counts.get(hostOf(s.url)) ?? 0) + 1);
+  for (const p of projects) for (const s of p.sources) counts.set(hostOf(s.url), (counts.get(hostOf(s.url)) ?? 0) + 1);
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([h]) => h);
 }
 
-function toRows(ps: Project[]): Row[] {
-  return ps.filter((p) => p.presentation).map((p) => ({ p, pres: p.presentation! }));
+function DateText({ row }: { row: BriefingRow }) {
+  return (
+    <span className={row.date.forecastPassed ? 'text-amber-900' : undefined}>
+      {row.date.text}
+      {row.date.mayBeEarlier && <sup className="ml-0.5 text-ink-soft">*</sup>}
+    </span>
+  );
 }
 
-/** When the register carries no briefing labels at all, derive them so the snapshot still works. */
-function derivedTotals(projects: readonly Project[], year: number): PresentedTotals {
-  const umbrellas = new Set(projects.filter((p) => p.parentId).map((p) => p.parentId!));
-  const dubai = projects.filter((p) => !isRegional(p) && !umbrellas.has(p.id));
-  const withPres: Project[] = dubai.map((p) => ({ ...p, presentation: derivePresentation(p, { counted: true }) }));
-  const sec = (p: Project) => p.presentation?.section;
-  const pick = (f: (p: Project) => boolean) =>
-    withPres.filter(f).sort((a, b) => (b.presentation?.presentedAreaM2 ?? 0) - (a.presentation?.presentedAreaM2 ?? 0));
-  const openings = pick((p) => sec(p) === 'openings' && Number(p.actualCompletion?.date.slice(0, 4)) === year);
-  const completedOnlyCount = openings.filter((p) => p.status === 'construction_completed').length;
-  const beingBuilt = pick((p) => sec(p) === 'being_built');
-  return {
-    year,
-    openings: {
-      rows: openings,
-      openedCount: openings.length - completedOnlyCount,
-      completedOnlyCount,
-      statusCompletedOnlyCount: completedOnlyCount,
-      disclosedFloorCount: openings.filter((p) => p.presentation?.countedInPresentedTotal).length,
-      floorAreaM2: sumPresentedArea(openings),
-    },
-    beingBuilt: { rows: beingBuilt, floorAreaM2: sumPresentedArea(beingBuilt) },
-    signedOrAnnounced: { rows: pick((p) => sec(p) === 'signed_or_announced') },
-    notCounted: { rows: [] },
-    addedAfterPdf: { rows: [] },
-  };
-}
+const anyQualified = (s: BriefingSection) => s.floorSubtotals.some((t) => t.qualifiedIds.length > 0);
 
 export function Snapshot() {
-  const { projects, data, defaultYear, isFixtures, umbrellas } = useData();
+  const { projects, byId, data, defaultYear, isFixtures } = useData();
   const { params } = useHashLocation();
   const clean = params.get('clean') === '1';
-  const hasBriefing = projects.some((p) => p.presentation);
-  const presented = useMemo(() => computePresentedTotals(projects, defaultYear), [projects, defaultYear]);
-  const year = (hasBriefing ? briefingYearOf(presented.openings.rows) : undefined) ?? (Number(params.get('year')) || defaultYear);
-  const totals = useMemo(
-    () => (hasBriefing ? computePresentedTotals(projects, year) : derivedTotals(projects, year)),
-    [hasBriefing, projects, year],
-  );
+  const yParam = Number(params.get('year'));
+  const year = Number.isInteger(yParam) && yParam > 1900 ? yParam : defaultYear;
+  const b = useMemo(() => computeBriefing(projects, year, todayIso()), [projects, year]);
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     const t = document.title;
@@ -191,43 +213,42 @@ export function Snapshot() {
     };
   }, [year]);
 
-  const openings = toRows(totals.openings.rows);
-  const built = toRows(totals.beingBuilt.rows);
-  const signed = toRows(totals.signedOrAnnounced.rows);
-  const notCounted = toRows(totals.notCounted.rows);
-  const after = totals.addedAfterPdf.rows.length + (hasBriefing ? projects.filter((p) => !p.presentation && !isRegional(p) && !umbrellas.has(p.id)).length : 0);
-  const all = [...openings, ...built, ...signed];
+  const d = b.delivered;
+  const built = b.beingBuilt;
+  const signed = b.signedOrAnnounced;
+  const shownProjects = [...d.rows, ...built.rows, ...signed.rows].map((r) => byId.get(r.id)).filter((p): p is Project => Boolean(p));
 
-  const asOfIso = [data.meta.lastSuccessfulRun?.slice(0, 10), data.register.updatedAt?.slice(0, 10), ...all.map((r) => r.p.lastVerified)]
+  const asOfIso = [data.meta.lastSuccessfulRun?.slice(0, 10), data.register.updatedAt?.slice(0, 10), ...shownProjects.map((p) => p.lastVerified)]
     .filter((x): x is string => Boolean(x))
     .sort()
     .pop();
   const asOf = asOfIso ? formatDate(asOfIso) : undefined;
-  const hosts = topHosts(all);
+  const hosts = topHosts(shownProjects);
   const sourceLine = `Sources: ${hosts.length ? `${hosts.join(', ')} and others` : 'company and government releases'}. Every row links to its sources in the Dubai Logistics Investment Tracker.${isFixtures ? ' FICTIONAL TEST DATA.' : ''}`;
-  const o = totals.openings;
 
-  const floorMax1 = Math.max(1, ...openings.filter((r) => r.pres.presentedAreaKind === 'floor').map((r) => r.pres.presentedAreaM2 ?? 0));
-  const floorMax2 = Math.max(1, ...built.filter((r) => r.pres.presentedAreaKind === 'floor').map((r) => r.pres.presentedAreaM2 ?? 0));
-  const rowH = Math.max(24, Math.min(37, Math.floor(460 / Math.max(1, openings.length))));
-  const anyUncounted1 = openings.some((r) => r.pres.presentedAreaKind === 'floor' && !r.pres.countedInPresentedTotal);
-  const anyUncounted2 = built.some((r) => r.pres.presentedAreaKind === 'floor' && !r.pres.countedInPresentedTotal);
+  const barMax = (rows: BriefingRow[]) => Math.max(1, ...rows.filter((r) => r.floor?.bar).map((r) => r.floor!.valueM2));
+  const max1 = barMax(d.rows);
+  const max2 = barMax(built.rows);
+  const rowH = Math.max(26, Math.min(38, Math.floor(430 / Math.max(1, d.rows.length))));
 
-  const commonNotes: ReactNode[] = [
-    <>Floor space as reported: each figure is the area its source gives (gross, leasable or built-up), so bases differ and totals are indicative. Strict per-basis figures are on the tracker.</>,
+  const areaNote = (
+    <>
+      Bars: warehouse floor area on the basis each source states; outlined: basis not stated. Bases are subtotalled separately and never added
+      together. Areas of other logistics infrastructure are shown as text only.
+    </>
+  );
+  const notes1: ReactNode[] = [
+    <>
+      {DELIVERY_LABELS.opened}: a source reports the opening or start of operations. {DELIVERY_LABELS.construction_completed}: completion reported, no
+      opening reported. {areaNote}
+    </>,
   ];
-  const differNote = (rows: Row[]) => {
-    const n = rows.filter((r) => r.pres.differsFromSources).length;
-    return n ? [<>Sources word or date {n} of these rows differently; see each project page.</>] : [];
-  };
-
-  const notes1 = [...commonNotes, ...differNote(openings)];
-  if (anyUncounted1) notes1.push(<>† Shown for reference, not included in the total.</>);
-  if (notCounted.length)
-    notes1.push(<>Not counted (unconfirmed): {notCounted.map((r) => `${r.pres.partners[0] ?? r.p.name} ${r.pres.descriptor}`).join('; ')}.</>);
-  const notes2 = [...commonNotes, ...differNote([...built, ...signed.slice(0, 8)])];
-  if (anyUncounted2) notes2.push(<>† Shown for reference, not included in the total.</>);
-  if (after > 0) notes2.push(<>{after} further project{after === 1 ? ' has' : 's have'} been added to the register since this briefing; see the tracker.</>);
+  const marks1: ReactNode[] = [];
+  if (d.rows.some((r) => r.date.mayBeEarlier)) marks1.push(<>* Month or period in which the source reported the event; it may have happened earlier.</>);
+  if (anyQualified(d)) marks1.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
+  if (marks1.length) notes1.push(<>{marks1.map((m, i) => <span key={i}>{i > 0 && ' '}{m}</span>)}</>);
+  const notes2: ReactNode[] = [<>Completion dates of projects being built are forecasts. {areaNote}</>];
+  if (anyQualified(built)) notes2.push(<>§ Includes a figure the source gives as &ldquo;over&rdquo;, &ldquo;nearly&rdquo; or &ldquo;about&rdquo;.</>);
 
   const copy = async () => {
     try {
@@ -240,7 +261,7 @@ export function Snapshot() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E9EEEF] pb-10">
+    <div className="snapshot-page min-h-screen bg-[#E9EEEF] pb-10">
       {!clean && (
         <div className="no-print mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
           <a href="#/" className="font-medium">
@@ -260,72 +281,72 @@ export function Snapshot() {
       {isFixtures && !clean && (
         <p className="no-print mb-2 text-center text-sm font-medium text-amber-900">Fictional test data (development fixtures).</p>
       )}
+      <h1 className="sr-only">Briefing snapshot, {year}</h1>
       <main className="mx-auto max-w-[1600px] space-y-6 px-4">
-        <h1 className="sr-only">Briefing snapshot, {year}</h1>
-        {/* Slide 1: openings */}
+        {/* Slide 1: delivered in the year */}
         <SlideFrame label={`Slide 1: openings and completions ${year}`}>
-          <div className="relative h-full px-14 pt-11">
-            <SlideHeader
-              kicker={`Dubai logistics · ${year}`}
-              title={`Openings and completions in ${year}`}
-              sub={
-                o.rows.length ? (
-                  <>
-                    Dubai opened {o.openedCount} logistics {o.openedCount === 1 ? 'facility' : 'facilities'}
-                    {o.completedOnlyCount > 0 && <> and completed {o.completedOnlyCount === 1 ? 'one' : o.completedOnlyCount} more</>}, with about{' '}
-                    {formatNumber(Math.round(o.floorAreaM2 / 1000) * 1000)} m² of floor space as reported
-                  </>
-                ) : (
-                  'No openings recorded for this year yet'
-                )
-              }
-            />
-            {openings.length ? (
-              <table className="mt-6 w-full table-fixed border-collapse text-[16px]">
+          <div className="relative h-full px-14 pt-10">
+            <SlideHeader kicker={`Dubai logistics · ${year}`} title={`Openings and completions in ${year}`} sub={b.headline} />
+            {d.rows.length ? (
+              <table className="mt-5 w-full table-fixed border-collapse text-[16px]">
                 <caption className="sr-only">Openings and completions</caption>
                 <colgroup>
-                  <col style={{ width: 360 }} />
-                  <col style={{ width: 380 }} />
-                  <col style={{ width: 170 }} />
+                  <col style={{ width: 280 }} />
+                  <col style={{ width: 330 }} />
+                  <col style={{ width: 140 }} />
+                  <col style={{ width: 190 }} />
                   <col />
-                  <col style={{ width: 170 }} />
+                  <col style={{ width: 110 }} />
                 </colgroup>
                 <thead>
                   <tr className="border-b-2 border-[#00838F] text-left text-[13px] font-semibold uppercase tracking-wider text-ink-muted">
                     <th scope="col" className="pb-1.5">Companies</th>
                     <th scope="col" className="pb-1.5">Facility</th>
                     <th scope="col" className="pb-1.5">Location</th>
-                    <th scope="col" className="pb-1.5">Floor space, m²</th>
+                    <th scope="col" className="pb-1.5">Delivery</th>
+                    <th scope="col" className="pb-1.5">Floor area, m² (basis)</th>
                     <th scope="col" className="pb-1.5 text-right">Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {openings.map((r) => (
-                    <tr key={r.p.id} className="border-b border-[#E6EBEC]" style={{ height: rowH }}>
+                  {d.rows.map((r) => (
+                    <tr key={r.id} className="border-b border-[#E6EBEC]" style={{ height: rowH }}>
                       <td className="pr-3">
                         <span className="flex items-center gap-2">
-                          <span aria-hidden="true" className="h-[22px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.pres.category] }} />
-                          <PartnerChips names={r.pres.partners} />
+                          <span aria-hidden="true" className="h-[22px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.category] }} />
+                          <PartnerChips names={r.partners.slice(0, 2)} />
                         </span>
                       </td>
-                      <td className="truncate pr-3">
-                        {r.pres.descriptor}
+                      <td className="truncate pr-3" title={r.descriptor}>
+                        {r.descriptor}
+                        {r.gradeTag && <span className="ml-1.5 text-[13px] text-ink-muted">· {r.gradeTag}</span>}
                       </td>
-                      <td className="truncate pr-3 text-ink-muted">{r.pres.locationLabel}</td>
+                      <td className="truncate pr-3 text-ink-muted">{r.location}</td>
+                      <td className="truncate pr-3 text-[14px]">
+                        <span className={r.deliveryKind === 'construction_completed' ? 'font-medium text-amber-900' : 'text-ink-muted'}>
+                          {r.deliveryLabel}
+                        </span>
+                      </td>
                       <td className="pr-3">
-                        <AreaBar row={r} max={floorMax1} width={330} />
+                        <AreaCell row={r} max={max1} width={150} />
                       </td>
-                      <td className="whitespace-nowrap text-right text-ink-muted">{r.pres.dateLabel}</td>
+                      <td className="whitespace-nowrap text-right text-[15px] text-ink-muted">
+                        <DateText row={r} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr className="border-t-2 border-ink" style={{ height: 44 }}>
-                    <th scope="row" colSpan={3} className="text-left text-[17px] font-semibold">
-                      Total floor space, {o.disclosedFloorCount} {o.disclosedFloorCount === 1 ? 'facility' : 'facilities'} that disclosed it
+                  <tr className="border-t-2 border-ink" style={{ height: 48 }}>
+                    <th scope="row" colSpan={3} className="pr-3 text-left text-[15px] font-semibold leading-tight">
+                      Warehouse floor area by basis
+                      <span className="block text-[13px] font-normal text-ink-muted">
+                        {d.floorDisclosedIds.length} of {plural(d.warehouseIds.length, 'warehouse facility', 'warehouse facilities')} disclosed one;{' '}
+                        never added together
+                      </span>
                     </th>
-                    <td colSpan={2} className="num text-[20px] font-semibold text-[#00838F]">
-                      {formatNumber(o.floorAreaM2)} m²
+                    <td colSpan={3}>
+                      <Subtotals subtotals={d.floorSubtotals} size={17} />
                     </td>
                   </tr>
                 </tfoot>
@@ -339,32 +360,38 @@ export function Snapshot() {
 
         {/* Slide 2: pipeline */}
         <SlideFrame label="Slide 2: pipeline">
-          <div className="relative h-full px-14 pt-11">
-            <SlideHeader kicker={`Dubai logistics · pipeline`} title="Being built, signed and announced" />
-            <div className="mt-6 grid grid-cols-[1fr_1fr] gap-10">
+          <div className="relative h-full px-14 pt-10">
+            <SlideHeader kicker="Dubai logistics · pipeline" title="Being built, signed and announced" />
+            <div className="mt-5 grid grid-cols-[1fr_1fr] gap-10">
               <section aria-label="Being built">
-                <h3 className="border-b-2 border-[#00838F] pb-1.5 text-[20px] font-semibold">
+                <h3 className="border-b-2 border-[#00838F] pb-1 text-[20px] font-semibold">
                   Being built <span className="text-ink-soft">·</span>{' '}
-                  <span className="num text-[#00838F]">{formatNumber(totals.beingBuilt.floorAreaM2)} m²</span>{' '}
-                  <span className="font-normal text-ink-muted">floor space</span>
+                  <span className="font-normal text-ink-muted">{plural(built.rows.length, 'project')}</span>
                 </h3>
-                {built.length ? (
+                <div className="flex items-baseline justify-between gap-3 border-b border-[#E6EBEC] py-1.5 text-[14px] text-ink-muted">
+                  <span className="shrink-0">Warehouse floor area by basis:</span>
+                  <Subtotals subtotals={built.floorSubtotals} size={16} />
+                </div>
+                {built.rows.length ? (
                   <ul>
-                    {built.map((r) => (
-                      <li key={r.p.id} className="border-b border-[#E6EBEC] py-2.5">
+                    {built.rows.map((r) => (
+                      <li key={r.id} className="border-b border-[#E6EBEC] py-[7px]">
                         <div className="flex items-center justify-between gap-3">
-                          <span className="flex items-center gap-2">
-                            <span aria-hidden="true" className="h-[22px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.pres.category] }} />
-                            <PartnerChips names={r.pres.partners} />
+                          <span className="flex min-w-0 items-center gap-2">
+                            <span aria-hidden="true" className="h-[20px] w-1.5 shrink-0 rounded-sm" style={{ background: CATEGORY_COLORS[r.category] }} />
+                            <PartnerChips names={r.partners.slice(0, 2)} size={14} />
                           </span>
-                          <span className="whitespace-nowrap text-[15px] text-ink-muted">{r.pres.dateLabel}</span>
+                          <span className="whitespace-nowrap text-[14px] text-ink-muted">
+                            <DateText row={r} />
+                          </span>
                         </div>
-                        <div className="mt-1.5 grid grid-cols-[1fr_300px] items-center gap-3 pl-3.5">
-                          <span className="truncate text-[16px]">
-                            {r.pres.descriptor}
-                                <span className="text-ink-muted"> · {r.pres.locationLabel}</span>
+                        <div className="mt-1 grid grid-cols-[1fr_330px] items-center gap-3 pl-3.5">
+                          <span className="truncate text-[15px]" title={r.descriptor}>
+                            {r.descriptor}
+                            {r.gradeTag && <span className="text-ink-muted"> · {r.gradeTag}</span>}
+                            <span className="text-ink-muted"> · {r.location}</span>
                           </span>
-                          <AreaBar row={r} max={floorMax2} width={200} />
+                          <AreaCell row={r} max={max2} width={140} />
                         </div>
                       </li>
                     ))}
@@ -374,33 +401,48 @@ export function Snapshot() {
                 )}
               </section>
               <section aria-label="Signed or announced">
-                <h3 className="border-b-2 border-[#00838F] pb-1.5 text-[20px] font-semibold">
-                  Signed or announced <span className="text-ink-soft">·</span> <span className="font-normal text-ink-muted">Area type varies</span>
+                <h3 className="border-b-2 border-[#00838F] pb-1 text-[20px] font-semibold">
+                  Signed or announced <span className="text-ink-soft">·</span>{' '}
+                  <span className="font-normal text-ink-muted">{plural(signed.rows.length, 'project')}; area basis varies</span>
                 </h3>
-                {signed.length ? (
+                {signed.rows.length ? (
                   <ul className="mt-3 grid grid-cols-2 gap-3">
-                    {signed.slice(0, 8).map((r) => (
-                      <li key={r.p.id} className="rounded-md border border-[#DCE3E5] bg-[#FAFBFB] p-3" style={{ borderLeft: `5px solid ${CATEGORY_COLORS[r.pres.category]}` }}>
-                        <PartnerChips names={r.pres.partners.slice(0, 2)} />
-                        <p className="mt-1.5 truncate text-[16px] font-medium">
-                          {r.pres.descriptor}
-                          </p>
-                        <p className="mt-0.5 truncate text-[15px] text-ink-muted">{r.pres.locationLabel}</p>
-                        <p className="num mt-0.5 truncate text-[15px] font-semibold">{r.pres.areaLabel}</p>
-                        <p className="mt-0.5 truncate text-[14px] text-ink-muted">{r.pres.dateLabel}</p>
+                    {signed.rows.slice(0, 8).map((r) => (
+                      <li
+                        key={r.id}
+                        className="min-w-0 rounded-md border border-[#DCE3E5] bg-[#FAFBFB] p-2.5"
+                        style={{ borderLeft: `5px solid ${CATEGORY_COLORS[r.category]}` }}
+                      >
+                        <PartnerChips names={r.partners.slice(0, 2)} size={14} />
+                        <p className="mt-1 truncate text-[15px] font-medium" title={r.descriptor}>
+                          {r.descriptor}
+                        </p>
+                        <p className="truncate text-[14px] text-ink-muted">
+                          {r.location} · {r.statusLabel}
+                        </p>
+                        <p className="num truncate text-[14px] font-semibold">
+                          {r.areaText}
+                          {r.investment && <span className="font-normal text-ink-muted"> · {r.investment.text}</span>}
+                        </p>
+                        <p className="truncate text-[13px] text-ink-muted">
+                          <DateText row={r} />
+                        </p>
                       </li>
                     ))}
                   </ul>
                 ) : (
                   <p className="mt-4 text-[17px] text-ink-muted">No signed or announced projects are recorded.</p>
                 )}
-                {signed.length > 8 && <p className="mt-2 text-[14px] text-ink-muted">+ {signed.length - 8} more on the tracker</p>}
+                {signed.rows.length > 8 && <p className="mt-2 text-[14px] text-ink-muted">+ {signed.rows.length - 8} more on the tracker</p>}
               </section>
             </div>
             <SlideFooter notes={notes2} sourceLine={sourceLine} asOf={asOf} />
           </div>
         </SlideFrame>
       </main>
+      <p className="sr-only">
+        Delivered warehouse floor area by basis: {subtotalsText(d.floorSubtotals)}. Being built: {subtotalsText(built.floorSubtotals)}.
+      </p>
     </div>
   );
 }

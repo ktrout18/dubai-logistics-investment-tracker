@@ -89,8 +89,7 @@ vitest and tsx all resolve them.
 | `parentId?` | slug | This project is a phase of `parentId`. |
 | `phaseLabel?` | string | e.g. "Phase 1". Expected whenever `parentId` is set. |
 | `provenance` | `seed_pdf | manual | pipeline` | |
-| `seedNote?` | string | Original PDF wording / qualifications. |
-| `presentation?` | `Presentation` | Briefing-view labels reproducing the owner's Nov 2026 PDF ("as reported"). Never used by strict metrics. See §2a. |
+| `seedNote?` | string | Provenance note from seeding. Never shown as a figure or label. |
 | `createdAt`, `updatedAt` | timestamp | `updatedAt ≥ createdAt`. |
 
 ### Investment
@@ -102,6 +101,7 @@ vitest and tsx all resolve them.
 | `amountAed?` | Only when the source states it, the currency is AED, or USD via the 3.6725 peg (`AED_PER_USD`). Never invent other conversions. |
 | `amountAedDerivation?` | `stated_in_source | native_aed | usd_peg`. Required whenever `amountAed` is present. `usd_peg` requires `currency: 'USD'` and `amountAed = amount × 3.6725`; `native_aed` requires `currency: 'AED'` and `amountAed = amount`. |
 | `basis` | Free-text note on what the amount covers. |
+| `scope?` | `facility | wider_than_facility | unknown` (`INVESTMENT_SCOPES`). What the amount covers: the logistics facility itself (incl. its own yard, offices, fit-out) or more (land, a corporate HQ, retail, a whole complex). Absent = `unknown`. Aggregates sum `facility` amounts only; the rest are listed separately (`sumInvestments`). Every disclosed seed amount has a scope. |
 | `disclosed` | `false` = investment exists but no value published. |
 | `sourceUrl?` | Required when `disclosed` (`INVESTMENT_UNSOURCED`). |
 
@@ -112,6 +112,7 @@ vitest and tsx all resolve them.
 | `valueM2` | > 0. Exact conversion of `originalValue` when given (tolerance max(1 m², 0.1 %)). |
 | `basis` | `AreaBasis` — see table below. |
 | `label?`, `note?` | e.g. "Phase 1 GFA", "source says 'up to'". |
+| `qualifier?` | `over | nearly | about` (`AREA_QUALIFIERS`): the source's own qualifier. Shown with the figure everywhere ("over 67,000 m²"); subtotals that include one are flagged. |
 | `originalValue?`, `originalUnit?` | Given together. Units: `sqm | sqft | hectare | acre`. |
 | `sourceUrl?` | Required by the validator (`AREA_UNSOURCED` is an error). |
 
@@ -143,41 +144,14 @@ error (`ACTUAL_COMPLETION_SOURCE_PREDATES`): such a source can only be a forecas
 `id` is unique within the project (`makeEventId`). Events must be sorted by
 date and not in the future.
 
-### Presentation (briefing view, §2a)
+### Briefing (derived, no stored fields)
 
-`PresentationSchema` / `type Presentation`, optional on a project. It holds
-the owner's PDF wording and charted figures so the first public view matches
-the PDF while every row still links to its strict, sourced record. Umbrellas
-never carry one.
-
-| Field | Type | Notes |
-|---|---|---|
-| `pdfRef?` | int 1–26 | Row in the owner's Nov 2026 PDF. Absent for `not_counted` / `added_after_pdf` rows. |
-| `section` | `PresentationSection` | `openings`, `being_built`, `signed_or_announced`, `not_counted`, `added_after_pdf`. |
-| `partners` | string[] | Company chips as shown, lead first. Display only (filtering uses `companies`). |
-| `descriptor`, `locationLabel`, `areaLabel`, `dateLabel` | string | PDF text as shown (e.g. "Not disclosed (AED 300 m)", "Q3, completed"). |
-| `presentedAreaM2?` | number | The figure the PDF charts, if any. |
-| `presentedAreaKind?` | `floor | district | land | yard` | What the PDF says the figure is. |
-| `countedInPresentedTotal` | boolean | True only for rows inside the PDF subtotals. |
-| `category` | `grade_a_developer | other_modern | specialised | land_site_yard` | PDF colour category. |
-| `sortOrder` | number | Row order within the section. |
-| `presentedMilestone?` | `opened | completed_only` | Openings rows only: how the PDF counts the row ("opened 13 … and completed one more"). Default `opened`. |
-| `differsFromSources?` | string | Short plain note where sources disagree with the PDF wording or figure. |
-
-Enums: `PRESENTATION_SECTIONS`, `PRESENTED_AREA_KINDS`,
-`PRESENTATION_CATEGORIES`, `PRESENTED_MILESTONES`, each with a `*_LABELS` map
-(also in `ENUM_LABELS` as `presentationSection`, `presentedAreaKind`,
-`presentationCategory`, `presentedMilestone`).
-
-**"As reported" vs strict.** `computePresentedTotals` (below) adds up
-`presentedAreaM2` across rows regardless of the source's measurement basis,
-and splits opened / completed-only by `presentedMilestone`, not by `status`.
-That reproduces the PDF; it is explicitly **not** a like-for-like metric.
-Strict figures come only from `computeMetrics`. Where the strict status is
-only `construction_completed` for a row the PDF calls opened (e.g. a source
-says "commissioning"), `presentedMilestone` stays `opened`, the difference
-goes in `differsFromSources`, and `statusCompletedOnlyCount` exposes the
-strict count.
+There is no stored briefing or presentation data. The owner's PDF wording and
+totals were removed in the consistency repair (12 Nov 2026,
+`docs/CONSISTENCY_REPAIR.md`). The headline, the snapshot rows, partner chips,
+descriptors, date labels, colour categories and per-basis subtotals are all
+derived by `computeBriefing` (§8, `briefing.ts`) from the structured fields
+above.
 
 ### Phasing (umbrellas)
 
@@ -201,7 +175,7 @@ label maps are also in `ENUM_LABELS` (use `labelFor(kind, value)`).
 |---|---|---|---|
 | `EMIRATES` | `Emirate` | `EMIRATE_LABELS` | Dubai, Abu Dhabi, Sharjah, Fujairah, Ajman, Ras Al Khaimah, Umm Al Quwain, Other |
 | `SECTORS` | `Sector` | `SECTOR_LABELS` | grade_a_warehousing, modern_warehousing, automotive_spare_parts, finished_vehicles, industrial_machinery, chemicals_dangerous_goods, fashion_luxury_ecommerce, food_fmcg_cold_chain, aerospace_air_cargo, multimodal_container_inland, other |
-| `ASSET_TYPES` | `AssetType` | `ASSET_TYPE_LABELS` | warehouse, distribution_centre, fulfilment_centre, cold_store, logistics_park, vehicle_processing_centre, dangerous_goods_store, air_cargo_terminal, mro_aerospace_facility, container_terminal_or_depot, inland_port_or_rail, open_yard, mixed_industrial, other |
+| `ASSET_TYPES` | `AssetType` | `ASSET_TYPE_LABELS` | warehouse, distribution_centre, fulfilment_centre, cold_store, logistics_park, vehicle_processing_centre, dangerous_goods_store, air_cargo_terminal, mro_aerospace_facility, container_terminal_or_depot, bulk_liquid_terminal, inland_port_or_rail, open_yard, mixed_industrial, other |
 | `PROJECT_STATUSES` | `ProjectStatus` | `PROJECT_STATUS_LABELS` | proposed, mou, term_sheet, signed_agreement, investment_committed, under_construction, construction_completed, operational, cancelled |
 | `DATE_PRECISIONS` | `DatePrecision` | `DATE_PRECISION_LABELS` | day, month, quarter, year |
 | `AREA_BASES` | `AreaBasis` | `AREA_BASIS_LABELS` | see table above |
@@ -220,10 +194,8 @@ label maps are also in `ENUM_LABELS` (use `labelFor(kind, value)`).
 | `REVIEW_STATES` | `ReviewState` | `REVIEW_STATE_LABELS` | open, accepted, rejected |
 | `RUN_STATUSES` | `RunStatus` | `RUN_STATUS_LABELS` | never_run, success, partial, failed |
 | `SCAN_STATUSES` | `ScanStatus` | `SCAN_STATUS_LABELS` | ok, fallback_used, failed, skipped |
-| `PRESENTATION_SECTIONS` | `PresentationSection` | `PRESENTATION_SECTION_LABELS` | openings, being_built, signed_or_announced, not_counted, added_after_pdf |
-| `PRESENTED_AREA_KINDS` | `PresentedAreaKind` | `PRESENTED_AREA_KIND_LABELS` | floor, district, land, yard |
-| `PRESENTATION_CATEGORIES` | `PresentationCategory` | `PRESENTATION_CATEGORY_LABELS` | grade_a_developer, other_modern, specialised, land_site_yard |
-| `PRESENTED_MILESTONES` | `PresentedMilestone` | `PRESENTED_MILESTONE_LABELS` | opened, completed_only |
+| `AREA_QUALIFIERS` | `AreaQualifier` | `AREA_QUALIFIER_LABELS` | over, nearly, about |
+| `INVESTMENT_SCOPES` | `InvestmentScope` | `INVESTMENT_SCOPE_LABELS` | facility, wider_than_facility, unknown |
 
 Status groupings: `DELIVERED_STATUSES` (construction_completed, operational),
 `COMMITTED_NOT_STARTED_STATUSES` (signed_agreement, investment_committed),
@@ -264,29 +236,59 @@ agreement_signed, investment_committed).
 
 ---
 
-## 5. Counting rules (`computeMetrics`)
+## 5. Counting rules (`computeMetrics`, `computeBriefing`)
 
-1. **Bases are never summed together.** Every area figure is an
-   `AreaBreakdown` (one `{ totalM2, projectIds }` per basis). Warehouse floor
-   space = `warehouse_gfa` and `gla`, shown as two numbers; `mixed_building_area`
-   is a third, labelled number; land, yard, district and unspecified areas stay
-   in their own buckets.
-2. **Population:** only Dubai, countable (non-umbrella), non-cancelled projects
-   enter totals. Non-Dubai projects appear only in `regionalContext` (same
-   umbrella/cancelled exclusions).
+Definitions and eligibility live in ONE place, `shared/definitions.ts`, and
+every view uses them (headline, cards, tables, project pages, snapshot and its
+print output, method page, CSV).
+
+**Delivery status** (`DELIVERY_LABELS`, `DELIVERY_DEFINITIONS`, `deliveryKindOf`):
+* **Opened / operational** = status `operational`: a source explicitly reports
+  the opening, inauguration or start of operations.
+* **Construction completed** = status `construction_completed`: completion (or
+  commissioning) reported, no opening reported. Always shown and counted
+  separately from opened.
+* Where the evidence establishes neither, the record keeps its lower status
+  and is not counted as delivered; doubts stay visible as unresolved
+  questions, confidence and review items.
+
+**Eligibility** (`ELIGIBILITY_RULES`, `eligibleProjects`, `isWarehouseAsset`):
+
+1. **Population:** Dubai only, no umbrellas (their phases count), no cancelled
+   projects. Non-Dubai projects appear only in `regionalContext`.
+2. **Warehouse space** figures (Grade-A confirmed / probable / other modern)
+   include only `WAREHOUSE_ASSET_TYPES` = warehouse, distribution_centre,
+   fulfilment_centre, cold_store, dangerous_goods_store, logistics_park.
+   Every other asset type (container terminal or depot, bulk liquid terminal,
+   air cargo terminal, MRO / aerospace, vehicle processing, inland port, open
+   yard, mixed industrial, other) is **other logistics infrastructure**,
+   counted in its own bucket and never added to warehouse floor space.
 3. **Delivered in year Y** = status `construction_completed` or `operational`
    **and** `actualCompletion.date` in Y. A forecast never counts.
-4. **One measure per project per basis:** the `primaryAreaIndex` measure for
-   its own basis, otherwise the largest measure of that basis
-   (`selectAreasByBasis`). Overlapping same-basis figures are never added.
+4. **Areas: one floor figure per facility** (`floorFigure`): the primary
+   measure if it is GFA, GLA or built-up (`mixed_building_area`); else the
+   selected GFA, then GLA, then built-up measure; else the primary measure
+   (`primaryAreaIndex`, else the first) when its basis is `unspecified`. Land,
+   yard and district are never a floor figure; nor is a secondary unspecified
+   measure. Floor figures are subtotalled **per basis** (`sumFloorSpace`:
+   GFA, GLA, built-up, basis not stated) and never added together. The
+   per-basis `AreaBreakdown` (one measure per project per basis,
+   `selectAreasByBasis`) is kept for land / yard / district tables and CSV.
 5. **Grade-A confirmed and probable are separate** figures and never merged.
-6. **Investment announcements in Y:** included (rule 2) projects with at least
-   one event of an `INVESTMENT_ANNOUNCEMENT_EVENT_TYPES` type dated in Y.
-   Disclosed values are summed **per currency** (never converted); an
-   `aedWhereAvailable` sum uses `amountAed` only where present and lists which
-   were peg-derived. Umbrellas are listed in `umbrellaProjectIds` for context
-   but never counted or summed (their phases carry the money).
-7. Every figure carries the `projectIds` behind it so the UI can link each
+   In the snapshot colour rule (`briefingCategoryOf`), confirmed warehouse →
+   Grade A colour; probable keeps the other-modern colour and carries the tag
+   "Grade A (probable)"; non-warehouse → other-infrastructure colour.
+6. **Investment:** summed **per currency** (never converted), **facility-scope
+   amounts only** (`sumInvestments`); `wider_than_facility` and `unknown`
+   scope amounts are listed in `notSummed` with their scope. Announcements in
+   Y: projects with an `INVESTMENT_ANNOUNCEMENT_EVENT_TYPES` event dated in Y;
+   `aedWhereAvailable` sums facility-scope `amountAed` only. Umbrellas are
+   listed in `umbrellaProjectIds` for context, never summed.
+7. **One formatter, one rounding rule** (`shared/format.ts`): whole m² with
+   thousands separators, the source's qualifier kept ("over 67,000 m²"), dates
+   at their stored precision ("20 May 2026", "Oct 2026", "Q3 2026"); forecasts
+   always labelled; totals summed from stored values and rounded once.
+8. Every figure carries the `projectIds` behind it so the UI can link each
    number to its evidence.
 
 ### `Metrics` shape
@@ -294,23 +296,30 @@ agreement_signed, investment_committed).
 ```ts
 interface BasisTotal { totalM2: number; projectIds: string[] }          // totalM2 rounded to 2 dp
 type AreaBreakdown = Record<AreaBasis, BasisTotal>;
-interface ProjectBucket { projectCount: number; projectIds: string[]; areas: AreaBreakdown; withoutBuildingAreaIds: string[];
-                         primaryUnspecified: BasisTotal; withoutAnyAreaIds: string[] }
+type FloorSpace = Record<'warehouse_gfa' | 'gla' | 'mixed_building_area' | 'unspecified', BasisTotal & { qualifiedIds: string[] }>;
+interface ProjectBucket { projectCount: number; projectIds: string[]; areas: AreaBreakdown; floorSpace: FloorSpace;
+                         withoutFloorFigureIds: string[]; withoutBuildingAreaIds: string[];
+                         primaryUnspecified: BasisTotal /* = floorSpace.unspecified */; withoutAnyAreaIds: string[] }
 interface StatusCount { count: number; projectIds: string[] }
 
 interface Metrics {
   year: number;
   scope: { includedProjectIds; excludedUmbrellaIds; excludedCancelledIds; regionalProjectIds: string[] };
-  gradeADelivered: ProjectBucket;          // delivered in year, gradeA confirmed
-  gradeAProbableDelivered: ProjectBucket;  // delivered in year, gradeA probable
-  otherModernDelivered: ProjectBucket;     // delivered in year, unverified / not_applicable
-  underConstruction: { gradeA; gradeAConfirmed; gradeAProbable; other; all: ProjectBucket };   // current status
-  committedNotStarted: ProjectBucket & { byStatus: { signed_agreement: StatusCount; investment_committed: StatusCount } };
+  delivered: { all: ProjectBucket; opened: StatusCount; constructionCompleted: StatusCount;
+               warehouse: ProjectBucket; otherInfrastructure: ProjectBucket };
+  gradeADelivered: ProjectBucket;          // warehouse assets delivered in year, gradeA confirmed
+  gradeAProbableDelivered: ProjectBucket;  // warehouse assets delivered in year, gradeA probable
+  otherModernDelivered: ProjectBucket;     // warehouse assets delivered in year, unverified / not_applicable
+  otherInfrastructureDelivered: ProjectBucket;  // non-warehouse assets delivered in year
+  underConstruction: { gradeA; gradeAConfirmed; gradeAProbable; other; otherInfrastructure; all: ProjectBucket };   // current status
+  committedNotStarted: ProjectBucket & { byStatus: { signed_agreement: StatusCount; investment_committed: StatusCount };
+                                         warehouse: ProjectBucket; otherInfrastructure: ProjectBucket };
   nonBinding: StatusCount & { byStatus: { proposed; mou; term_sheet: StatusCount } };
   investmentAnnouncements: {
     year; eventTypes; projectCount; projectIds; eventCount;
     events: { projectId; eventId; type; date }[];
-    disclosed: { projectCount; projectIds; byCurrency: Record<string, { total: number; projectIds: string[] }>;
+    disclosed: { projectCount; projectIds; byCurrency: Record<string, CurrencyTotal>;   // facility scope only
+                 notSummed: ScopedAmount[];                                              // wider / unknown scope, listed
                  aedWhereAvailable: { total; projectIds; derivedProjectIds } };
     undisclosed: StatusCount;
     umbrellaProjectIds: string[];          // context only, never summed
@@ -324,15 +333,11 @@ interface Metrics {
 `withoutBuildingAreaIds` lists bucket members with no GFA/GLA/mixed figure,
 so the UI can say "N further projects with floor area not disclosed".
 
-`primaryUnspecified` is the "reported area, basis not stated" figure: the sum
-over bucket members whose **primary** measure (`primaryAreaIndex`, else the
-first measure; `primaryAreaMeasure(p)`) has basis `unspecified`, counting that
-primary measure only. Secondary `unspecified` measures (e.g. a whole-campus
-figure next to a storage figure) are excluded. It is shown as its own figure
-and never added to GFA, GLA or mixed building area; `areas.unspecified`
-(largest unspecified measure per project) is unchanged. `withoutAnyAreaIds`
-lists members with no area measure at all ("area not disclosed").
-Helpers: `primaryAreaMeasure(p)`, `sumPrimaryUnspecified(projects)`.
+`floorSpace` holds the per-basis subtotals of the bucket's floor figures
+(rule 4); it is what every card and the snapshot show. `primaryUnspecified`
+equals `floorSpace.unspecified` (floor figures whose basis the source does not
+state). `withoutFloorFigureIds` lists members with no floor figure;
+`withoutAnyAreaIds` lists members with no area measure at all.
 
 ---
 
@@ -498,30 +503,57 @@ function selectAreasByBasis(p): Partial<Record<AreaBasis, { valueM2: number; ind
 function sumAreasByBasis(projects): AreaBreakdown;
 function emptyAreaBreakdown(): AreaBreakdown;
 function hasBuildingArea(p: Pick<Project,'areas'>): boolean;
+function floorFigure(p): { measure: AreaMeasure; index: number; basis: FloorFigureBasis } | undefined;
+function sumFloorSpace(projects): FloorSpace;
 ```
 
-### `presentation.ts`
+### `definitions.ts`
 ```ts
-interface PresentedTotals {
-  year: number;
-  openings: { rows: Project[]; openedCount: number; completedOnlyCount: number; statusCompletedOnlyCount: number;
-              disclosedFloorCount: number; floorAreaM2: number };
-  beingBuilt: { rows: Project[]; floorAreaM2: number };
-  signedOrAnnounced: { rows: Project[] };
-  notCounted: { rows: Project[] };
-  addedAfterPdf: { rows: Project[] };
-}
-function computePresentedTotals(projects: readonly Project[], year: number): PresentedTotals;
-function presentedRows(projects: readonly Project[], section: PresentationSection): Project[];  // sorted by sortOrder, then id
-function isCountedPresentedArea(p: Project): boolean;   // countedInPresentedTotal && presentedAreaM2 present
-function sumPresentedArea(rows: readonly Project[]): number;
+const DELIVERY_KINDS, DELIVERY_LABELS, DELIVERY_DEFINITIONS, NOT_DELIVERED_DEFINITION;
+function deliveryKindOf(p): 'opened' | 'construction_completed' | undefined;
+const WAREHOUSE_ASSET_TYPES, OTHER_INFRASTRUCTURE_ASSET_TYPES, ASSET_GROUP_LABELS, ELIGIBILITY_RULES;
+function isWarehouseAsset(p): boolean;  function assetGroupOf(p): 'warehouse' | 'other_infrastructure';
+function eligibleProjects<T>(all: readonly T[]): T[];   // Dubai, not umbrella, not cancelled
+function investmentScopeOf(inv): InvestmentScope;       // absent → 'unknown'
+function sumInvestments(projects): { facilityByCurrency; notSummed: ScopedAmount[]; undisclosedIds };
 ```
-Rows are sorted by `sortOrder`. `floorAreaM2` = Σ `presentedAreaM2` where
-`countedInPresentedTotal` ("as reported", mixed bases). `openedCount` =
-openings rows minus `completedOnlyCount` (rows with `presentedMilestone:
-'completed_only'`); `statusCompletedOnlyCount` = openings rows whose `status`
-is `construction_completed`. `disclosedFloorCount` = openings rows with a
-counted figure.
+
+### `format.ts`
+`formatNumber`, `formatM2`, `formatMeasureM2`, `formatArea`, `AREA_BASIS_SHORT`,
+`formatOriginal`, `formatMoney`, `formatDate`, `plural` — the only formatters
+(re-exported by `src/lib/format.ts`).
+
+### `briefing.ts`
+```ts
+function computeBriefing(projects: readonly Project[], year: number, today: string): Briefing;
+interface Briefing {
+  year: number;
+  headline: string;                 // "In 2026, 11 logistics facilities opened in Dubai and 3 more completed construction."
+  deliveredFloorSentence: string;   // "9 of the 10 warehouse facilities disclosed a floor area: 26,013 m² GFA · …"
+  delivered: BriefingSection & { openedIds: string[]; constructionCompletedIds: string[] };
+  beingBuilt: BriefingSection;      // status under_construction
+  signedOrAnnounced: BriefingSection;   // committed-not-started + non-binding statuses
+}
+interface BriefingSection { rows: BriefingRow[]; warehouseIds; otherInfrastructureIds; floorDisclosedIds: string[];
+                            floorSubtotals: FloorSubtotal[];   // one per basis, never a cross-basis total
+                            investment: InvestmentSums }
+interface BriefingRow { id; name; partners: string[]; descriptor; location; assetTypeLabel; assetGroup; status; statusLabel;
+                        deliveryKind?; deliveryLabel?; category: BriefingCategory; gradeA; gradeTag?;
+                        date: { text; kind: 'actual'|'forecast'|'milestone'; mayBeEarlier; forecastPassed };
+                        floor?: BriefingArea; otherArea?: BriefingArea; areaText; investment? }
+function deliveryHeadline(year, opened, completed): string;
+function partnersOf(p): string[];  function describeFacility(p): string;  function locationLabelOf(p): string;
+function briefingCategoryOf(p): 'grade_a' | 'other_modern' | 'other_infrastructure';
+function dateLabelOf(p, today): DateLabel;
+function completionMayBeEarlier(p): boolean;  function eventMayBeEarlier(e): boolean;  const MAY_BE_EARLIER_NOTE;
+function subtotalsText(subtotals): string;
+```
+All inputs are structured fields: chips from the parties fields, the
+descriptor from `name` (minus trailing location, bracketed notes and leading
+company names) + `phaseLabel` + "for {operator}" where a developer/owner is a
+different company, dates at stored precision with forecasts labelled, and
+"may be earlier" where a month/quarter/year date's source was published in
+that same period.
 
 ### `validate.ts`
 ```ts
@@ -543,7 +575,9 @@ function csvCell(v: string | number | boolean | null | undefined): string;   // 
 const CSV_COLUMNS: readonly string[];
 ```
 CSV: one row per project, CRLF, one column per area basis (never summed),
-lists joined with `; `, `is_umbrella` and `regional_context` flags.
+lists joined with `; `, `is_umbrella` and `regional_context` flags, and the
+shared definitions: `delivery`, `asset_group`, `floor_figure_m2` /
+`_basis` / `_qualifier`, `investment_scope`.
 
 ### Site helpers (`src/lib/loadData.ts`, browser only)
 ```ts

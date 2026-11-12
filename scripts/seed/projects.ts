@@ -1,12 +1,12 @@
 /**
- * The 2026 seed register: all 26 rows of the owner's Nov 2026 PDF (pdfRef
- * 1–26), the two umbrella schemes they belong to, and the PDF's three
- * "not counted" items.
+ * The 2026 seed register: the 26 projects of the owner's Nov 2026 briefing
+ * PDF (`provenance: 'seed_pdf'`, see `PDF_ROW_IDS`), the two umbrella schemes
+ * they belong to, and three further projects found while seeding.
  *
- * `presentation` reproduces the PDF's own labels and charted figures ("as
- * reported"). Every other field follows the SOURCES (see sources.ts); where
- * the two disagree, `presentation.differsFromSources` and
- * `unresolvedQuestions` say so. See docs/SEED_NOTES.md.
+ * Every field follows the SOURCES (see sources.ts), as audited on 12 Nov 2026
+ * (docs/AUDIT_2026-11.md). No wording, figure, grouping or date from the PDF
+ * is stored: the briefing is rebuilt from these records by `computeBriefing`
+ * (shared/briefing.ts). See docs/SEED_NOTES.md and docs/CONSISTENCY_REPAIR.md.
  */
 import type { Project } from '../../shared/index.ts';
 import { buildProject } from './lib.ts';
@@ -19,7 +19,7 @@ export const NIP_UMBRELLA_ID = 'aldar-logistics-centres-nip';
 export const TERRALOGIX_UMBRELLA_ID = 'terralogix-logistics-park-warsan';
 
 // ---------------------------------------------------------------------------
-// Umbrellas (never counted; no presentation)
+// Umbrellas (never counted)
 // ---------------------------------------------------------------------------
 
 const nipUmbrella = buildProject({
@@ -83,7 +83,7 @@ const terralogixUmbrella = buildProject({
   status: 'under_construction',
   originalAnnouncement: { date: '2025-06', precision: 'month', src: 'enterpriseTerralogix' },
   areas: [
-    { value: 182000, unit: 'sqm', basis: 'gla', src: 'terralogixSite', label: 'Scheme leasable area',
+    { value: 182000, unit: 'sqm', basis: 'gla', qualifier: 'about', src: 'terralogixSite', label: 'Scheme leasable area',
       note: 'Developer site via search snippet only: "about 182,000 sq m of leasable Grade-A space". Not read directly.' },
     { value: 3300000, unit: 'sqft', basis: 'unspecified', src: 'enterpriseTerralogix', label: 'Scheme size at launch',
       note: 'Launch coverage (search results only): "3.3 million sq ft"; the basis (site or built area) is not stated.' },
@@ -127,7 +127,7 @@ const row1 = buildProject({
   status: 'construction_completed',
   originalAnnouncement: { date: '2024-07', precision: 'month', src: 'gnAldar2024' },
   areas: [
-    { value: 67000, unit: 'sqm', basis: 'unspecified', src: 'tvAldarPhased', label: 'First building (lower bound)',
+    { value: 67000, unit: 'sqm', basis: 'unspecified', qualifier: 'over', src: 'tvAldarPhased', label: 'First building (lower bound)',
       note: '"covering over 67,000 sqm" — seen only in search results for Aldar\'s Nov 2025 release (re-searched 12 Nov 2026); a lower bound, basis (GLA or GFA) not stated.' },
   ],
   gradeA: 'confirmed',
@@ -152,12 +152,7 @@ const row1 = buildProject({
   ],
   parentId: NIP_UMBRELLA_ID,
   phaseLabel: 'Phase 1',
-  presentation: {
-    pdfRef: 1, section: 'openings', partners: ['Aldar', 'DP World'], descriptor: 'Grade A park, phase 1', locationLabel: 'NIP',
-    areaLabel: '67,000', presentedAreaM2: 67000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Q3, completed', category: 'grade_a_developer', sortOrder: 1, presentedMilestone: 'completed_only',
-    differsFromSources: 'The basis of the 67,000 m² figure (GLA or GFA) is not stated in any page read; it appears only in search snippets of Aldar\'s Nov 2025 release.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row2 = buildProject({
@@ -175,7 +170,7 @@ const row2 = buildProject({
   assetType: 'warehouse',
   status: 'construction_completed',
   originalAnnouncement: { date: '2024-12-05', precision: 'day', src: 'dnata2024' },
-  investment: { disclosed: true, amount: 100_000_000, currency: 'AED', aed: 'native_aed', src: 'dnata2024',
+  investment: { disclosed: true, amount: 100_000_000, currency: 'AED', aed: 'native_aed', src: 'dnata2024', scope: 'facility',
     basis: '"The facility, which represents an investment of AED 100 million (US$ 27 million)" — the warehouse itself.' },
   areas: [
     { value: 57000, unit: 'sqm', basis: 'unspecified', src: 'dnata2024', label: 'Warehouse',
@@ -206,12 +201,7 @@ const row2 = buildProject({
     { date: '2026', precision: 'year', type: 'commissioned', src: 'dnataH1',
       summary: 'Emirates Group H1 2026-27 results (published 5 Nov 2026, covering April–September 2026): dnata continued its cargo and logistics strategy, "commissioning its new AED 100 million (US$ 27 million) logistics facility in Dubai South". Identical wording on emirates.com and the Dubai Media Office. Opening not stated.' },
   ],
-  presentation: {
-    pdfRef: 2, section: 'openings', partners: ['dnata Logistics'], descriptor: 'Automated warehouse, AED 100 m', locationLabel: 'Dubai South',
-    areaLabel: '57,000', presentedAreaM2: 57000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Apr to Sep', category: 'other_modern', sortOrder: 2, presentedMilestone: 'opened',
-    differsFromSources: 'The PDF counts this as opened. The source says dnata was "commissioning" the facility during April–September 2026 and does not say operations began, so the register status is construction completed. Basis of 57,000 m² not stated; may predate 2026.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row3 = buildProject({
@@ -250,12 +240,7 @@ const row3 = buildProject({
     { date: '2026-05-21', type: 'other', src: 'gnDsv',
       summary: 'DSV and Arcapita/Lintara release (dated 21 May 2026, read directly) "announce the completion" of the warehouse, "delivered as a turnkey build-to-suit development"; DSV Dubai MD: "I\'m excited to open this state-of-the-art facility".' },
   ],
-  presentation: {
-    pdfRef: 3, section: 'openings', partners: ['DSV', 'Arcapita Lintara'], descriptor: 'Multiuser warehouse', locationLabel: 'Jafza',
-    areaLabel: '30,000', presentedAreaM2: 30000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '20 May', category: 'grade_a_developer', sortOrder: 3, presentedMilestone: 'opened',
-    differsFromSources: 'Sources describe a build-to-suit warehouse for DSV on DSV\'s headquarters plot, not a multi-user warehouse. The completion announcement is dated 21 May 2026, not 20 May.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row4 = buildProject({
@@ -269,7 +254,7 @@ const row4 = buildProject({
   sectors: ['food_fmcg_cold_chain', 'modern_warehousing'],
   assetType: 'distribution_centre',
   status: 'operational',
-  investment: { disclosed: true, amount: 70_000_000, currency: 'AED', aed: 'native_aed', src: 'dicSharqi',
+  investment: { disclosed: true, amount: 70_000_000, currency: 'AED', aed: 'native_aed', src: 'dicSharqi', scope: 'facility',
     basis: '"The newly launched facility represents an investment of AED 70 million" — the whole hub (storage, yard, offices, basement).' },
   areas: [
     { value: 280000, unit: 'sqft', basis: 'warehouse_gfa', src: 'dicSharqi', label: 'Built-up storage',
@@ -291,12 +276,7 @@ const row4 = buildProject({
     { date: '2026-10', precision: 'month', type: 'opened', src: 'dicSharqi',
       summary: 'Release datelined 15 Oct 2026: Al Sharqi Shipping "has inaugurated its new integrated logistics and distribution hub at Dubai Industrial City"; COO: "The opening of our new facility".' },
   ],
-  presentation: {
-    pdfRef: 4, section: 'openings', partners: ['Al Sharqi Shipping'], descriptor: 'Cold and dry hub, AED 70 m', locationLabel: 'DIC',
-    areaLabel: '26,000', presentedAreaM2: 26000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '15 Oct', category: 'other_modern', sortOrder: 4, presentedMilestone: 'opened',
-    differsFromSources: 'The PDF\'s 26,000 m² is the 280,000 sq ft (26,013 m²) of built-up storage only; the hub also has a 200,000 sq ft open yard, 30,000 sq ft of offices and a 40,000 sq ft basement.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row5 = buildProject({
@@ -326,12 +306,7 @@ const row5 = buildProject({
     { date: '2026-01', precision: 'month', type: 'opened', src: 'lmCeva',
       summary: 'Trade press (search results only): "CEVA opens new e-commerce warehouse in Dubai" — 23,000 m² multi-user warehouse in Dubai South, handling over 30,000 units a day.' },
   ],
-  presentation: {
-    pdfRef: 5, section: 'openings', partners: ['CEVA Logistics'], descriptor: 'eCommerce fulfilment warehouse', locationLabel: 'Dubai South',
-    areaLabel: '23,000', presentedAreaM2: 23000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '15 Jan', category: 'other_modern', sortOrder: 5, presentedMilestone: 'opened',
-    differsFromSources: 'Evidence is trade press seen only through search results. The building probably predates 2026 (fitted out in weeks).',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row6 = buildProject({
@@ -370,12 +345,7 @@ const row6 = buildProject({
     { date: '2026-05', precision: 'month', type: 'opened', src: 'moGallega',
       summary: 'Dubai Media Office (20 May 2026) and Jafza (21 May 2026): Gallega Global Logistics "has inaugurated a new 215,000 sq. ft. multi-user 3PL Logistics Hub"; "The opening ceremony was attended by" Ghassan Aboud and DP World\'s Abdulla Al Hashmi (ceremony day not stated).' },
   ],
-  presentation: {
-    pdfRef: 6, section: 'openings', partners: ['Gallega Global Logistics'], descriptor: '3PL hub with auto parts', locationLabel: 'Jafza',
-    areaLabel: '20,000', presentedAreaM2: 20000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '20 May', category: 'other_modern', sortOrder: 6, presentedMilestone: 'opened',
-    differsFromSources: '20,000 m² is the 215,000 sq ft (19,974 m²) total; the source does not say it is all enclosed floor space.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row7 = buildProject({
@@ -392,7 +362,7 @@ const row7 = buildProject({
   assetType: 'cold_store',
   status: 'construction_completed',
   originalAnnouncement: { date: '2025-05-22', precision: 'day', src: 'aldarEsf2025' },
-  areas: [{ value: 20000, unit: 'sqm', basis: 'gla', src: 'aldarEsf2025', label: 'Leasable area',
+  areas: [{ value: 20000, unit: 'sqm', basis: 'gla', qualifier: 'nearly', src: 'aldarEsf2025', label: 'Leasable area',
     note: '"Developed across a leasable area of almost 20,000 sqm" (an approximate upper figure; includes the corporate office and regional HQ). Aldar\'s portfolio page lists "20,000 sqm".' }],
   primaryAreaIndex: 0,
   gradeA: 'confirmed',
@@ -412,12 +382,7 @@ const row7 = buildProject({
     { date: '2026-04', precision: 'quarter', type: 'construction_completed', src: 'aldarQ3',
       summary: 'Aldar Q3 2026 results (27 Oct 2026): "Following completion in Q2, the Emirates Snack Foods facility has started to meaningfully contribute to segment EBITDA."' },
   ],
-  presentation: {
-    pdfRef: 7, section: 'openings', partners: ['Emirates Snack Foods', 'Aldar'], descriptor: 'Cold store', locationLabel: 'Dubai South',
-    areaLabel: '20,000', presentedAreaM2: 20000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Q2', category: 'other_modern', sortOrder: 7, presentedMilestone: 'opened',
-    differsFromSources: 'Aldar gives ~20,000 m² as leasable area (GLA). Aldar reports completion in Q2 and rental income, but no source gives an opening date, so the register status is construction completed.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row8 = buildProject({
@@ -434,7 +399,7 @@ const row8 = buildProject({
   sectors: ['chemicals_dangerous_goods'],
   assetType: 'dangerous_goods_store',
   status: 'operational',
-  investment: { disclosed: true, amount: 11_000_000, currency: 'USD', aed: 'usd_peg', src: 'ktPalmon',
+  investment: { disclosed: true, amount: 11_000_000, currency: 'USD', aed: 'usd_peg', src: 'ktPalmon', scope: 'wider_than_facility',
     basis: '"approximately $11 million, covering land, construction, compliance, and specialized fitouts" — includes the land.' },
   areas: [
     { value: 112000, unit: 'sqft', basis: 'mixed_building_area', src: 'ktPalmon', label: 'Built-up area',
@@ -454,12 +419,7 @@ const row8 = buildProject({
     { date: '2026-01', precision: 'month', type: 'opened', src: 'ktPalmon',
       summary: 'Khaleej Times (14 Jan 2026): GFH Partners Manrre REIT and Palmon Group "have opened" the facility; "The warehouse was inaugurated by Abdulla bin Damithan" of DP World GCC; Gulf News (15 Jan): "The logistics hub is now fully operational and is leased to Safe Logistics" (ceremony day not stated).' },
   ],
-  presentation: {
-    pdfRef: 8, section: 'openings', partners: ['Palmon Group', 'GFH Partners'], descriptor: 'Chemical store, USD 11 m', locationLabel: 'Jafza',
-    areaLabel: '10,400', presentedAreaM2: 10400, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '14 Jan', category: 'specialised', sortOrder: 8, presentedMilestone: 'opened',
-    differsFromSources: '10,400 m² is the 112,000 sq ft built-up area (incl. offices) on an 180,000 sq ft plot. Owner is GFH Partners Manrre REIT; operator Safe Logistics.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row9 = buildProject({
@@ -483,11 +443,7 @@ const row9 = buildProject({
   unresolvedQuestions: ['Building developer / landlord.', 'Inauguration day: 21 Sep 2026 is the newsroom date; the ceremony day is not stated. Stored with month precision.'],
   events: [{ date: '2026-09', precision: 'month', type: 'opened', src: 'dsDior',
     summary: 'Dubai South (item dated 21 Sep 2026) "has marked the official inauguration of Dior\'s new Regional Distribution Centre for the Middle East, at EZDubai Logistics Hub".' }],
-  presentation: {
-    pdfRef: 9, section: 'openings', partners: ['Dior'], descriptor: 'Regional distribution hub', locationLabel: 'Dubai South',
-    areaLabel: '7,200', presentedAreaM2: 7200, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: '21 Sep', category: 'other_modern', sortOrder: 9, presentedMilestone: 'opened',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row10 = buildProject({
@@ -504,7 +460,7 @@ const row10 = buildProject({
   areas: [
     { value: 161000, unit: 'sqft', basis: 'site_land_area', src: 'jafzaMosolf', label: 'Total site incl. open vehicle storage',
       note: '"The new facility spans 161,000 square feet in total, including open vehicle storage" (whole site, mostly open storage; never floor space).' },
-    { value: 11000, unit: 'sqft', basis: 'unspecified', src: 'jafzaMosolf', label: 'PDI warehouse',
+    { value: 11000, unit: 'sqft', basis: 'unspecified', qualifier: 'nearly', src: 'jafzaMosolf', label: 'PDI warehouse',
       note: '"a nearly 11,000-square-foot warehouse equipped for Pre-Delivery Inspection (PDI)"; an approximate warehouse size, basis (GFA or GLA) not stated.' },
   ],
   gradeA: 'not_applicable',
@@ -518,12 +474,7 @@ const row10 = buildProject({
     { date: '2026-03', precision: 'month', type: 'opened', src: 'jafzaMosolf', summary: 'Jafza (21 May 2026): "The site has been fully operational since March this year."' },
     { date: '2026-05-21', type: 'other', src: 'jafzaMosolf', summary: 'Jafza announces MOSOLF\'s new automotive hub (161,000 sq ft incl. open storage; ~11,000 sq ft PDI warehouse).' },
   ],
-  presentation: {
-    pdfRef: 10, section: 'openings', partners: ['MOSOLF'], descriptor: 'Vehicle hub, 15,000 m² site', locationLabel: 'Jafza',
-    areaLabel: '1,000', presentedAreaM2: 1000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'March', category: 'specialised', sortOrder: 10, presentedMilestone: 'opened',
-    differsFromSources: '1,000 m² is the ~11,000 sq ft PDI warehouse (1,022 m²); 15,000 m² is the 161,000 sq ft site including open vehicle storage.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row11 = buildProject({
@@ -537,9 +488,9 @@ const row11 = buildProject({
   location: 'Jebel Ali, Dubai',
   zone: 'Jebel Ali Port',
   sectors: ['chemicals_dangerous_goods'],
-  assetType: 'dangerous_goods_store',
+  assetType: 'bulk_liquid_terminal',
   status: 'operational',
-  investment: { disclosed: true, amount: 300_000_000, currency: 'AED', aed: 'native_aed', src: 'dpwPetrochem',
+  investment: { disclosed: true, amount: 300_000_000, currency: 'AED', aed: 'native_aed', src: 'dpwPetrochem', scope: 'wider_than_facility',
     basis: 'NOT the terminal alone: "its AED 300 million petrochemical terminal and corporate headquarters"; "The development comprises Petrochem\'s second terminal in the UAE alongside multiple standalone office buildings". Exclude or qualify in logistics investment totals.' },
   gradeA: 'not_applicable',
   gradeAEvidence: 'Bulk chemical terminal (offices built to LEED Gold).',
@@ -554,12 +505,7 @@ const row11 = buildProject({
   ],
   events: [{ date: '2026-01', precision: 'month', type: 'opened', src: 'dpwPetrochem',
     summary: 'DP World release (14 Jan 2026): "Petrochem Middle East has inaugurated its AED 300 million petrochemical terminal and corporate headquarters in Jebel Ali" (ceremony day not stated).' }],
-  presentation: {
-    pdfRef: 11, section: 'openings', partners: ['Petrochem', 'DP World'], descriptor: 'Chemical terminal', locationLabel: 'Jebel Ali Port',
-    areaLabel: 'Not disclosed (AED 300 m)', countedInPresentedTotal: false,
-    dateLabel: '14 Jan', category: 'specialised', sortOrder: 11, presentedMilestone: 'opened',
-    differsFromSources: 'AED 300 m covers the terminal plus corporate HQ and offices, not the terminal alone.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row12 = buildProject({
@@ -584,12 +530,7 @@ const row12 = buildProject({
     { date: '2026-03', precision: 'month', type: 'opened', src: 'dsHellmann',
       summary: 'Dubai South (item dated 31 Mar 2026) "has welcomed a new distribution facility by Hellmann Calipar Healthcare Logistics (HCHL) at its Logistics District"; "The opening is Hellmann\'s response to the growing demand..." (opening day not stated).' },
   ],
-  presentation: {
-    pdfRef: 12, section: 'openings', partners: ['Hellmann', 'Calipar'], descriptor: 'Healthcare hub', locationLabel: 'Dubai South',
-    areaLabel: 'Not disclosed', countedInPresentedTotal: false,
-    dateLabel: '31 Mar', category: 'specialised', sortOrder: 12, presentedMilestone: 'opened',
-    differsFromSources: 'The PDF gives no colour category for this row; placed under specialised (healthcare distribution with a hazardous-goods chamber). 31 Mar is the release date; the opening date is not given.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row13 = buildProject({
@@ -615,12 +556,7 @@ const row13 = buildProject({
     { date: '2026-03', precision: 'month', type: 'opened', src: 'moLht',
       summary: 'Dubai Media Office (25 Mar 2026): MBRAH "has officially inaugurated a new Painting & Grinding Center developed by Lufthansa Technik Middle East" (ceremony day not stated).' },
   ],
-  presentation: {
-    pdfRef: 13, section: 'openings', partners: ['Lufthansa Technik'], descriptor: 'Aircraft parts repairs', locationLabel: 'Dubai South',
-    areaLabel: 'Not disclosed', countedInPresentedTotal: false,
-    dateLabel: '24 Mar', category: 'specialised', sortOrder: 13, presentedMilestone: 'opened',
-    differsFromSources: 'The source is dated 25 Mar, not 24 Mar, and describes a painting and grinding centre added to an existing site, supporting structural and composite repairs.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row14 = buildProject({
@@ -653,11 +589,7 @@ const row14 = buildProject({
     { date: '2026-08', precision: 'month', type: 'opened', src: 'dpwAwir',
       summary: 'DP World release (21 Aug 2026): "DP World has also opened a new 100,000 sqm inland empty container depot in Al Awir, Dubai" (opening day not given).' },
   ],
-  presentation: {
-    pdfRef: 14, section: 'openings', partners: ['DP World'], descriptor: 'Inland empty-container depot', locationLabel: 'Al Awir',
-    areaLabel: 'Open depot, 100,000 m² site', presentedAreaM2: 100000, presentedAreaKind: 'yard', countedInPresentedTotal: false,
-    dateLabel: 'August', category: 'land_site_yard', sortOrder: 14, presentedMilestone: 'opened',
-  },
+  provenance: 'seed_pdf',
 });
 
 // ---------------------------------------------------------------------------
@@ -680,7 +612,7 @@ const row15 = buildProject({
   originalAnnouncement: { date: '2024-07', precision: 'month', src: 'gnAldar2024' },
   areas: [
     { value: 81000, unit: 'sqm', basis: 'gla', src: 'aldar9m2024', label: 'Two additional buildings',
-      note: 'Aldar 9M 2024 results presentation, seen only as a search snippet: "GLA 81k sqm across 2 additional modular buildings" (a rounded figure; not found again when re-searched 12 Nov 2026). No other source gives a phase 2 figure. The PDF\'s 81,500 m² is a subtraction across different bases (148,500 total − 67,000 phase 1) and is not a measure.' },
+      note: 'Aldar 9M 2024 results presentation, seen only as a search snippet: "GLA 81k sqm across 2 additional modular buildings" (a rounded figure; not found again when re-searched 12 Nov 2026). No other source gives a phase 2 figure, and none can be derived by subtracting figures on different bases.' },
   ],
   primaryAreaIndex: 0,
   gradeA: 'confirmed',
@@ -692,7 +624,7 @@ const row15 = buildProject({
   confidence: 'medium',
   unresolvedQuestions: [
     'Phase 2 status in H2 2026: Aldar\'s Q3 2026 release (re-read 12 Nov 2026) does not mention phase 2 or the Q1 2027 date.',
-    'Area: the only phase-specific figure is "GLA 81k sqm" from a 2024 presentation seen as a search snippet; the PDF\'s 81,500 m² is derived and unsourced.',
+    'Area: the only phase-specific figure is "GLA 81k sqm" from a 2024 presentation seen as a search snippet (not found again on 12 Nov 2026).',
     'Exact groundbreaking date (Nov 2025, search results only).',
   ],
   events: [
@@ -702,12 +634,7 @@ const row15 = buildProject({
   ],
   parentId: NIP_UMBRELLA_ID,
   phaseLabel: 'Phase 2',
-  presentation: {
-    pdfRef: 15, section: 'being_built', partners: ['Aldar', 'DP World'], descriptor: 'Grade A park, phase 2', locationLabel: 'NIP',
-    areaLabel: '81,500 m²', presentedAreaM2: 81500, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Ready Q1 2027', category: 'grade_a_developer', sortOrder: 15,
-    differsFromSources: '81,500 m² is derived by the PDF (148,500 total − 67,000 phase 1); no source states it. Aldar\'s 2024 presentation (search result only) gives ~81,000 m² GLA.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row16 = buildProject({
@@ -744,12 +671,7 @@ const row16 = buildProject({
   ],
   parentId: TERRALOGIX_UMBRELLA_ID,
   phaseLabel: 'Phase 1',
-  presentation: {
-    pdfRef: 16, section: 'being_built', partners: ['Sweid & Sweid', 'Dutco'], descriptor: 'Grade A park, phase 1 of 3', locationLabel: 'Warsan',
-    areaLabel: '53,360 m²', presentedAreaM2: 53360, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Ready Q4 2026', category: 'grade_a_developer', sortOrder: 16,
-    differsFromSources: 'Evidence is from search results only. The launch coverage (June 2025) said Q3 2026; the developer site says Q4 2026. The number of phases is not confirmed by sources seen.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row17 = buildProject({
@@ -765,7 +687,7 @@ const row17 = buildProject({
   assetType: 'distribution_centre',
   status: 'under_construction',
   originalAnnouncement: { date: '2026-07-21', precision: 'day', src: 'dicTalal' },
-  investment: { disclosed: true, amount: 150_000_000, currency: 'AED', aed: 'native_aed', src: 'dicTalal',
+  investment: { disclosed: true, amount: 150_000_000, currency: 'AED', aed: 'native_aed', src: 'dicTalal', scope: 'wider_than_facility',
     basis: '"Representing an investment of AED 150 million" — the whole campus, including corporate HQ, a cash-and-carry store and a customer service centre, not the logistics space alone.' },
   areas: [
     { value: 350000, unit: 'sqft', basis: 'mixed_building_area', src: 'dicTalal', label: 'Built-up area',
@@ -781,12 +703,7 @@ const row17 = buildProject({
   unresolvedQuestions: ['Groundbreaking day: the release is datelined 21 Jul 2026 and says Talal Group "has broken ground"; the ceremony day is not stated.'],
   events: [{ date: '2026-07', precision: 'month', type: 'construction_start', src: 'dicTalal',
     summary: 'Release datelined 21 Jul 2026: Talal Group "has broken ground" on its AED 150 million Central Distribution Centre; "Construction is underway, with completion targeted for Q3 2027."' }],
-  presentation: {
-    pdfRef: 17, section: 'being_built', partners: ['Talal Group'], descriptor: 'AED 150 m distribution centre', locationLabel: 'DIC',
-    areaLabel: '32,500 m²', presentedAreaM2: 32500, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Started 21 Jul', category: 'other_modern', sortOrder: 17,
-    differsFromSources: '32,500 m² is 350,000 sq ft of built-up area that includes HQ offices, a cash-and-carry store and a customer service centre, not warehouse floor alone.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row18 = buildProject({
@@ -802,7 +719,7 @@ const row18 = buildProject({
   status: 'under_construction',
   originalAnnouncement: { date: '2026-06-08', precision: 'day', src: 'jafzaHellmannIndu' },
   areas: [
-    { value: 300000, unit: 'sqft', basis: 'unspecified', src: 'jafzaHellmannIndu', label: 'Site / facility (approx.)',
+    { value: 300000, unit: 'sqft', basis: 'unspecified', qualifier: 'nearly', src: 'jafzaHellmannIndu', label: 'Site / facility (approx.)',
       note: '"With a total area of nearly 300,000 sq. ft., the site will provide scalable infrastructure"; headline "New 300,000 sq. ft. facility". May be site area rather than floor space.' },
   ],
   gradeA: 'unverified',
@@ -813,12 +730,7 @@ const row18 = buildProject({
   unresolvedQuestions: ['Measurement basis of the ~300,000 sq ft (site or building).', 'Completion target and investment not disclosed.', 'Ceremony date not stated (8 Jun 2026 is the Jafza item date).'],
   events: [{ date: '2026-06', precision: 'month', type: 'construction_start', src: 'jafzaHellmannIndu',
     summary: 'Jafza item dated 8 Jun 2026: Hellmann Worldwide Logistics and INDU Group "have broken ground on a new automotive logistics hub in Jafza" (ceremony day not stated).' }],
-  presentation: {
-    pdfRef: 18, section: 'being_built', partners: ['Hellmann', 'INDU Group'], descriptor: 'Auto spare parts hub', locationLabel: 'Jafza',
-    areaLabel: '27,900 m²', presentedAreaM2: 27900, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Started 8 Jun', category: 'other_modern', sortOrder: 18,
-    differsFromSources: 'The release gives "a total area of nearly 300,000 sq. ft." for "the site"; this may be site area rather than floor space.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row19 = buildProject({
@@ -844,11 +756,7 @@ const row19 = buildProject({
   unresolvedQuestions: ['Investment not disclosed.', 'A MEED extract (search result only) gives a conflicting 43,000 m² figure.', 'Groundbreaking day not stated (30 Jun 2026 is the release date).'],
   events: [{ date: '2026-06', precision: 'month', type: 'construction_start', src: 'dpwLintara',
     summary: 'DP World release (30 Jun 2026): DP World and Lintara "have broken ground on a new 20,000 square metre build-to-suit logistics centre"; "Construction is expected to conclude in Q1 2027."' }],
-  presentation: {
-    pdfRef: 19, section: 'being_built', partners: ['DP World', 'Arcapita Lintara'], descriptor: 'Grade A, dangerous goods', locationLabel: 'Jafza',
-    areaLabel: '20,000 m²', presentedAreaM2: 20000, presentedAreaKind: 'floor', countedInPresentedTotal: true,
-    dateLabel: 'Ready Q1 2027', category: 'grade_a_developer', sortOrder: 19,
-  },
+  provenance: 'seed_pdf',
 });
 
 const row20 = buildProject({
@@ -866,7 +774,7 @@ const row20 = buildProject({
   assetType: 'mro_aerospace_facility',
   status: 'under_construction',
   originalAnnouncement: { date: '2023-11', precision: 'month', src: 'tnEmirates2023' },
-  investment: { disclosed: true, amount: 5_100_000_000, currency: 'USD', aed: 'usd_peg', src: 'emiratesMro',
+  investment: { disclosed: true, amount: 5_100_000_000, currency: 'USD', aed: 'usd_peg', src: 'emiratesMro', scope: 'wider_than_facility',
     basis: 'The whole aviation engineering (MRO) complex — hangars, workshops, paint hangars, administration and storage — not a logistics facility: "its new US$ 5.1 billion engineering complex". Supersedes the US$950 million announced in Nov 2023 for a smaller first scope. Exclude or qualify in logistics investment totals.' },
   areas: [
     { value: 380000, unit: 'sqm', basis: 'unspecified', src: 'emiratesMro', label: 'Storage and logistics capacity',
@@ -890,12 +798,7 @@ const row20 = buildProject({
     { date: '2026-11-05', type: 'other', src: 'emiratesH1',
       summary: 'Emirates Group H1 2026-27 results: "in May, Emirates broke ground on its US$ 5.1 billion engineering and ... (MRO) facility ... with completion expected in the mid-2030s".' },
   ],
-  presentation: {
-    pdfRef: 20, section: 'being_built', partners: ['Emirates'], descriptor: 'MRO, 380,000 m² storage', locationLabel: 'Dubai South',
-    areaLabel: 'USD 5.1 bn', countedInPresentedTotal: false,
-    dateLabel: 'Started 18 May, due mid-2030', category: 'specialised', sortOrder: 20,
-    differsFromSources: 'The Emirates Group H1 results (5 Nov 2026) say completion is expected in the "mid-2030s", not mid-2030. 380,000 m² is storage and logistics capacity in an MRO complex, not warehouse floor space.',
-  },
+  provenance: 'seed_pdf',
 });
 
 // ---------------------------------------------------------------------------
@@ -922,12 +825,7 @@ const row21 = buildProject({
   confidence: 'high',
   unresolvedQuestions: ['Investment and incremental (new) area not disclosed.', 'Phase 1 is scheduled to begin in 2027; no completion date.'],
   events: [{ date: '2026-01-22', type: 'announcement', src: 'dpwFood', summary: 'DP World release (22 Jan 2026) announces Dubai Food District, a 29m sq ft food trade hub; "the first phase scheduled to begin in 2027".' }],
-  presentation: {
-    pdfRef: 21, section: 'signed_or_announced', partners: ['DP World'], descriptor: 'Food District, starts 2027', locationLabel: 'Al Aweer',
-    areaLabel: '2,690,000 m²', presentedAreaM2: 2690000, presentedAreaKind: 'district', countedInPresentedTotal: false,
-    dateLabel: 'District, 22 Jan', category: 'land_site_yard', sortOrder: 21,
-    differsFromSources: 'The 2.69 million m² is the whole district including the existing market, not new area.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row22 = buildProject({
@@ -955,12 +853,7 @@ const row22 = buildProject({
     { date: '2026-10-13', type: 'mou', src: 'moGargash',
       summary: 'Dubai Media Office (15 Oct 2026): "The MoU was signed on 13 October" in Shenzhen (Dubai Business Forum – China) for a JV to develop a 2.5m sq ft plot.' },
   ],
-  presentation: {
-    pdfRef: 22, section: 'signed_or_announced', partners: ['Gargash Prime', 'JINGDONG Property'], descriptor: 'eCommerce and fulfilment hub', locationLabel: 'Dubai',
-    areaLabel: '232,000 m²', presentedAreaM2: 232000, presentedAreaKind: 'land', countedInPresentedTotal: false,
-    dateLabel: 'Land, MoU 15 Oct', category: 'land_site_yard', sortOrder: 22,
-    differsFromSources: 'The MoU was signed on 13 Oct; 15 Oct is the announcement date. The source calls it a "regional distribution and fulfilment hub" and converts 2.5m sq ft as "~250,000 sqm".',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row23 = buildProject({
@@ -996,12 +889,7 @@ const row23 = buildProject({
     { date: '2026-04-15', type: 'announcement', src: 'xGallegaFvh',
       summary: 'Dubai Media Office post (15 Apr 2026): Gallega launches an integrated Finished Vehicles Hub in Jafza, 1m sq ft, up to 6,500 vehicles, operations from May 2026 (search results only).' },
   ],
-  presentation: {
-    pdfRef: 23, section: 'signed_or_announced', partners: ['Gallega Global Logistics'], descriptor: 'Vehicle yard, 6,500 cars', locationLabel: 'Jafza',
-    areaLabel: '92,900 m²', presentedAreaM2: 92900, presentedAreaKind: 'yard', countedInPresentedTotal: false,
-    dateLabel: 'Yard, 15 Apr', category: 'land_site_yard', sortOrder: 23,
-    differsFromSources: 'Evidence from search results only. Operations were due to start in May 2026, so the hub may already be operating; the "yard" basis is not stated by the source.',
-  },
+  provenance: 'seed_pdf',
 });
 
 const row24 = buildProject({
@@ -1033,13 +921,8 @@ const row24 = buildProject({
   unresolvedQuestions: ['Exact signing date ("The signing ceremony took place during MRO Europe"; the Dubai South item is dated 30 Oct 2026).', 'Plot area, total area and investment not given.'],
   events: [{ date: '2026-10', precision: 'month', type: 'agreement_signed', src: 'dsPhoenix',
     summary: 'Dubai South (item dated 30 Oct 2026) "has signed an agreement with Phoenix Aviation for a new airside plot" at MBRAH, signed during MRO Europe; completion scheduled Q1 2029.' }],
-  presentation: {
-    pdfRef: 24, section: 'signed_or_announced', partners: ['Dubai South', 'Phoenix Aviation'], descriptor: 'MRO, freighter conversion, Q1 2029', locationLabel: 'Dubai South',
-    areaLabel: '71,000 m²', presentedAreaM2: 71000, presentedAreaKind: 'floor', countedInPresentedTotal: false,
-    dateLabel: 'Signed 30 Oct', category: 'specialised', sortOrder: 24,
-    differsFromSources: '71,000 m² is the sum of four building components (hangar, delivery centre, workshops and stores, offices); the source gives no total.',
-  },
-  seedNote: 'The PDF row has no separate location cell ("Q1 2029" sits where the location would be); the location label here comes from the partner name.',
+  provenance: 'seed_pdf',
+  seedNote: 'Seeded from the owner\'s Nov 2026 briefing PDF; every field follows the sources.',
 });
 
 const row25 = buildProject({
@@ -1066,13 +949,8 @@ const row25 = buildProject({
     'The National gives Dh1.8bn as both "$272.2 million" and "$490 million" in the same article (Dh1.8bn is about $490m).',
   ],
   events: [{ date: '2026-10-04', type: 'announcement', src: 'tnCommercity', summary: 'Dubai Media Office statement (Sunday 4 Oct 2026, via The National): Dubai CommerCity phase-two expansion, including The Hive (5,600 m², 181 units); delivery in phases Q1 2027 – Q4 2028.' }],
-  presentation: {
-    pdfRef: 25, section: 'signed_or_announced', partners: ['Dubai CommerCity'], descriptor: 'The Hive, ready 2027 to 2028', locationLabel: 'Dubai CommerCity',
-    areaLabel: '5,600 m²', presentedAreaM2: 5600, presentedAreaKind: 'floor', countedInPresentedTotal: false,
-    dateLabel: 'Floor, 4 Oct', category: 'other_modern', sortOrder: 25,
-    differsFromSources: '"Ready 2027 to 2028" is the delivery window for all of phase two, not The Hive alone.',
-  },
-  seedNote: 'The PDF row has no separate location cell; the location label comes from the partner name.',
+  provenance: 'seed_pdf',
+  seedNote: 'Seeded from the owner\'s Nov 2026 briefing PDF; every field follows the sources.',
 });
 
 const row26 = buildProject({
@@ -1101,16 +979,11 @@ const row26 = buildProject({
     { date: '2026-10', precision: 'month', type: 'term_sheet', src: 'marklinesMol',
       summary: 'Trade press (search results only): DP World announced on 7 Oct 2026 that it has signed a term sheet with MOL setting the framework for a proposed automotive logistics and processing facility at Jebel Ali Port (signing day not stated).' },
   ],
-  presentation: {
-    pdfRef: 26, section: 'signed_or_announced', partners: ['DP World', 'Mitsui O.S.K. Lines'], descriptor: 'Vehicle processing', locationLabel: 'Jebel Ali',
-    areaLabel: 'Not disclosed', countedInPresentedTotal: false,
-    dateLabel: 'Term sheet 6 Oct', category: 'specialised', sortOrder: 26,
-    differsFromSources: 'No source found for 6 Oct; trade press (search results only) reports an October 2026 term sheet. No DP World or MOL release located.',
-  },
+  provenance: 'seed_pdf',
 });
 
 // ---------------------------------------------------------------------------
-// The PDF's "not counted" items
+// Further projects found while seeding
 // ---------------------------------------------------------------------------
 
 const tollDc6 = buildProject({
@@ -1150,12 +1023,7 @@ const tollDc6 = buildProject({
     { date: '2025-08', precision: 'month', type: 'construction_start', src: 'dsToll',
       summary: 'Dubai South / Dubai Media Office (29 Aug 2025): Dubai South and Toll Group "have broken ground" on DC6 in the Logistics District (ceremony day not stated); "Upon completion in August 2026".' },
   ],
-  presentation: {
-    section: 'not_counted', partners: ['Toll Group', 'CWT-SML'], descriptor: 'Distribution centre DC6', locationLabel: 'Dubai South',
-    areaLabel: '15,620 m² building (25,000 m² facility/site)', countedInPresentedTotal: false,
-    dateLabel: 'Due Aug 2026, not confirmed', category: 'other_modern', sortOrder: 1,
-  },
-  seedNote: 'Listed in the PDF as not counted (completion not confirmed). Labels come from the sources, not the PDF.',
+  seedNote: 'Found while seeding from the owner\'s Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.',
 });
 
 const dhlDubaiSouth = buildProject({
@@ -1171,7 +1039,7 @@ const dhlDubaiSouth = buildProject({
   assetType: 'warehouse',
   status: 'investment_committed',
   originalAnnouncement: { date: '2025-12-04', precision: 'day', src: 'dhl2025' },
-  investment: { disclosed: true, amount: 120_000_000, currency: 'EUR', src: 'dhl2025',
+  investment: { disclosed: true, amount: 120_000_000, currency: 'EUR', src: 'dhl2025', scope: 'facility',
     basis: '"DHL Supply Chain is investing EUR 120 million in a 55,000-square-meter multi-user warehouse" (DHL Group release, search results only). Secondary outlets give USD 120m, about USD 130m or US$140m; the EUR figure is DHL\'s own and is not converted.' },
   areas: [
     { value: 55000, unit: 'sqm', basis: 'unspecified', src: 'dhl2025', label: 'Warehouse',
@@ -1195,12 +1063,7 @@ const dhlDubaiSouth = buildProject({
     { date: '2025-12-04', type: 'investment_committed', src: 'dhl2025',
       summary: 'DHL Group release (4 Dec 2025): DHL Supply Chain "is investing EUR 120 million" in a 55,000 m² multi-user warehouse on a 96,000 m² Dubai South plot; groundbreaking planned Q1 2026, completion summer 2027 (search results only).' },
   ],
-  presentation: {
-    section: 'not_counted', partners: ['DHL Supply Chain'], descriptor: 'Multi-user warehouse, EUR 120 m', locationLabel: 'Dubai South',
-    areaLabel: '55,000 m² warehouse', countedInPresentedTotal: false,
-    dateLabel: 'Groundbreaking planned Q1 2026, not confirmed', category: 'other_modern', sortOrder: 2,
-  },
-  seedNote: 'Listed in the PDF as not counted. Labels come from the sources, not the PDF.',
+  seedNote: 'Found while seeding from the owner\'s Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.',
 });
 
 const skySupport = buildProject({
@@ -1231,12 +1094,7 @@ const skySupport = buildProject({
     { date: '2025-08-12', type: 'announcement', src: 'moSkyLaunch', summary: 'Dubai Media Office (12 Aug 2025): MBRAH "has announced the launch of its new Sky Support Complex", 16,661 m², 14 units.' },
     { date: '2026-07-28', type: 'construction_milestone', src: 'dsSkyJul2026', summary: 'Dubai South (28 Jul 2026): MBRAH "has announced that construction of its Sky Support Complex is on track for completion by the end of Q3 2026".' },
   ],
-  presentation: {
-    section: 'not_counted', partners: ['MBRAH', 'Dubai South'], descriptor: 'Sky Support Complex, 14 units', locationLabel: 'MBRAH, Dubai South',
-    areaLabel: '16,661 m² (basis not stated)', countedInPresentedTotal: false,
-    dateLabel: 'Due end Q3 2026, not confirmed', category: 'specialised', sortOrder: 3,
-  },
-  seedNote: 'Listed in the PDF as not counted (completion not confirmed). Labels come from the sources, not the PDF.',
+  seedNote: 'Found while seeding from the owner\'s Nov 2026 briefing PDF, which listed it apart as unconfirmed. Every field follows the sources.',
 });
 
 export const SEED_PROJECTS: Project[] = [
@@ -1245,3 +1103,13 @@ export const SEED_PROJECTS: Project[] = [
   row21, row22, row23, row24, row25, row26,
   tollDc6, dhlDubaiSouth, skySupport,
 ];
+
+/**
+ * Seed traceability only: the record behind each project row of the owner's
+ * Nov 2026 briefing PDF (row number → project id). Nothing else from the PDF
+ * is kept; its own totals are deliberately not reproduced.
+ */
+export const PDF_ROW_IDS: readonly string[] = [
+  row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13,
+  row14, row15, row16, row17, row18, row19, row20, row21, row22, row23, row24, row25, row26,
+].map((p) => p.id);

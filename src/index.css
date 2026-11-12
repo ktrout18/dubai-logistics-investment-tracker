@@ -90,7 +90,14 @@
   }
   .slide-print {
     page: snapshot;
-    break-after: page;
+  }
+  .snapshot-page {
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .slide-print + .slide-print {
+    break-before: page;
+    margin-top: 0 !important;
   }
 }
 
@@ -99,9 +106,12 @@
     width: 16in !important;
     height: 9in !important;
     box-shadow: none !important;
+    break-inside: avoid;
   }
   .slide-inner {
-    transform: scale(0.96) !important;
+    /* zoom (not transform) so page fragmentation sees the scaled size: 1600×900 → 16in×9in. */
+    transform: none !important;
+    zoom: 0.96;
   }
 }
 

@@ -20,9 +20,10 @@ import {
   type DatePrecision,
   type Emirate,
   type EventType,
+  type AreaQualifier,
   type GradeAStatus,
+  type InvestmentScope,
   type NetNew,
-  type Presentation,
   type Project,
   type ProjectEvent,
   type ProjectStatus,
@@ -53,6 +54,8 @@ export interface AreaInput {
   src: SourceKey;
   label?: string;
   note?: string;
+  /** The source's own qualifier: "over 67,000 sqm" → 'over'; "nearly"/"almost" → 'nearly'. */
+  qualifier?: AreaQualifier;
   /** When the stored m² must differ from the exact conversion (e.g. a source's own rounded m² figure). */
   valueM2?: number;
 }
@@ -82,7 +85,16 @@ export interface ProjectInput {
   originalAnnouncement?: DatedInput;
   investment?:
     | { disclosed: false; basis: string; src?: SourceKey }
-    | { disclosed: true; amount: number; currency: string; basis: string; src: SourceKey; aed?: 'native_aed' | 'usd_peg' };
+    | {
+        disclosed: true;
+        amount: number;
+        currency: string;
+        basis: string;
+        /** What the amount covers (required for every disclosed amount in the seed). */
+        scope: InvestmentScope;
+        src: SourceKey;
+        aed?: 'native_aed' | 'usd_peg';
+      };
   areas?: AreaInput[];
   primaryAreaIndex?: number;
   gradeA: GradeAStatus;
@@ -99,7 +111,7 @@ export interface ProjectInput {
   parentId?: string;
   phaseLabel?: string;
   seedNote?: string;
-  presentation?: Presentation;
+  /** 'seed_pdf' for the 26 projects of the owner's Nov 2026 briefing PDF; default 'manual'. */
   provenance?: Project['provenance'];
 }
 
@@ -155,6 +167,7 @@ export function buildProject(input: ProjectInput): Project {
       valueM2: a.valueM2 ?? exact,
       basis: a.basis,
       ...(a.label ? { label: a.label } : {}),
+      ...(a.qualifier ? { qualifier: a.qualifier } : {}),
       originalValue: a.value,
       originalUnit: a.unit,
       sourceUrl: src(a.src).url,
@@ -174,6 +187,7 @@ export function buildProject(input: ProjectInput): Project {
         currency: inv.currency,
         ...(amountAed !== undefined ? { amountAed, amountAedDerivation: inv.aed } : {}),
         basis: inv.basis,
+        scope: inv.scope,
         disclosed: true,
         sourceUrl: src(inv.src).url,
       };
@@ -229,9 +243,8 @@ export function buildProject(input: ProjectInput): Project {
     events,
     ...(input.parentId ? { parentId: input.parentId } : {}),
     ...(input.phaseLabel ? { phaseLabel: input.phaseLabel } : {}),
-    provenance: input.provenance ?? (input.presentation?.pdfRef ? 'seed_pdf' : 'manual'),
+    provenance: input.provenance ?? 'manual',
     ...(input.seedNote ? { seedNote: input.seedNote } : {}),
-    ...(input.presentation ? { presentation: input.presentation } : {}),
     createdAt: SEED_TS,
     updatedAt: SEED_TS,
   };

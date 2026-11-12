@@ -4,8 +4,11 @@ import {
   computeMetrics,
   countableProjects,
   isDeliveredInYear,
+  floorFigure,
   isUmbrella,
   selectAreasByBasis,
+  sumFloorSpace,
+  sumInvestments,
   sumAreasByBasis,
   type Project,
 } from '../index.ts';
@@ -116,13 +119,16 @@ describe('land and yard never inflate warehouse metrics', () => {
     expect(g.site_land_area.totalM2).toBe(100_000);
   });
 
-  it('open yard delivered counts as a project but adds no floor area', () => {
-    const o = m2026.otherModernDelivered;
-    expect(o.projectIds).toContain(epsilon.id);
+  it('an open yard delivered is other logistics infrastructure: counted, never warehouse floor space', () => {
+    expect(m2026.otherModernDelivered.projectIds).not.toContain(epsilon.id);
+    const o = m2026.otherInfrastructureDelivered;
+    expect(o.projectIds).toEqual([epsilon.id]);
     expect(o.areas.open_yard.totalM2).toBe(80937.13);
     expect(o.areas.warehouse_gfa.projectIds).not.toContain(epsilon.id);
-    expect(o.areas.gla.projectIds).not.toContain(epsilon.id);
     expect(o.withoutBuildingAreaIds).toEqual([epsilon.id]);
+    expect(o.withoutFloorFigureIds).toEqual([epsilon.id]);
+    expect(m2026.delivered.all.projectIds).toContain(epsilon.id);
+    expect(m2026.delivered.otherInfrastructure.projectIds).toEqual([epsilon.id]);
   });
 
   it('land-only committed project contributes only to site_land_area', () => {
@@ -211,7 +217,16 @@ describe('year switching', () => {
     expect(m2026.gradeADelivered.projectIds).toEqual([alpha.id]);
     expect(m2026.gradeAProbableDelivered.projectIds).toEqual([gamma.id]);
     expect(m2026.gradeAProbableDelivered.areas.warehouse_gfa.totalM2).toBe(20_000);
-    expect(m2026.otherModernDelivered.projectIds.sort()).toEqual([beta.id, epsilon.id, lambda.id].sort());
+    expect(m2026.otherModernDelivered.projectIds.sort()).toEqual([beta.id, lambda.id].sort());
+    expect(m2026.otherInfrastructureDelivered.projectIds).toEqual([epsilon.id]);
+  });
+
+  it('splits delivered into opened and construction completed, never merged', () => {
+    const d = m2026.delivered;
+    expect(d.constructionCompleted.projectIds).toEqual([beta.id]);
+    expect(d.opened.projectIds.sort()).toEqual([alpha.id, gamma.id, epsilon.id, lambda.id].sort());
+    expect(d.opened.count + d.constructionCompleted.count).toBe(d.all.projectCount);
+    expect(d.warehouse.projectCount + d.otherInfrastructure.projectCount).toBe(d.all.projectCount);
   });
 
   it('2027 delivered figures', () => {
@@ -326,5 +341,53 @@ describe('primaryUnspecified (reported area, basis not stated)', () => {
   it('is present on every bucket including committed and under construction', () => {
     expect(m2026.committedNotStarted.primaryUnspecified).toBeDefined();
     expect(m2026.underConstruction.all.primaryUnspecified).toBeDefined();
+  });
+});
+
+describe('floor figures and subtotals', () => {
+  it('one floor figure per project; land never; secondary unspecified never', () => {
+    expect(floorFigure(alpha)?.basis).toBe('warehouse_gfa');
+    expect(floorFigure(delta)).toBeUndefined(); // land plot only
+    expect(floorFigure(epsilon)).toBeUndefined(); // open yard only
+    const p: Project = {
+      ...alpha,
+      areas: [
+        { valueM2: 30_000, basis: 'site_land_area', sourceUrl: alpha.areas[0]!.sourceUrl },
+        { valueM2: 9_000, basis: 'unspecified', qualifier: 'over', sourceUrl: alpha.areas[0]!.sourceUrl },
+      ],
+    };
+    delete (p as Partial<Project>).primaryAreaIndex;
+    expect(floorFigure(p)).toBeUndefined(); // primary (first) is land
+    const q: Project = { ...p, primaryAreaIndex: 1 };
+    expect(floorFigure(q)?.basis).toBe('unspecified');
+    const fs = sumFloorSpace([q]);
+    expect(fs.unspecified).toEqual({ totalM2: 9_000, projectIds: [alpha.id], qualifiedIds: [alpha.id] });
+  });
+
+  it('bucket floorSpace matches its per-basis areas for building bases', () => {
+    for (const b of [m2026.gradeADelivered, m2026.otherModernDelivered, m2026.underConstruction.all]) {
+      for (const basis of ['warehouse_gfa', 'gla', 'mixed_building_area'] as const) {
+        expect(b.floorSpace[basis].totalM2).toBe(b.areas[basis].totalM2);
+      }
+      expect(b.primaryUnspecified.totalM2).toBe(b.floorSpace.unspecified.totalM2);
+    }
+  });
+});
+
+describe('investment scope', () => {
+  it('sums facility-scope amounts only and lists the rest', () => {
+    const ps = cloneProjects();
+    ps.find((p) => p.id === eta.id)!.investment!.scope = 'wider_than_facility';
+    delete ps.find((p) => p.id === delta.id)!.investment!.scope;
+    const i = computeMetrics(ps, 2026).investmentAnnouncements.disclosed;
+    expect(i.byCurrency).toEqual({ AED: { total: 200_000_000, projectIds: [zetaPhase1.id] } });
+    expect(i.notSummed.map((x) => [x.projectId, x.scope]).sort()).toEqual([
+      [delta.id, 'unknown'],
+      [eta.id, 'wider_than_facility'],
+    ]);
+    expect(i.aedWhereAvailable.total).toBe(200_000_000);
+    const s = sumInvestments(ps.filter((p) => [eta.id, delta.id, zetaPhase1.id, gamma.id].includes(p.id)));
+    expect(Object.keys(s.facilityByCurrency)).toEqual(['AED']);
+    expect(s.undisclosedIds).toEqual([gamma.id]);
   });
 });

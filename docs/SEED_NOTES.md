@@ -3,8 +3,13 @@
 > **Evidence audit, 12 Nov 2026.** Every record was re-checked field by field
 > against its sources (`docs/AUDIT_2026-11.md`). The reviewed evidence is the
 > single source of truth; the PDF never overrides it. Structured fields below
-> reflect the audit; the `presentation` (briefing) blocks were left unchanged
-> for the next step, which rebuilds the briefing from the audited records.
+> reflect the audit.
+>
+> **Consistency repair, 12 Nov 2026.** The `presentation` (briefing) blocks
+> and `computePresentedTotals` were removed. The headline and the briefing
+> snapshot are now derived from the audited records by `computeBriefing`
+> (`docs/CONSISTENCY_REPAIR.md`). The PDF columns in §2 are kept only as a
+> record of what the old briefing said; none of it is shown on the site.
 
 This page explains how `data/register.json` and `data/pending-review.json`
 were seeded from the owner's November 2026 briefing PDF, how each PDF figure
@@ -17,34 +22,21 @@ maps to the structured (strict) data, and what could not be verified.
   once the pipeline has added records**: it overwrites both files.
 * **Evidence:** `research/pdf-sources.{json,md}`, `research/seed-research.{json,md}`,
   plus pages read directly while seeding (listed in §6).
-* **Counts:** 31 projects (26 PDF rows, 2 umbrellas, 3 "not counted"
-  items), 14 pending-review items, 0 regional (non-Dubai) projects.
+* **Counts:** 31 projects (26 PDF rows, 2 umbrellas, 3 further projects
+  found while seeding), 14 pending-review items, 0 regional (non-Dubai) projects.
   `npm run validate`: 0 errors, 7 warnings (§5).
 
-## 1. Two views of the same data
+## 1. One view of the data
 
-| | Briefing view ("as reported") | Strict view |
-|---|---|---|
-| Function | `computePresentedTotals(projects, 2026)` | `computeMetrics(projects, 2026)` |
-| Area | Adds the figure the PDF charts (`presentation.presentedAreaM2`) for rows inside the PDF subtotals, whatever its basis | One number per measurement basis; only `warehouse_gfa` and `gla` count as warehouse floor space; `mixed_building_area` is a separate labelled number; land, yard, district and unspecified never count |
-| Opened or completed | The PDF's own split (`presentation.presentedMilestone`) | `status` from the latest sourced event |
-| Labels | PDF wording (`descriptor`, `areaLabel`, `dateLabel`) | Source wording (`summary`, events, area notes) |
-
-The briefing view reproduces the PDF exactly:
-
-| PDF figure | `computePresentedTotals` |
-|---|---|
-| Openings floor area 261,600 m² across ten disclosed facilities | `openings.floorAreaM2` = 261,600; `disclosedFloorCount` = 10 |
-| "Opened 13 … and completed one more" (Aldar NIP phase 1) | `openedCount` = 13; `completedOnlyCount` = 1 |
-| Being built 215,260 m² (rows 15–19) | `beingBuilt.floorAreaM2` = 215,260 |
-
-`statusCompletedOnlyCount` = 3. Under the strict status, rows 1, 2 and 7 are
-"construction completed": the sources confirm completion, but not opening,
-for Aldar NIP phase 1 (row 1) and Emirates Snack Foods (row 7), and say only
-"commissioning" for dnata (row 2). The other 11 openings rows have explicit
-opening wording (§4 of `docs/AUDIT_2026-11.md`). The briefing view above is
-the PDF "as reported"; the audit lists which of its claims the evidence does
-not support (AUDIT §5).
+Since the consistency repair there is a single view. `computeMetrics` and
+`computeBriefing` (shared/) apply the rules in `shared/definitions.ts` to the
+audited records; every page, the snapshot and the CSV use them. The PDF's own
+totals ("13 opened and one completed", 261,600 m² opened, 215,260 m² being
+built) are deliberately not reproduced: they mixed area bases and counted
+three completions as openings. Derived 2026 figures: 11 opened / operational,
+3 construction completed (rows 1, 2 and 7); warehouse floor area by basis
+26,013 m² GFA · 20,000 m² GLA · 10,405 m² built-up (mixed use) · 204,174 m²
+basis not stated. Which PDF claims the evidence does not support: AUDIT §5.
 
 ## 2. All 26 PDF rows
 
@@ -83,7 +75,7 @@ source uses the words "Grade A" (quoted in `gradeAEvidence`).
 | 25 | `dubai-commercity-the-hive` | 5,600 m²; Floor, 4 Oct | 5,600 m² `unspecified`; proposed; investment recorded as undisclosed (Dh1.8 bn covers all of phase two) | unverified | Direct (1 of 1) | "2027 to 2028" covers all of phase two, not The Hive alone. |
 | 26 | `dp-world-mol-jebel-ali-vehicle-processing` | Not disclosed; Term sheet 6 Oct | No area; term sheet Oct 2026 (announced 7 Oct per MarkLines, indexed); MoU Dec 2023 | not applicable | **Indexed only** | No source for 6 Oct. |
 
-**Umbrellas** (no presentation; never counted):
+**Umbrellas** (never counted):
 
 * `aldar-logistics-centres-nip`: 148,530 m² `warehouse_gfa` ("Total GFA" on
   Aldar's leasing page; the portfolio page rounds to 148,500), 144,000 m²
@@ -92,10 +84,11 @@ source uses the words "Grade A" (quoted in `gradeAEvidence`).
 * `terralogix-logistics-park-warsan`: 182,000 m² `gla` and 3.3 m sq ft
   `unspecified` (indexed only). Phase: row 16.
 
-**Not counted** (`section: 'not_counted'`; labels from the sources, since
-the PDF only names them):
+**Further projects found while seeding** (the PDF listed them apart as
+unconfirmed; every field follows the sources and they are counted by status
+like any other record — two under construction, one investment committed):
 
-| Project id | Status | Why it is not counted |
+| Project id | Status | Evidence position |
 |---|---|---|
 | `cwt-sml-toll-dc6-dubai-south` | under construction | Completion was due Aug 2026 (Dubai South page, read while seeding); no completion found. Areas: 25,000 m² `unspecified` and 15,620 m² `mixed_building_area`. |
 | `dhl-supply-chain-dubai-south-multi-user-warehouse` | investment committed | The Q1 2026 groundbreaking is unconfirmed (one secondary report says construction began). Completion due summer 2027. 55,000 m² `unspecified` (no GFA stated), EUR 120 m. |
@@ -121,9 +114,12 @@ other 10.
 | Site / land | 31,679.94 m² | rows 8, 10 |
 | Open yard | 18,580.61 m² | row 4 |
 
-The PDF reports **261,600 m²** of floor space opened. The strict figure is
-**26,013 m² warehouse GFA + 20,000 m² GLA**, plus 10,405 m² of mixed building
-area reported separately; every other figure has no stated floor basis.
+The old PDF reported 261,600 m² of floor space opened (not reproduced). Since
+the consistency repair, the site shows warehouse floor area per basis for the
+10 warehouse-type facilities only: 26,013 m² GFA · 20,000 m² GLA · 10,405 m²
+built-up (mixed use) · 204,174 m² basis not stated (rows 1, 2, 3, 5, 6, 9).
+The Al Awir depot (row 14) and MOSOLF's PDI warehouse (row 10, a secondary
+measure) are not warehouse floor figures.
 
 ### Being built (current status `under_construction`: 8 projects)
 
@@ -133,9 +129,10 @@ area reported separately; every other figure has no stated floor basis.
 | Mixed building area | 48,136.06 m² | row 17 (32,516.06), Toll DC6 (15,620) |
 | Unspecified | 1,242,891.91 m² | rows 16, 18, 19, 20 (1.1 m), Toll DC6 (25,000), Sky Support |
 
-The PDF reports **215,260 m²** for rows 15–19. Strictly, only the 81,000 m²
-GLA of NIP phase 2 is warehouse floor space; the PDF's 81,500 is derived and
-is not stored.
+The old PDF reported 215,260 m² for rows 15–19 (not reproduced). The site
+shows, for warehouse-type facilities being built: 81,000 m² GLA (NIP phase 2)
+· 48,136 m² built-up (mixed use) · 101,231 m² basis not stated; the Emirates
+complex and the Sky Support Complex are other logistics infrastructure.
 
 ### Other strict figures
 
@@ -181,8 +178,8 @@ this session, that confirmed identity, location, area and milestone.
 | Code | Project | Why it is acceptable |
 |---|---|---|
 | FORECAST_OVERDUE | `gallega-finished-vehicles-hub-jafza` | Operations were due May 2026 and are unconfirmed; the record shows this as an open question. |
-| FORECAST_OVERDUE | `cwt-sml-toll-dc6-dubai-south` | Completion was due Aug 2026 and is unconfirmed (the reason the PDF does not count it). |
-| FORECAST_OVERDUE | `mbrah-sky-support-complex` | Completion was due by end of Q3 2026 and is unconfirmed (the reason the PDF does not count it). |
+| FORECAST_OVERDUE | `cwt-sml-toll-dc6-dubai-south` | Completion was due Aug 2026 and is unconfirmed; shown as "Forecast Aug 2026 (date passed)". |
+| FORECAST_OVERDUE | `mbrah-sky-support-complex` | Completion was due by end of Q3 2026 and is unconfirmed; shown as "Forecast Q3 2026 (date passed)". |
 | MULTIPLE_AREAS_SAME_BASIS | `emirates-engineering-complex-dubai-south` | 380,000 m² capacity and the 1.1 m m² complex are both `unspecified`; never floor space. |
 | MULTIPLE_AREAS_SAME_BASIS | `phoenix-aviation-mro-centre-mbrah` | Four sourced components, none with a stated basis; the PDF's sum is not stored. |
 | SHARED_SOURCE_URL | NIP umbrella and phase 1, Emirates Snack Foods | Aldar's Q3 2026 results release covers both Aldar facilities. |
@@ -216,11 +213,8 @@ warehouse, DHL's warehouse, Al Awir's depot and Emirates' 380,000 m² are
 `unspecified`; no Emirates completion forecast is stored. The notes below are
 the original seeding decisions, kept for the record.
 
-* **`presentedMilestone` (additive schema field).** The brief defined
-  `completedOnlyCount` by status. With the sources as they stand, that gives
-  11 opened and 3 completed-only, not the PDF's 13 + 1. The new field keeps
-  the briefing view "as reported", consistent with the area convention, and
-  `statusCompletedOnlyCount` keeps the strict number visible.
+* **`presentedMilestone`** (removed in the consistency repair). It kept the
+  PDF's "13 + 1" split; the site now counts by status only (11 + 3).
 * **dnata status: construction completed.** The 5 Nov 2026 release says
   "commissioning", which is neither "commissioned" nor "was commissioning".
   The data model maps commissioning to construction completed unless a

@@ -4,8 +4,7 @@
  */
 import {
   NON_FLOOR_BASES,
-  primaryAreaMeasure,
-  selectAreasByBasis,
+  floorFigure,
   type AreaBasis,
   type AreaBreakdown,
   type AreaMeasure,
@@ -35,33 +34,18 @@ export function basisFigures(breakdown: AreaBreakdown, bases: readonly AreaBasis
     .filter((f) => f.projectIds.length > 0);
 }
 
-/** The measure that represents the project's floor space (primary if it is a building basis, else largest building measure). */
+/** The facility's floor measure (the shared `floorFigure`: GFA, GLA, built-up, else a basis-not-stated primary figure). */
 export function floorMeasure(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): AreaMeasure | undefined {
-  const primary = p.primaryAreaIndex !== undefined ? p.areas[p.primaryAreaIndex] : undefined;
-  if (primary && (BUILDING_BASES as readonly AreaBasis[]).includes(primary.basis)) return primary;
-  const sel = selectAreasByBasis(p);
-  for (const b of BUILDING_BASES) {
-    const s = sel[b];
-    if (s) return p.areas[s.index];
-  }
-  return undefined;
+  return floorFigure(p)?.measure;
 }
 
-/** The measure to show in a one-line table cell: floor measure, else primary, else the largest. */
+/** The measure to show in a one-line table cell: the floor figure, else the primary, else the largest measure. */
 export function headlineMeasure(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): AreaMeasure | undefined {
-  const floor = reportedFloorMeasure(p);
+  const floor = floorMeasure(p);
   if (floor) return floor;
   const primary = p.primaryAreaIndex !== undefined ? p.areas[p.primaryAreaIndex] : undefined;
   if (primary) return primary;
   return [...p.areas].sort((a, b) => b.valueM2 - a.valueM2)[0];
-}
-
-/** Floor measure, or failing that the source's area of unstated basis (reported as floor space). */
-export function reportedFloorMeasure(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): AreaMeasure | undefined {
-  const floor = floorMeasure(p);
-  if (floor) return floor;
-  const primary = primaryAreaMeasure(p);
-  return primary?.basis === 'unspecified' ? primary : undefined;
 }
 
 export const SIZE_BANDS = [
@@ -73,9 +57,9 @@ export const SIZE_BANDS = [
 ] as const;
 export type SizeBandId = (typeof SIZE_BANDS)[number]['id'];
 
-/** Size band by floor measure (GFA, GLA or mixed building area — whichever represents the facility). */
+/** Size band by the facility's floor figure (whatever its basis). */
 export function sizeBandOf(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): SizeBandId {
-  const m = reportedFloorMeasure(p);
+  const m = floorMeasure(p);
   if (!m) return 'undisclosed';
   for (const b of SIZE_BANDS) if (m.valueM2 >= b.min && m.valueM2 < b.max) return b.id;
   return 'undisclosed';

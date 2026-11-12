@@ -120,6 +120,7 @@ export const ASSET_TYPES = [
   'air_cargo_terminal',
   'mro_aerospace_facility',
   'container_terminal_or_depot',
+  'bulk_liquid_terminal',
   'inland_port_or_rail',
   'open_yard',
   'mixed_industrial',
@@ -137,6 +138,7 @@ export const ASSET_TYPE_LABELS: Record<AssetType, string> = {
   air_cargo_terminal: 'Air cargo terminal',
   mro_aerospace_facility: 'MRO / aerospace facility',
   container_terminal_or_depot: 'Container terminal or depot',
+  bulk_liquid_terminal: 'Bulk liquid (tank) terminal',
   inland_port_or_rail: 'Inland port or rail',
   open_yard: 'Open yard',
   mixed_industrial: 'Mixed industrial',
@@ -224,6 +226,35 @@ export const AREA_UNIT_LABELS: Record<AreaUnit, string> = {
   sqft: 'square feet (sq ft)',
   hectare: 'hectares (ha)',
   acre: 'acres',
+};
+
+/**
+ * How the source qualifies an area figure: "over 67,000 sqm" is a lower bound
+ * (`over`); "nearly" / "almost 20,000 sqm" is `nearly`; "about" / "approximately"
+ * is `about`. Absent = the source states the figure plainly.
+ */
+export const AREA_QUALIFIERS = ['over', 'nearly', 'about'] as const;
+export type AreaQualifier = (typeof AREA_QUALIFIERS)[number];
+export const AREA_QUALIFIER_LABELS: Record<AreaQualifier, string> = {
+  over: 'over',
+  nearly: 'nearly',
+  about: 'about',
+};
+
+/**
+ * What a disclosed investment amount covers. `facility`: the logistics facility
+ * itself (it may include its own yard, offices or fit-out). `wider_than_facility`:
+ * the amount also covers things that are not the logistics facility (land, a
+ * corporate HQ, retail, a whole MRO complex). `unknown`: not established.
+ * Aggregates sum `facility` amounts only; the rest is listed separately.
+ * An investment without `scope` is treated as `unknown`.
+ */
+export const INVESTMENT_SCOPES = ['facility', 'wider_than_facility', 'unknown'] as const;
+export type InvestmentScope = (typeof INVESTMENT_SCOPES)[number];
+export const INVESTMENT_SCOPE_LABELS: Record<InvestmentScope, string> = {
+  facility: 'The logistics facility',
+  wider_than_facility: 'More than the logistics facility',
+  unknown: 'Scope not established',
 };
 
 export const GRADE_A_STATUSES = ['confirmed', 'probable', 'unverified', 'not_applicable'] as const;
@@ -378,56 +409,6 @@ export const SCAN_STATUS_LABELS: Record<ScanStatus, string> = {
   skipped: 'Skipped',
 };
 
-/** Section of the owner's Nov 2026 briefing PDF a project is presented in (see `presentation`). */
-export const PRESENTATION_SECTIONS = [
-  'openings',
-  'being_built',
-  'signed_or_announced',
-  'not_counted',
-  'added_after_pdf',
-] as const;
-export type PresentationSection = (typeof PRESENTATION_SECTIONS)[number];
-export const PRESENTATION_SECTION_LABELS: Record<PresentationSection, string> = {
-  openings: 'Openings and completions',
-  being_built: 'Being built',
-  signed_or_announced: 'Signed or announced',
-  not_counted: 'Not counted (unconfirmed)',
-  added_after_pdf: 'Added after the briefing',
-};
-
-/** What the PDF's charted area figure measures (presentation only; strict basis lives in `areas[]`). */
-export const PRESENTED_AREA_KINDS = ['floor', 'district', 'land', 'yard'] as const;
-export type PresentedAreaKind = (typeof PRESENTED_AREA_KINDS)[number];
-export const PRESENTED_AREA_KIND_LABELS: Record<PresentedAreaKind, string> = {
-  floor: 'Floor area (as reported)',
-  district: 'District area',
-  land: 'Land / site area',
-  yard: 'Open yard',
-};
-
-/** How the PDF counts an openings row (as reported; not the strict status). */
-export const PRESENTED_MILESTONES = ['opened', 'completed_only'] as const;
-export type PresentedMilestone = (typeof PRESENTED_MILESTONES)[number];
-export const PRESENTED_MILESTONE_LABELS: Record<PresentedMilestone, string> = {
-  opened: 'Opened (as reported)',
-  completed_only: 'Completed, not yet opened (as reported)',
-};
-
-/** Colour category used by the owner's briefing PDF. */
-export const PRESENTATION_CATEGORIES = [
-  'grade_a_developer',
-  'other_modern',
-  'specialised',
-  'land_site_yard',
-] as const;
-export type PresentationCategory = (typeof PRESENTATION_CATEGORIES)[number];
-export const PRESENTATION_CATEGORY_LABELS: Record<PresentationCategory, string> = {
-  grade_a_developer: 'Grade A (developer)',
-  other_modern: 'Other modern',
-  specialised: 'Specialised',
-  land_site_yard: 'Land, site or yard',
-};
-
 /** Index of every enum's label map, keyed by enum name, for generic UI rendering. */
 export const ENUM_LABELS = {
   emirate: EMIRATE_LABELS,
@@ -451,10 +432,8 @@ export const ENUM_LABELS = {
   reviewState: REVIEW_STATE_LABELS,
   runStatus: RUN_STATUS_LABELS,
   scanStatus: SCAN_STATUS_LABELS,
-  presentationSection: PRESENTATION_SECTION_LABELS,
-  presentedAreaKind: PRESENTED_AREA_KIND_LABELS,
-  presentationCategory: PRESENTATION_CATEGORY_LABELS,
-  presentedMilestone: PRESENTED_MILESTONE_LABELS,
+  areaQualifier: AREA_QUALIFIER_LABELS,
+  investmentScope: INVESTMENT_SCOPE_LABELS,
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -497,6 +476,8 @@ export const InvestmentSchema = z
     amountAedDerivation: z.enum(AED_DERIVATIONS).optional(),
     /** Free-text note on what the amount covers (e.g. "total programme capex incl. phase 2"). */
     basis: z.string(),
+    /** Structured scope of the amount (see INVESTMENT_SCOPES). Absent = `unknown`. */
+    scope: z.enum(INVESTMENT_SCOPES).optional(),
     /** False when the investment exists but its value was not disclosed. */
     disclosed: z.boolean(),
     sourceUrl: UrlStringSchema.optional(),
@@ -531,6 +512,8 @@ export const AreaMeasureSchema = z
     valueM2: z.number().positive(),
     basis: z.enum(AREA_BASES),
     label: z.string().optional(),
+    /** The source's own qualifier ("over", "nearly", "about"); shown with the figure everywhere. */
+    qualifier: z.enum(AREA_QUALIFIERS).optional(),
     /** The figure exactly as the source gave it. */
     originalValue: z.number().positive().optional(),
     originalUnit: z.enum(AREA_UNITS).optional(),
@@ -593,45 +576,6 @@ export const ProjectEventSchema = z
   .strict();
 export type ProjectEvent = z.infer<typeof ProjectEventSchema>;
 
-/**
- * How a project is shown in the owner's briefing view (Nov 2026 PDF). These
- * labels and figures reproduce the PDF "as reported" and are NOT strict data:
- * strict figures live in `areas[]`, `status`, `actualCompletion` etc.
- */
-export const PresentationSchema = z
-  .object({
-    /** 1–26, row in the owner's Nov 2026 PDF. */
-    pdfRef: z.number().int().min(1).max(26).optional(),
-    section: z.enum(PRESENTATION_SECTIONS),
-    /** Company chips as shown, lead first, e.g. ["Aldar","DP World"]. */
-    partners: z.array(NonEmpty),
-    /** e.g. "Automated warehouse, AED 100 m". */
-    descriptor: NonEmpty,
-    /** e.g. "Dubai South", "NIP", "DIC". */
-    locationLabel: NonEmpty,
-    /** e.g. "57,000", "Not disclosed (AED 300 m)", "USD 5.1 bn". */
-    areaLabel: NonEmpty,
-    /** The number the PDF charts, if any. */
-    presentedAreaM2: z.number().positive().optional(),
-    presentedAreaKind: z.enum(PRESENTED_AREA_KINDS).optional(),
-    /** True only for rows inside the PDF subtotals. */
-    countedInPresentedTotal: z.boolean(),
-    /** e.g. "20 May", "Q3, completed", "Ready Q1 2027". */
-    dateLabel: NonEmpty,
-    category: z.enum(PRESENTATION_CATEGORIES),
-    sortOrder: z.number(),
-    /**
-     * Openings rows only: whether the PDF counts the row as opened or as
-     * completed-only ("opened 13 … and completed one more"). Defaults to
-     * 'opened'. As reported by the PDF; the strict status is `status`.
-     */
-    presentedMilestone: z.enum(PRESENTED_MILESTONES).optional(),
-    /** Short plain note where sources disagree with the PDF wording/figure. */
-    differsFromSources: z.string().optional(),
-  })
-  .strict();
-export type Presentation = z.infer<typeof PresentationSchema>;
-
 /** Slug: lowercase a-z, 0-9 and single hyphens; 3–100 chars. */
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const ProjectIdSchema = z
@@ -691,8 +635,6 @@ export const ProjectSchema = z
 
     provenance: z.enum(PROVENANCES),
     seedNote: z.string().optional(),
-    /** Optional briefing-view presentation (PDF labels, "as reported"). Never used by strict metrics. */
-    presentation: PresentationSchema.optional(),
     createdAt: IsoDateTimeSchema,
     updatedAt: IsoDateTimeSchema,
   })

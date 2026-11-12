@@ -1,34 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CSV_COLUMNS, RegisterFileSchema, csvCell, registerToCsv, registerToJson, serializeDataFile } from '../index.ts';
 import { FIXTURE_PROJECTS, alpha, zeta, zetaPhase1 } from '../__fixtures__/projects.ts';
-
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = '';
-  let q = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]!;
-    if (q) {
-      if (ch === '"' && text[i + 1] === '"') {
-        cell += '"';
-        i++;
-      } else if (ch === '"') q = false;
-      else cell += ch;
-    } else if (ch === '"') q = true;
-    else if (ch === ',') {
-      row.push(cell);
-      cell = '';
-    } else if (ch === '\r' && text[i + 1] === '\n') {
-      row.push(cell);
-      rows.push(row);
-      row = [];
-      cell = '';
-      i++;
-    } else cell += ch;
-  }
-  return rows;
-}
+import { parseCsv } from './parseCsv.ts';
 
 describe('CSV export', () => {
   const csv = registerToCsv(FIXTURE_PROJECTS);
@@ -47,6 +20,20 @@ describe('CSV export', () => {
     expect(a[col('area_warehouse_gfa_m2')]).toBe('49981.84');
     expect(a[col('area_site_land_m2')]).toBe('100000');
     expect(a[col('area_gla_m2')]).toBe('');
+  });
+
+  it('uses the shared delivery, asset-group, floor-figure and investment-scope definitions', () => {
+    const a = rows.find((r) => r[0] === alpha.id)!;
+    expect(a[col('delivery')]).toBe('Opened / operational');
+    expect(a[col('asset_group')]).toBe('warehouse');
+    expect(a[col('floor_figure_m2')]).toBe('49981.84');
+    expect(a[col('floor_figure_basis')]).toBe('warehouse_gfa');
+    expect(a[col('investment_scope')]).toBe('facility');
+    const y = rows.find((r) => r[0] === 'epsilon-jafza-open-yard')!;
+    expect(y[col('asset_group')]).toBe('other_infrastructure');
+    expect(y[col('floor_figure_m2')]).toBe('');
+    const b = rows.find((r) => r[0] === 'beta-dic-gla-park')!;
+    expect(b[col('delivery')]).toBe('Construction completed');
   });
 
   it('marks umbrellas and phases', () => {

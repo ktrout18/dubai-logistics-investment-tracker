@@ -12,7 +12,8 @@ import {
   SCHEMA_VERSION,
   isRegional,
 } from './schema.ts';
-import { selectAreasByBasis, umbrellaIdSet } from './metrics.ts';
+import { floorFigure, selectAreasByBasis, umbrellaIdSet } from './metrics.ts';
+import { DELIVERY_LABELS, assetGroupOf, deliveryKindOf, investmentScopeOf } from './definitions.ts';
 
 /** Stable, pretty JSON for any data file (2-space indent + trailing newline). */
 export function serializeDataFile(data: unknown): string {
@@ -44,12 +45,17 @@ const COLUMNS: readonly ColumnDef[] = [
   ['facility_name', (p) => p.facilityName],
   ['status', (p) => p.status],
   ['status_label', (p) => PROJECT_STATUS_LABELS[p.status]],
+  ['delivery', (p) => {
+    const k = deliveryKindOf(p);
+    return k ? DELIVERY_LABELS[k] : undefined;
+  }],
   ['emirate', (p) => p.emirate],
   ['regional_context', (p) => isRegional(p)],
   ['zone', (p) => p.zone],
   ['location', (p) => p.location],
   ['sectors', (p) => p.sectors.join('; ')],
   ['asset_type', (p) => p.assetType],
+  ['asset_group', (p) => assetGroupOf(p)],
   ['developer', (p) => p.developer],
   ['investor', (p) => p.investor],
   ['owner', (p) => p.owner],
@@ -65,11 +71,15 @@ const COLUMNS: readonly ColumnDef[] = [
     (b): ColumnDef => [AREA_COLUMN[b], (p) => selectAreasByBasis(p)[b]?.valueM2],
   ),
   ['primary_area_basis', (p) => (p.primaryAreaIndex !== undefined ? p.areas[p.primaryAreaIndex]?.basis : undefined)],
+  ['floor_figure_m2', (p) => floorFigure(p)?.measure.valueM2],
+  ['floor_figure_basis', (p) => floorFigure(p)?.basis],
+  ['floor_figure_qualifier', (p) => floorFigure(p)?.measure.qualifier],
   ['investment_disclosed', (p) => p.investment?.disclosed],
   ['investment_amount', (p) => p.investment?.amount],
   ['investment_currency', (p) => p.investment?.currency],
   ['investment_amount_aed', (p) => p.investment?.amountAed],
   ['investment_aed_derivation', (p) => p.investment?.amountAedDerivation],
+  ['investment_scope', (p) => (p.investment?.disclosed ? investmentScopeOf(p.investment) : undefined)],
   ['investment_basis', (p) => p.investment?.basis],
   ['investment_source_url', (p) => p.investment?.sourceUrl],
   ['original_announcement_date', (p) => p.originalAnnouncement?.date],

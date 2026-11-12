@@ -2,12 +2,11 @@
   "schemaVersion": 1,
   "items": [
     {
-      "id": "rev-20261111-58466968",
+      "id": "rev-20261111-1264d3e9",
       "kind": "conflict",
       "projectId": "dnata-logistics-dubai-south-warehouse",
       "proposed": {
-        "status": "operational",
-        "presentation.presentedMilestone": "opened"
+        "status": "operational"
       },
       "evidence": [
         {
@@ -95,7 +94,7 @@
       "state": "open"
     },
     {
-      "id": "rev-20261111-23c38044",
+      "id": "rev-20261111-68d32101",
       "kind": "new_project",
       "proposed": {
         "name": "Iron Mountain warehousing and logistics facility (Unilever), EZDubai",
@@ -107,10 +106,7 @@
             "valueM2": 37000,
             "basis": "unspecified"
           }
-        ],
-        "presentation": {
-          "section": "added_after_pdf"
-        }
+        ]
       },
       "evidence": [
         {
@@ -123,12 +119,12 @@
           "quote": "Iron Mountain opens 37,000-sq m warehousing facility in Dubai South (search results only)"
         }
       ],
-      "reasonHeld": "Opened per reports dated 9 Nov 2026 (re-searched 12 Nov: WAM, Al Khaleej, TradeArabia, GDN, all search results only), after the PDF. No official page could be read (WAM pages need JavaScript; the item was not in the Dubai South newsroom on 11 Nov), the opening day itself is not stated, and one outlet gave 37,000 sq ft instead of sq m. Add as \"added after PDF\" once an official page confirms area and date.",
+      "reasonHeld": "Opened per reports dated 9 Nov 2026 (re-searched 12 Nov: WAM, Al Khaleej, TradeArabia, GDN, all search results only), after the PDF. No official page could be read (WAM pages need JavaScript; the item was not in the Dubai South newsroom on 11 Nov), the opening day itself is not stated, and one outlet gave 37,000 sq ft instead of sq m. Add to the register once an official page confirms area and date.",
       "createdAt": "2026-11-11T12:00:00Z",
       "state": "open"
     },
     {
-      "id": "rev-20261111-c057f01b",
+      "id": "rev-20261111-11d3eeec",
       "kind": "new_project",
       "proposed": {
         "name": "Aramex regional healthcare and pharmaceutical hub, Dubai South Free Zone",
@@ -140,10 +136,7 @@
             "valueM2": 5600,
             "basis": "unspecified"
           }
-        ],
-        "presentation": {
-          "section": "added_after_pdf"
-        }
+        ]
       },
       "evidence": [
         {
@@ -156,7 +149,7 @@
           "quote": "Aramex opens first regional healthcare hub at Dubai South Free Zone (search results only)"
         }
       ],
-      "reasonHeld": "Identity, location, 5,600 m² and the March 2026 opening are confirmed by Gulf News (read directly), but no official Aramex or Dubai South page was read, and Aramex's own healthcare page refers to a facility in Dubai Logistics City. Not in the PDF. Add as \"added after PDF\" once an official page is read.",
+      "reasonHeld": "Identity, location, 5,600 m² and the March 2026 opening are confirmed by Gulf News (read directly), but no official Aramex or Dubai South page was read, and Aramex's own healthcare page refers to a facility in Dubai Logistics City. Not in the PDF. Add to the register once an official page is read.",
       "createdAt": "2026-11-11T12:00:00Z",
       "state": "open"
     },

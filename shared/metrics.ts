@@ -11,7 +11,13 @@
  * 2. Only Dubai, countable (non-umbrella), non-cancelled projects enter
  *    totals. Regional (non-Dubai) projects get a separate summary.
  * 3. "Delivered in year Y" = status construction_completed or operational AND
- *    `actualCompletion.date` falls in Y. A forecast date never counts.
+ *    `actualCompletion.date` falls in Y. A forecast date never counts. The two
+ *    statuses are always counted separately (opened vs construction completed;
+ *    see definitions.ts).
+ * 4. Warehouse floor-space buckets (Grade-A confirmed / probable / other
+ *    modern) include only warehouse-type assets (`isWarehouseAsset`); other
+ *    logistics infrastructure is a separate bucket.
+ * 5. Investment sums use facility-scope amounts only (`sumInvestments`).
  *
  * Phasing: a project that has child phases (any project whose `parentId`
  * points at it) is an UMBRELLA. Umbrellas are excluded from all totals; their
@@ -23,7 +29,14 @@
  * `primaryAreaIndex` for its own basis, otherwise the largest measure of that
  * basis. (The validator warns when a project has several measures of one basis.)
  */
-import type { AreaBasis, Project, ProjectStatus } from './schema.ts';
+import type { AreaBasis, AreaMeasure, Project, ProjectStatus } from './schema.ts';
+import {
+  eligibleProjects,
+  isWarehouseAsset,
+  sumInvestments,
+  type CurrencyTotal,
+  type ScopedAmount,
+} from './definitions.ts';
 import {
   AREA_BASES,
   COMMITTED_NOT_STARTED_STATUSES,
@@ -128,6 +141,75 @@ export function hasBuildingArea(p: Pick<Project, 'areas'>): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// Floor figure: the ONE area figure that represents a facility's floor space
+// ---------------------------------------------------------------------------
+
+/** Bases a floor figure can have, in display order. Land / yard / district never qualify. */
+export const FLOOR_FIGURE_BASES = ['warehouse_gfa', 'gla', 'mixed_building_area', 'unspecified'] as const satisfies readonly AreaBasis[];
+export type FloorFigureBasis = (typeof FLOOR_FIGURE_BASES)[number];
+
+const BUILDING_FIGURE_BASES = ['warehouse_gfa', 'gla', 'mixed_building_area'] as const satisfies readonly AreaBasis[];
+
+export interface FloorFigure {
+  measure: AreaMeasure;
+  /** Index into `project.areas`. */
+  index: number;
+  basis: FloorFigureBasis;
+}
+
+/**
+ * The single measure that stands for a facility's floor space, used by every
+ * view and every subtotal: the primary measure if it is a building basis
+ * (GFA, GLA, built-up), else the selected GFA, then GLA, then built-up
+ * measure; failing those, the PRIMARY measure (`primaryAreaIndex`, else the
+ * first) when its basis is not stated. Site, land, yard and district areas
+ * are never a floor figure, and neither is a secondary basis-not-stated
+ * measure.
+ */
+export function floorFigure(p: Pick<Project, 'areas' | 'primaryAreaIndex'>): FloorFigure | undefined {
+  const isBuilding = (b: AreaBasis) => (BUILDING_FIGURE_BASES as readonly AreaBasis[]).includes(b);
+  const primaryIdx = p.primaryAreaIndex;
+  const primary = primaryIdx !== undefined ? p.areas[primaryIdx] : undefined;
+  if (primary && primaryIdx !== undefined && isBuilding(primary.basis)) {
+    return { measure: primary, index: primaryIdx, basis: primary.basis as FloorFigureBasis };
+  }
+  const sel = selectAreasByBasis(p);
+  for (const b of BUILDING_FIGURE_BASES) {
+    const s = sel[b];
+    if (s) return { measure: p.areas[s.index]!, index: s.index, basis: b };
+  }
+  const first = primaryIdx !== undefined ? primary : p.areas[0];
+  if (first?.basis === 'unspecified') {
+    return { measure: first, index: primaryIdx ?? 0, basis: 'unspecified' };
+  }
+  return undefined;
+}
+
+export interface FloorBasisTotal extends BasisTotal {
+  /** Contributing projects whose figure carries a qualifier ("over", "nearly", "about"). */
+  qualifiedIds: string[];
+}
+
+/** Floor-figure subtotals, one per basis. Never add them together. */
+export type FloorSpace = Record<FloorFigureBasis, FloorBasisTotal>;
+
+/** Per-basis subtotals of the floor figures of `projects` (one figure per project). */
+export function sumFloorSpace(projects: readonly Pick<Project, 'id' | 'areas' | 'primaryAreaIndex'>[]): FloorSpace {
+  const raw: Record<string, number> = {};
+  const out = {} as FloorSpace;
+  for (const b of FLOOR_FIGURE_BASES) out[b] = { totalM2: 0, projectIds: [], qualifiedIds: [] };
+  for (const p of projects) {
+    const f = floorFigure(p);
+    if (!f) continue;
+    raw[f.basis] = (raw[f.basis] ?? 0) + f.measure.valueM2;
+    out[f.basis].projectIds.push(p.id);
+    if (f.measure.qualifier) out[f.basis].qualifiedIds.push(p.id);
+  }
+  for (const b of FLOOR_FIGURE_BASES) out[b].totalM2 = roundTo(raw[b] ?? 0, 2);
+  return out;
+}
+
+// ---------------------------------------------------------------------------
 // Result types
 // ---------------------------------------------------------------------------
 
@@ -136,14 +218,19 @@ export interface ProjectBucket {
   projectCount: number;
   projectIds: string[];
   areas: AreaBreakdown;
-  /** Projects in the bucket with no warehouse_gfa / gla / mixed_building_area figure (floor space undisclosed). */
+  /**
+   * Floor-figure subtotals per basis (one figure per project, see
+   * `floorFigure`). This is what every card, table and the snapshot show.
+   */
+  floorSpace: FloorSpace;
+  /** Projects in the bucket with no floor figure (no GFA, GLA, built-up or basis-not-stated primary figure). */
+  withoutFloorFigureIds: string[];
+  /** Projects in the bucket with no warehouse_gfa / gla / mixed_building_area figure. */
   withoutBuildingAreaIds: string[];
   /**
-   * Reported area whose basis the source does not state: Σ over bucket
-   * projects whose PRIMARY measure (`primaryAreaIndex`, else the first
-   * measure) has basis `unspecified`, counting that primary measure only.
-   * Secondary unspecified measures are excluded. Never add this to any other
-   * basis total.
+   * Floor figures whose basis the source does not state (= `floorSpace.unspecified`):
+   * the primary measure of projects with no GFA, GLA or built-up figure, when that
+   * primary measure is `unspecified`. Never add this to any other basis total.
    */
   primaryUnspecified: BasisTotal;
   /** Projects in the bucket with no area measure at all (area not disclosed). */
@@ -152,12 +239,6 @@ export interface ProjectBucket {
 
 export interface StatusCount {
   count: number;
-  projectIds: string[];
-}
-
-export interface CurrencyTotal {
-  /** Sum of `investment.amount` in this currency (full units, not millions). */
-  total: number;
   projectIds: string[];
 }
 
@@ -174,9 +255,11 @@ export interface InvestmentAnnouncements {
   disclosed: {
     projectCount: number;
     projectIds: string[];
-    /** Summed per currency; currencies are never converted or combined. */
+    /** Facility-scope amounts summed per currency; currencies are never converted or combined. */
     byCurrency: Record<string, CurrencyTotal>;
-    /** Sum of `amountAed` where present (stated, native or peg-derived). Coverage may be partial. */
+    /** Disclosed amounts wider than the facility or of unknown scope: listed, never summed. */
+    notSummed: ScopedAmount[];
+    /** Sum of facility-scope `amountAed` where present (stated, native or peg-derived). Coverage may be partial. */
     aedWhereAvailable: {
       total: number;
       projectIds: string[];
@@ -212,23 +295,42 @@ export interface Metrics {
     excludedCancelledIds: string[];
     regionalProjectIds: string[];
   };
-  /** Delivered in `year` with gradeA === 'confirmed'. */
+  /** Everything delivered in `year` (eligible projects), split by delivery kind. */
+  delivered: {
+    all: ProjectBucket;
+    /** Status operational: opened / operational. */
+    opened: StatusCount;
+    /** Status construction_completed: never counted as opened. */
+    constructionCompleted: StatusCount;
+    /** Warehouse-type assets (all grades). */
+    warehouse: ProjectBucket;
+    /** Other logistics infrastructure (depots, terminals, MRO, vehicle hubs, yards). */
+    otherInfrastructure: ProjectBucket;
+  };
+  /** Warehouse assets delivered in `year` with gradeA === 'confirmed'. */
   gradeADelivered: ProjectBucket;
-  /** Delivered in `year` with gradeA === 'probable'. Never merged into confirmed. */
+  /** Warehouse assets delivered in `year` with gradeA === 'probable'. Never merged into confirmed. */
   gradeAProbableDelivered: ProjectBucket;
-  /** Delivered in `year` with gradeA 'unverified' or 'not_applicable'. */
+  /** Warehouse assets delivered in `year` with gradeA 'unverified' or 'not_applicable'. */
   otherModernDelivered: ProjectBucket;
+  /** Other logistics infrastructure delivered in `year` (= delivered.otherInfrastructure). */
+  otherInfrastructureDelivered: ProjectBucket;
   underConstruction: {
-    /** Grade-A confirmed + probable. */
+    /** Warehouse assets, Grade-A confirmed + probable. */
     gradeA: ProjectBucket;
     gradeAConfirmed: ProjectBucket;
     gradeAProbable: ProjectBucket;
-    /** Not confirmed/probable Grade-A. */
+    /** Warehouse assets, not confirmed/probable Grade-A. */
     other: ProjectBucket;
+    /** Other logistics infrastructure under construction. */
+    otherInfrastructure: ProjectBucket;
+    /** Everything under construction (warehouse + other infrastructure). */
     all: ProjectBucket;
   };
   committedNotStarted: ProjectBucket & {
     byStatus: Record<(typeof COMMITTED_NOT_STARTED_STATUSES)[number], StatusCount>;
+    warehouse: ProjectBucket;
+    otherInfrastructure: ProjectBucket;
   };
   nonBinding: StatusCount & {
     byStatus: Record<(typeof NON_BINDING_STATUSES)[number], StatusCount>;
@@ -256,26 +358,22 @@ export function primaryAreaMeasure(p: Pick<Project, 'areas' | 'primaryAreaIndex'
   return (p.primaryAreaIndex !== undefined ? p.areas[p.primaryAreaIndex] : undefined) ?? p.areas[0];
 }
 
-/** Σ primary measures with basis `unspecified` (see `ProjectBucket.primaryUnspecified`). */
+/** Σ basis-not-stated floor figures (see `ProjectBucket.primaryUnspecified`). */
 export function sumPrimaryUnspecified(projects: readonly Pick<Project, 'id' | 'areas' | 'primaryAreaIndex'>[]): BasisTotal {
-  let total = 0;
-  const projectIds: string[] = [];
-  for (const p of projects) {
-    const m = primaryAreaMeasure(p);
-    if (m?.basis !== 'unspecified') continue;
-    total += m.valueM2;
-    projectIds.push(p.id);
-  }
-  return { totalM2: roundTo(total, 2), projectIds };
+  const u = sumFloorSpace(projects).unspecified;
+  return { totalM2: u.totalM2, projectIds: u.projectIds };
 }
 
 function bucket(projects: readonly Project[]): ProjectBucket {
+  const floorSpace = sumFloorSpace(projects);
   return {
     projectCount: projects.length,
     projectIds: projects.map((p) => p.id),
     areas: sumAreasByBasis(projects),
+    floorSpace,
+    withoutFloorFigureIds: projects.filter((p) => !floorFigure(p)).map((p) => p.id),
     withoutBuildingAreaIds: projects.filter((p) => !hasBuildingArea(p)).map((p) => p.id),
-    primaryUnspecified: sumPrimaryUnspecified(projects),
+    primaryUnspecified: { totalM2: floorSpace.unspecified.totalM2, projectIds: floorSpace.unspecified.projectIds },
     withoutAnyAreaIds: projects.filter((p) => p.areas.length === 0).map((p) => p.id),
   };
 }
@@ -299,11 +397,13 @@ export function computeMetrics(projects: readonly Project[], year: number): Metr
   const umbrellas = umbrellaIdSet(projects);
   const countable = projects.filter((p) => !umbrellas.has(p.id));
   const dubai = countable.filter((p) => p.emirate === 'Dubai');
-  const included = dubai.filter((p) => p.status !== 'cancelled');
+  const included = eligibleProjects(projects);
   const regional = countable.filter((p) => p.emirate !== 'Dubai' && p.status !== 'cancelled');
 
   const delivered = included.filter((p) => isDeliveredInYear(p, year));
+  const deliveredWh = delivered.filter(isWarehouseAsset);
   const uc = included.filter((p) => p.status === 'under_construction');
+  const ucWh = uc.filter(isWarehouseAsset);
 
   const committed = included.filter((p) =>
     (COMMITTED_NOT_STARTED_STATUSES as readonly ProjectStatus[]).includes(p.status),
@@ -332,17 +432,31 @@ export function computeMetrics(projects: readonly Project[], year: number): Metr
       excludedCancelledIds: dubai.filter((p) => p.status === 'cancelled').map((p) => p.id),
       regionalProjectIds: projects.filter((p) => p.emirate !== 'Dubai').map((p) => p.id),
     },
-    gradeADelivered: bucket(delivered.filter((p) => p.gradeA === 'confirmed')),
-    gradeAProbableDelivered: bucket(delivered.filter((p) => p.gradeA === 'probable')),
-    otherModernDelivered: bucket(delivered.filter((p) => !isGradeA(p))),
+    delivered: {
+      all: bucket(delivered),
+      opened: statusCount(delivered.filter((p) => p.status === 'operational')),
+      constructionCompleted: statusCount(delivered.filter((p) => p.status === 'construction_completed')),
+      warehouse: bucket(deliveredWh),
+      otherInfrastructure: bucket(delivered.filter((p) => !isWarehouseAsset(p))),
+    },
+    gradeADelivered: bucket(deliveredWh.filter((p) => p.gradeA === 'confirmed')),
+    gradeAProbableDelivered: bucket(deliveredWh.filter((p) => p.gradeA === 'probable')),
+    otherModernDelivered: bucket(deliveredWh.filter((p) => !isGradeA(p))),
+    otherInfrastructureDelivered: bucket(delivered.filter((p) => !isWarehouseAsset(p))),
     underConstruction: {
-      gradeA: bucket(uc.filter(isGradeA)),
-      gradeAConfirmed: bucket(uc.filter((p) => p.gradeA === 'confirmed')),
-      gradeAProbable: bucket(uc.filter((p) => p.gradeA === 'probable')),
-      other: bucket(uc.filter((p) => !isGradeA(p))),
+      gradeA: bucket(ucWh.filter(isGradeA)),
+      gradeAConfirmed: bucket(ucWh.filter((p) => p.gradeA === 'confirmed')),
+      gradeAProbable: bucket(ucWh.filter((p) => p.gradeA === 'probable')),
+      other: bucket(ucWh.filter((p) => !isGradeA(p))),
+      otherInfrastructure: bucket(uc.filter((p) => !isWarehouseAsset(p))),
       all: bucket(uc),
     },
-    committedNotStarted: { ...bucket(committed), byStatus: committedByStatus },
+    committedNotStarted: {
+      ...bucket(committed),
+      byStatus: committedByStatus,
+      warehouse: bucket(committed.filter(isWarehouseAsset)),
+      otherInfrastructure: bucket(committed.filter((p) => !isWarehouseAsset(p))),
+    },
     nonBinding: { ...statusCount(nonBinding), byStatus: nonBindingByStatus },
     investmentAnnouncements: computeInvestmentAnnouncements(projects, included, umbrellas, year),
     verifiedProjectCount: statusCount(included.filter((p) => p.sources.some((s) => s.verification === 'direct'))),
@@ -379,21 +493,15 @@ function computeInvestmentAnnouncements(
   }
 
   const disclosed = announced.filter((p) => p.investment?.disclosed === true && p.investment.amount !== undefined);
-  const byCurrencyRaw: Record<string, CurrencyTotal> = {};
+  const sums = sumInvestments(disclosed);
   const aed = { total: 0, projectIds: [] as string[], derivedProjectIds: [] as string[] };
   for (const p of disclosed) {
     const inv = p.investment!;
-    const cur = inv.currency!;
-    const t = (byCurrencyRaw[cur] ??= { total: 0, projectIds: [] });
-    t.total += inv.amount!;
-    t.projectIds.push(p.id);
-    if (inv.amountAed !== undefined) {
-      aed.total += inv.amountAed;
-      aed.projectIds.push(p.id);
-      if (inv.amountAedDerivation === 'usd_peg') aed.derivedProjectIds.push(p.id);
-    }
+    if (inv.scope !== 'facility' || inv.amountAed === undefined) continue;
+    aed.total += inv.amountAed;
+    aed.projectIds.push(p.id);
+    if (inv.amountAedDerivation === 'usd_peg') aed.derivedProjectIds.push(p.id);
   }
-  for (const c of Object.values(byCurrencyRaw)) c.total = roundTo(c.total, 2);
   aed.total = roundTo(aed.total, 2);
 
   const undisclosed = announced.filter((p) => !disclosed.includes(p));
@@ -412,7 +520,8 @@ function computeInvestmentAnnouncements(
     disclosed: {
       projectCount: disclosed.length,
       projectIds: disclosed.map((p) => p.id),
-      byCurrency: byCurrencyRaw,
+      byCurrency: sums.facilityByCurrency,
+      notSummed: sums.notSummed,
       aedWhereAvailable: aed,
     },
     undisclosed: statusCount(undisclosed),

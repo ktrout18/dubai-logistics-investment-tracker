@@ -8,9 +8,10 @@
  */
 import { writeFile } from 'node:fs/promises';
 import {
+  computeBriefing,
   computeMetrics,
-  computePresentedTotals,
   formatIssue,
+  subtotalsText,
   PendingReviewFileSchema,
   RegisterFileSchema,
   registerToJson,
@@ -36,12 +37,10 @@ async function main(): Promise<number> {
   for (const i of result.warnings) console.warn(formatIssue(i));
   console.log(`seed: ${SEED_PROJECTS.length} projects, ${pendingReview.items.length} pending — ${result.errors.length} error(s), ${result.warnings.length} warning(s)`);
 
-  const t = computePresentedTotals(SEED_PROJECTS, 2026);
-  console.log(
-    `presented: openings ${t.openings.floorAreaM2} m² (${t.openings.disclosedFloorCount} disclosed), ` +
-      `${t.openings.openedCount} opened + ${t.openings.completedOnlyCount} completed-only ` +
-      `(strict status: ${t.openings.statusCompletedOnlyCount} construction_completed); being built ${t.beingBuilt.floorAreaM2} m²`,
-  );
+  const b = computeBriefing(SEED_PROJECTS, 2026, SEED_TS.slice(0, 10));
+  console.log(`briefing: ${b.headline}`);
+  console.log(`briefing: delivered warehouse floor space by basis — ${subtotalsText(b.delivered.floorSubtotals)}`);
+  console.log(`briefing: being built warehouse floor space by basis — ${subtotalsText(b.beingBuilt.floorSubtotals)}`);
   const m = computeMetrics(SEED_PROJECTS, 2026);
   const fmt = (b: { areas: Record<string, { totalM2: number }>; projectCount: number }) =>
     `${b.projectCount} projects, GFA ${b.areas.warehouse_gfa!.totalM2}, GLA ${b.areas.gla!.totalM2}, mixed ${b.areas.mixed_building_area!.totalM2}, unspecified ${b.areas.unspecified!.totalM2}`;

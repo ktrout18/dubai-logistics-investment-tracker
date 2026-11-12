@@ -7,25 +7,9 @@
 import { FIXTURE_PROJECTS } from '../../shared/__fixtures__/projects.ts';
 import type { ChangeRecord, PendingReviewItem, Project } from '../../shared/index.ts';
 import type { SiteData } from './loadData.ts';
-import { derivePresentation } from './presentation.ts';
 
 export function fixtureSiteData(): SiteData {
-  const projects: Project[] = FIXTURE_PROJECTS.map((p, i) => {
-    const umbrella = FIXTURE_PROJECTS.some((q) => q.parentId === p.id);
-    if (umbrella || p.emirate !== 'Dubai') return p;
-    const pres = derivePresentation(p, { counted: true });
-    // Mimic the briefing: openings are 2026 deliveries; later deliveries were added after it.
-    if (pres.section === 'openings' && !p.actualCompletion?.date.startsWith('2026')) pres.section = 'added_after_pdf';
-    return {
-      ...p,
-      presentation: {
-        ...pres,
-        pdfRef: i + 1,
-        sortOrder: i,
-        ...(i === 0 ? { differsFromSources: 'Fixture note: the briefing rounds the area; sources give 49,982 m².' } : {}),
-      },
-    };
-  });
+  const projects: Project[] = FIXTURE_PROJECTS.map((p) => ({ ...p }));
   const changes: ChangeRecord[] = [
     {
       id: 'chg-20270210-aaaa0001',

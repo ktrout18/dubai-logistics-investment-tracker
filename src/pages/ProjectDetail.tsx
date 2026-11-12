@@ -7,22 +7,26 @@ import {
   CONFIDENCE_LABELS,
   EMIRATE_LABELS,
   EVENT_TYPE_LABELS,
+  DELIVERY_LABELS,
+  INVESTMENT_SCOPE_LABELS,
+  MAY_BE_EARLIER_NOTE,
   NET_NEW_LABELS,
-  PRESENTATION_CATEGORY_LABELS,
-  PRESENTATION_SECTION_LABELS,
-  PRESENTED_AREA_KIND_LABELS,
   PROVENANCE_LABELS,
   SECTOR_LABELS,
   SOURCE_TYPE_LABELS,
   VERIFICATION_LABELS,
+  completionMayBeEarlier,
+  deliveryKindOf,
+  eventMayBeEarlier,
+  investmentScopeOf,
   isRegional,
   normaliseZone,
   phasesOf,
   type Project,
 } from '../../shared/index.ts';
-import { CategorySwatch, Chips, Dl, EmptyState, ExtLink, GradeBadge, Notice, StatusBadge, VerificationBadge } from '../components/ui.tsx';
+import { Dl, EmptyState, ExtLink, GradeBadge, Notice, StatusBadge, VerificationBadge } from '../components/ui.tsx';
 import { useData } from '../lib/data.tsx';
-import { BASIS_SHORT, formatDate, formatDubaiDateTime, formatM2, formatMoney, formatOriginal } from '../lib/format.ts';
+import { BASIS_SHORT, formatDate, formatDubaiDateTime, formatMeasureM2, formatMoney, formatOriginal } from '../lib/format.ts';
 import { hrefFor } from '../lib/router.ts';
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
@@ -59,7 +63,7 @@ export function ProjectDetail({ id }: { id: string }) {
   const phases = phasesOf(p.id, projects) as Project[];
   const isUmb = umbrellas.has(p.id);
   const changes = data.changelog.changes.filter((c) => c.projectId === p.id).sort((a, b) => b.appliedAt.localeCompare(a.appliedAt));
-  const pres = p.presentation;
+  const delivery = deliveryKindOf(p);
 
   const parties: [ReactNode, ReactNode][] = [];
   if (p.developer) parties.push(['Developer', p.developer]);
@@ -144,7 +148,7 @@ export function ProjectDetail({ id }: { id: string }) {
                           {BASIS_SHORT[a.basis]}
                           {i === p.primaryAreaIndex && <span className="ml-1 text-xs text-accent-800">(primary)</span>}
                         </span>
-                        <span className="num font-semibold">{formatM2(a.valueM2)}</span>
+                        <span className="num font-semibold">{formatMeasureM2(a)}</span>
                       </p>
                       <p className="text-xs text-ink-soft">{AREA_BASIS_LABELS[a.basis]}</p>
                       {a.originalValue !== undefined && a.originalUnit && (
@@ -181,7 +185,7 @@ export function ProjectDetail({ id }: { id: string }) {
                             {i === p.primaryAreaIndex && <span className="ml-1 text-xs text-accent-800">(primary)</span>}
                             <span className="block text-xs text-ink-soft">{AREA_BASIS_LABELS[a.basis]}</span>
                           </th>
-                          <td className="num whitespace-nowrap text-right">{formatM2(a.valueM2)}</td>
+                          <td className="num whitespace-nowrap text-right">{formatMeasureM2(a)}</td>
                           <td className="num whitespace-nowrap">
                             {a.originalValue !== undefined && a.originalUnit ? formatOriginal(a.originalValue, a.originalUnit) : '—'}
                           </td>
@@ -209,6 +213,7 @@ export function ProjectDetail({ id }: { id: string }) {
                       <span className="num">{formatDate(e.date, e.datePrecision)}</span> · {EVENT_TYPE_LABELS[e.type]}
                     </p>
                     <p className="mt-0.5 text-sm">{e.summary}</p>
+                    {eventMayBeEarlier(e) && <p className="mt-0.5 text-xs text-ink-muted">{MAY_BE_EARLIER_NOTE}</p>}
                     <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
                       <ExtLink href={e.sourceUrl} />
                       <VerificationBadge level={e.verification} />
@@ -267,11 +272,13 @@ export function ProjectDetail({ id }: { id: string }) {
           <Section id="completion" title="Completion">
             <Dl
               items={[
+                ['Delivery', delivery ? DELIVERY_LABELS[delivery] : 'Not delivered'],
                 [
                   'Actual',
                   p.actualCompletion ? (
                     <span key="a">
                       {formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)} · <ExtLink href={p.actualCompletion.sourceUrl}>evidence</ExtLink>
+                      {completionMayBeEarlier(p) && <span className="mt-1 block text-xs text-ink-muted">{MAY_BE_EARLIER_NOTE}</span>}
                     </span>
                   ) : (
                     'Not yet delivered'
@@ -306,6 +313,9 @@ export function ProjectDetail({ id }: { id: string }) {
                   ...(p.investment.amountAed && p.investment.currency !== 'AED'
                     ? ([['In AED', `${formatMoney(p.investment.amountAed, 'AED')} (${AED_DERIVATION_LABELS[p.investment.amountAedDerivation!]})`]] as [ReactNode, ReactNode][])
                     : []),
+                  ...(p.investment.disclosed
+                    ? ([['Scope', INVESTMENT_SCOPE_LABELS[investmentScopeOf(p.investment)]]] as [ReactNode, ReactNode][])
+                    : []),
                   ['Covers', p.investment.basis || '—'],
                   ...(p.investment.sourceUrl ? ([['Source', <ExtLink key="s" href={p.investment.sourceUrl} />]] as [ReactNode, ReactNode][]) : []),
                 ]}
@@ -332,6 +342,7 @@ export function ProjectDetail({ id }: { id: string }) {
                 ['Last verified', formatDate(p.lastVerified)],
                 ['Confidence', CONFIDENCE_LABELS[p.confidence]],
                 ['Origin', PROVENANCE_LABELS[p.provenance]],
+                ...(p.seedNote ? ([['Seed note', p.seedNote]] as [ReactNode, ReactNode][]) : []),
               ]}
             />
             {p.unresolvedQuestions.length > 0 && (
@@ -345,38 +356,6 @@ export function ProjectDetail({ id }: { id: string }) {
               </div>
             )}
           </Section>
-
-          {(pres || p.seedNote) && (
-            <Section id="briefing" title="In the briefing">
-              {pres && (
-                <div className="rounded-md border border-line bg-[#F7F9F9] p-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <CategorySwatch category={pres.category} />
-                    <span className="text-xs text-ink-muted">
-                      {PRESENTATION_SECTION_LABELS[pres.section]}
-                      {pres.pdfRef ? ` · row ${pres.pdfRef}` : ''} · {PRESENTATION_CATEGORY_LABELS[pres.category]}
-                    </span>
-                  </div>
-                  <div className="mt-2">
-                    <Chips names={pres.partners} small />
-                  </div>
-                  <p className="mt-2 font-medium">{pres.descriptor}</p>
-                  <p className="text-ink-muted">
-                    {pres.locationLabel} · {pres.areaLabel}
-                    {pres.presentedAreaKind ? `, ${PRESENTED_AREA_KIND_LABELS[pres.presentedAreaKind].toLowerCase()}` : ''} · {pres.dateLabel}
-                  </p>
-                </div>
-              )}
-              {pres?.differsFromSources && (
-                <div className="mt-3">
-                  <Notice tone="warn">
-                    <strong>Differs from sources:</strong> {pres.differsFromSources}
-                  </Notice>
-                </div>
-              )}
-              {p.seedNote && <p className="mt-3 text-sm text-ink-muted">{p.seedNote}</p>}
-            </Section>
-          )}
 
           {(parent || phases.length > 0) && (
             <Section id="phases" title="Phases">

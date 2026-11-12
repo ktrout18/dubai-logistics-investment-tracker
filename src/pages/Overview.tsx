@@ -1,16 +1,23 @@
 import { useId, useMemo, type ReactNode } from 'react';
 import {
   AREA_BASIS_LABELS,
+  ASSET_GROUP_LABELS,
+  ASSET_TYPE_LABELS,
+  DELIVERY_LABELS,
+  computeBriefing,
   computeMetrics,
-  computePresentedTotals,
+  sumInvestments,
+  todayIso,
+  type Briefing,
   type Metrics,
+  type Project,
   type ProjectBucket,
+  type ScopedAmount,
 } from '../../shared/index.ts';
-import { BUILDING_BASES, LAND_BASES, basisFigures } from '../lib/areas.ts';
+import { LAND_BASES, basisFigures } from '../lib/areas.ts';
 import { yearChoices, useData } from '../lib/data.tsx';
-import { BASIS_SHORT, formatApproxM2, formatDubaiDateTime, formatM2, formatMoney, numberWord, plural } from '../lib/format.ts';
-import { briefingYearOf } from '../lib/presentation.ts';
-import { activeFacilityIds, disclosedInvestmentByCurrency } from '../lib/investment.ts';
+import { BASIS_SHORT, formatDubaiDateTime, formatM2, formatMoney, plural } from '../lib/format.ts';
+import { activeFacilityIds } from '../lib/investment.ts';
 import { hrefFor, useHashLocation } from '../lib/router.ts';
 import { BasisFigures, CountLink, UnstatedBasisNote, listHref } from '../components/figures.tsx';
 import { ExportButtons } from '../components/ExportButtons.tsx';
@@ -29,13 +36,13 @@ function Card({ letter, title, sub, children }: { letter: string; title: string;
 }
 
 function Undisclosed({ bucket, context }: { bucket: ProjectBucket; context: string }) {
-  const ids = bucket.withoutAnyAreaIds;
+  const ids = bucket.withoutFloorFigureIds;
   const n = ids.length;
   if (!n) return null;
   return (
     <p className="text-xs text-ink-muted">
-      + <CountLink ids={ids} title={`${context} — no area disclosed`}>{plural(n, 'further project')}</CountLink>{' '}
-      with no area disclosed
+      + <CountLink ids={ids} title={`${context} — no floor area disclosed`}>{plural(n, 'further project')}</CountLink>{' '}
+      with no floor area disclosed
     </p>
   );
 }
@@ -66,7 +73,50 @@ function CurrencyFigures({
   );
 }
 
-function SubGroup({ label, bucket, context }: { label: string; bucket: ProjectBucket; context: string }) {
+/** Disclosed amounts that are not summed (wider than the facility, or scope unknown), listed with their scope. */
+function NotSummed({ items, byId }: { items: readonly ScopedAmount[]; byId: ReadonlyMap<string, Project> }) {
+  if (!items.length) return null;
+  return (
+    <div className="text-xs text-ink-muted">
+      <p className="font-medium">Not summed ({items.length}): amounts that cover more than the logistics facility, or whose scope is not established</p>
+      <ul className="mt-1 space-y-0.5">
+        {items.map((x) => (
+          <li key={x.projectId}>
+            <a href={hrefFor(`/project/${x.projectId}`)}>{byId.get(x.projectId)?.name ?? x.projectId}</a>:{' '}
+            <span className="num">{formatMoney(x.amount, x.currency)}</span> · {x.scopeLabel.toLowerCase()}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** "3 opened / operational · 1 construction completed" for the projects behind a figure. */
+function DeliverySplit({ ids, byId, context }: { ids: readonly string[]; byId: ReadonlyMap<string, Project>; context: string }) {
+  if (!ids.length) return null;
+  const opened = ids.filter((id) => byId.get(id)?.status === 'operational');
+  const completed = ids.filter((id) => byId.get(id)?.status === 'construction_completed');
+  return (
+    <p className="text-xs text-ink-muted">
+      <CountLink ids={opened} title={`${context} — ${DELIVERY_LABELS.opened}`}>{opened.length}</CountLink> {DELIVERY_LABELS.opened.toLowerCase()} ·{' '}
+      <CountLink ids={completed} title={`${context} — ${DELIVERY_LABELS.construction_completed}`}>{completed.length}</CountLink>{' '}
+      {DELIVERY_LABELS.construction_completed.toLowerCase()}
+    </p>
+  );
+}
+
+function SubGroup({
+  label,
+  bucket,
+  context,
+  delivered,
+}: {
+  label: string;
+  bucket: ProjectBucket;
+  context: string;
+  delivered?: boolean;
+}) {
+  const { byId } = useData();
   return (
     <div>
       <p className="mb-1.5 flex items-baseline justify-between gap-2 text-xs font-medium text-ink-muted">
@@ -76,68 +126,59 @@ function SubGroup({ label, bucket, context }: { label: string; bucket: ProjectBu
         </CountLink>
       </p>
       <BasisFigures
-        breakdown={bucket.areas}
-        bases={BUILDING_BASES}
-        unstated={bucket.primaryUnspecified}
+        floorSpace={bucket.floorSpace}
         context={context}
         emptyText={bucket.projectCount ? 'No floor area disclosed' : 'None recorded'}
       />
       <Undisclosed bucket={bucket} context={context} />
+      {delivered && <DeliverySplit ids={bucket.projectIds} byId={byId} context={context} />}
     </div>
   );
 }
 
-function Headline({ year, metrics }: { year: number; metrics: Metrics }) {
-  const { projects } = useData();
-  const presented = useMemo(() => computePresentedTotals(projects, year), [projects, year]);
-  const briefingYear = briefingYearOf(presented.openings.rows);
-  const deliveredIds = [
-    ...metrics.gradeADelivered.projectIds,
-    ...metrics.gradeAProbableDelivered.projectIds,
-    ...metrics.otherModernDelivered.projectIds,
+function OtherInfrastructure({ bucket, context, byId }: { bucket: ProjectBucket; context: string; byId: ReadonlyMap<string, Project> }) {
+  if (!bucket.projectCount) return null;
+  const types = [...new Set(bucket.projectIds.map((id) => byId.get(id)?.assetType).filter((t) => t !== undefined))].map((t) => ASSET_TYPE_LABELS[t]);
+  return (
+    <p className="border-t border-line pt-3 text-xs text-ink-muted">
+      Plus <CountLink ids={bucket.projectIds} title={context}>{plural(bucket.projectCount, 'project')}</CountLink> of{' '}
+      {ASSET_GROUP_LABELS.other_infrastructure.toLowerCase()} ({types.join(', ')}), counted separately and not included in warehouse floor space.
+    </p>
+  );
+}
+
+function Headline({ year, briefing }: { year: number; briefing: Briefing }) {
+  const d = briefing.delivered;
+  const tiles: { label: string; ids: string[]; title: string }[] = [
+    { label: DELIVERY_LABELS.opened, ids: d.openedIds, title: `${DELIVERY_LABELS.opened}, Dubai, ${year}` },
+    { label: DELIVERY_LABELS.construction_completed, ids: d.constructionCompletedIds, title: `${DELIVERY_LABELS.construction_completed}, Dubai, ${year}` },
+    { label: `${ASSET_GROUP_LABELS.warehouse} facilities`, ids: d.warehouseIds, title: `Warehouse facilities delivered in Dubai, ${year}` },
+    { label: ASSET_GROUP_LABELS.other_infrastructure, ids: d.otherInfrastructureIds, title: `Other logistics infrastructure delivered in Dubai, ${year}` },
   ];
-  if (briefingYear === year && presented.openings.rows.length) {
-    const o = presented.openings;
-    return (
-      <div>
-        <p className="max-w-4xl text-2xl font-semibold leading-snug text-ink sm:text-[1.9rem] sm:leading-tight">
-          Dubai opened{' '}
-          <a href={listHref(o.rows.map((p) => p.id), `Openings and completions, ${year} (briefing)`)} className="text-accent-700">
-            {o.openedCount} logistics {o.openedCount === 1 ? 'facility' : 'facilities'}
-          </a>
-          {o.completedOnlyCount > 0 && <> and completed {numberWord(o.completedOnlyCount)} more</>} in {year}, with about{' '}
-          <span className="num text-accent-700">{formatApproxM2(o.floorAreaM2)}</span> of floor space.
-        </p>
-        <p className="mt-2 text-sm text-ink-muted">
-          Floor space as reported: the sum of the figures sources give for the {o.disclosedFloorCount} facilities that disclosed one, on
-          whatever basis each source uses. <a href="#/method">How this differs from the strict figures below</a>.
-          {o.statusCompletedOnlyCount !== o.completedOnlyCount && (
-            <>
-              {' '}
-              Strictly, sources confirm only completion (not opening) for {plural(o.statusCompletedOnlyCount, 'of these facilities', 'of these facilities')}.
-            </>
-          )}
-        </p>
-      </div>
-    );
-  }
   return (
     <div>
-      <p className="max-w-4xl text-2xl font-semibold leading-snug sm:text-[1.9rem] sm:leading-tight">
-        {deliveredIds.length ? (
-          <>
-            <a href={listHref(deliveredIds, `Opened or completed in Dubai, ${year}`)} className="text-accent-700">
-              {plural(deliveredIds.length, 'logistics facility', 'logistics facilities')}
-            </a>{' '}
-            in this register {deliveredIds.length === 1 ? 'opened or was' : 'opened or were'} completed in Dubai in {year}.
-          </>
-        ) : (
-          <>No openings or completions in Dubai in {year} are in the register yet.</>
-        )}
+      <p className="max-w-4xl text-2xl font-semibold leading-snug text-ink sm:text-[1.9rem] sm:leading-tight" data-testid="headline">
+        {briefing.headline}
       </p>
-      <p className="mt-2 text-sm text-ink-muted">
-        Floor space is shown below by measurement basis only. <a href="#/method">Method note</a>.
-      </p>
+      {d.rows.length > 0 && (
+        <>
+          <dl className="mt-4 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
+            {tiles.map((t) => (
+              <div key={t.label} className="rounded-md border border-line bg-white px-3 py-2">
+                <dt className="text-xs text-ink-soft">{t.label}</dt>
+                <dd className="num text-xl font-semibold">
+                  <CountLink ids={t.ids} title={t.title}>
+                    {t.ids.length}
+                  </CountLink>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 max-w-4xl text-sm text-ink-muted">
+            {briefing.deliveredFloorSentence} <a href="#/method">Definitions and counting rules</a>.
+          </p>
+        </>
+      )}
     </div>
   );
 }
@@ -198,7 +239,8 @@ function NonFloorTable({ year, metrics }: { year: number; metrics: Metrics }) {
   const groups: [string, ProjectBucket][] = [
     [`Grade-A confirmed, delivered ${year}`, metrics.gradeADelivered],
     [`Grade-A probable, delivered ${year}`, metrics.gradeAProbableDelivered],
-    [`Other modern, delivered ${year}`, metrics.otherModernDelivered],
+    [`Other modern warehouse, delivered ${year}`, metrics.otherModernDelivered],
+    [`Other logistics infrastructure, delivered ${year}`, metrics.otherInfrastructureDelivered],
     ['Under construction', metrics.underConstruction.all],
     ['Committed, not started', metrics.committedNotStarted],
   ];
@@ -313,8 +355,12 @@ export function Overview() {
   const yParam = Number(params.get('year'));
   const year = Number.isInteger(yParam) && yParam > 1900 ? yParam : d.defaultYear;
   const metrics = useMemo(() => computeMetrics(d.projects, year), [d.projects, year]);
+  const briefing = useMemo(() => computeBriefing(d.projects, year, todayIso()), [d.projects, year]);
   const inv = metrics.investmentAnnouncements;
-  const active = useMemo(() => disclosedInvestmentByCurrency(activeFacilityIds(metrics), d.byId), [metrics, d.byId]);
+  const active = useMemo(() => {
+    const ids = activeFacilityIds(metrics);
+    return { ids, ...sumInvestments(ids.map((id) => d.byId.get(id)).filter((p): p is Project => Boolean(p))) };
+  }, [metrics, d.byId]);
   const meta = d.data.meta;
   const yearSel = useId();
 
@@ -342,7 +388,7 @@ export function Overview() {
       </div>
 
       <div className="mt-3">
-        <Headline year={year} metrics={metrics} />
+        <Headline year={year} briefing={briefing} />
       </div>
 
       {d.projects.length === 0 && (
@@ -357,16 +403,17 @@ export function Overview() {
       <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Card
           letter="a"
-          title={`Grade-A warehouse space opened or completed in ${year}`}
-          sub="Verified Grade-A only. Each figure is one measurement basis; GFA and GLA are never added together."
+          title={`Grade-A warehouse space delivered in ${year}`}
+          sub="Warehouse-type facilities opened or construction-completed in the year. Each figure is one measurement basis; bases are never added together."
         >
-          <SubGroup label="Grade-A confirmed" bucket={metrics.gradeADelivered} context={`Grade-A confirmed, delivered ${year}`} />
+          <SubGroup label="Grade-A confirmed" bucket={metrics.gradeADelivered} context={`Grade-A confirmed warehouse, delivered ${year}`} delivered />
           {metrics.gradeAProbableDelivered.projectCount > 0 && (
             <div className="border-t border-line pt-3">
               <SubGroup
                 label="Grade-A probable (shown separately, not verified)"
                 bucket={metrics.gradeAProbableDelivered}
-                context={`Grade-A probable, delivered ${year}`}
+                context={`Grade-A probable warehouse, delivered ${year}`}
+                delivered
               />
             </div>
           )}
@@ -374,19 +421,25 @@ export function Overview() {
         </Card>
         <Card
           letter="b"
-          title={`Other modern warehouse space opened or completed in ${year}`}
-          sub="Facilities whose Grade-A status is not verified or not applicable, measured separately."
+          title={`Other modern warehouse space delivered in ${year}`}
+          sub="Warehouse-type facilities whose Grade-A status is not verified or not applicable, measured separately."
         >
-          <SubGroup label="Other modern" bucket={metrics.otherModernDelivered} context={`Other modern, delivered ${year}`} />
+          <SubGroup label="Other modern warehouse" bucket={metrics.otherModernDelivered} context={`Other modern warehouse, delivered ${year}`} delivered />
           <UnstatedBasisNote buckets={[metrics.otherModernDelivered]} />
+          <OtherInfrastructure
+            bucket={metrics.otherInfrastructureDelivered}
+            context={`Other logistics infrastructure, delivered ${year}`}
+            byId={d.byId}
+          />
         </Card>
-        <Card letter="c" title="Under construction now" sub="Current status. Completion dates for these are forecasts.">
-          <SubGroup label="Grade-A confirmed" bucket={metrics.underConstruction.gradeAConfirmed} context="Under construction — Grade-A confirmed" />
+        <Card letter="c" title="Warehouse space under construction now" sub="Current status. Completion dates for these are forecasts.">
+          <SubGroup label="Grade-A confirmed" bucket={metrics.underConstruction.gradeAConfirmed} context="Under construction — Grade-A confirmed warehouse" />
           {metrics.underConstruction.gradeAProbable.projectCount > 0 && (
-            <SubGroup label="Grade-A probable" bucket={metrics.underConstruction.gradeAProbable} context="Under construction — Grade-A probable" />
+            <SubGroup label="Grade-A probable" bucket={metrics.underConstruction.gradeAProbable} context="Under construction — Grade-A probable warehouse" />
           )}
-          <SubGroup label="Other modern" bucket={metrics.underConstruction.other} context="Under construction — other modern" />
-          <UnstatedBasisNote buckets={[metrics.underConstruction.all]} />
+          <SubGroup label="Other modern warehouse" bucket={metrics.underConstruction.other} context="Under construction — other modern warehouse" />
+          <UnstatedBasisNote buckets={[metrics.underConstruction.gradeA, metrics.underConstruction.other]} />
+          <OtherInfrastructure bucket={metrics.underConstruction.otherInfrastructure} context="Under construction — other logistics infrastructure" byId={d.byId} />
         </Card>
         <Card letter="d" title="Committed, not yet under construction" sub="Signed agreements and committed investments without a construction start.">
           <p className="text-sm">
@@ -399,15 +452,9 @@ export function Overview() {
             </CountLink>{' '}
             with a signed agreement
           </p>
-          <BasisFigures
-            breakdown={metrics.committedNotStarted.areas}
-            bases={BUILDING_BASES}
-            unstated={metrics.committedNotStarted.primaryUnspecified}
-            context="Committed, not started"
-            emptyText="No floor area disclosed"
-          />
-          <Undisclosed bucket={metrics.committedNotStarted} context="Committed, not started" />
-          <UnstatedBasisNote buckets={[metrics.committedNotStarted]} />
+          <SubGroup label="Warehouse space" bucket={metrics.committedNotStarted.warehouse} context="Committed, not started — warehouse" />
+          <UnstatedBasisNote buckets={[metrics.committedNotStarted.warehouse]} />
+          <OtherInfrastructure bucket={metrics.committedNotStarted.otherInfrastructure} context="Committed, not started — other logistics infrastructure" byId={d.byId} />
           <p className="text-xs text-ink-soft">
             Plus{' '}
             <CountLink ids={metrics.nonBinding.projectIds} title="Non-binding (proposed, MoU, term sheet)">
@@ -419,7 +466,7 @@ export function Overview() {
         <Card
           letter="e"
           title={`Investment announcements in ${year}`}
-          sub="Disclosed values by currency as published; currencies are never converted or combined."
+          sub="Disclosed values by currency as published; currencies are never converted or combined. Only amounts for the logistics facility itself are summed."
         >
           <p className="text-sm">
             <CountLink ids={inv.projectIds} title={`Investment announcements, ${year}`}>
@@ -427,7 +474,8 @@ export function Overview() {
             </CountLink>{' '}
             with an announcement, agreement or commitment in {year}
           </p>
-          <CurrencyFigures byCurrency={inv.disclosed.byCurrency} context={`Disclosed investment, announcements in ${year}`} empty="No values disclosed for these." />
+          <CurrencyFigures byCurrency={inv.disclosed.byCurrency} context={`Disclosed facility investment, announcements in ${year}`} empty="No facility-only values disclosed for these." />
+          <NotSummed items={inv.disclosed.notSummed} byId={d.byId} />
           <p className="text-xs text-ink-muted">
             <CountLink ids={inv.undisclosed.projectIds} title={`Investment value not disclosed, announcements in ${year}`}>
               {plural(inv.undisclosed.count, 'project')}
@@ -436,14 +484,21 @@ export function Overview() {
           </p>
           <div className="border-t border-line pt-3">
             <p className="mb-1.5 text-xs font-medium text-ink-muted">
-              Disclosed investment in facilities opened in {year}, under construction or committed now
+              Disclosed facility investment: delivered in {year}, under construction or committed now
             </p>
-            <CurrencyFigures byCurrency={active.byCurrency} context={`Disclosed investment, facilities opened in ${year}, under construction or committed`} empty="No values disclosed." />
+            <CurrencyFigures
+              byCurrency={active.facilityByCurrency}
+              context={`Disclosed facility investment, delivered in ${year}, under construction or committed`}
+              empty="No facility-only values disclosed."
+            />
+            <div className="mt-2">
+              <NotSummed items={active.notSummed} byId={d.byId} />
+            </div>
             <p className="mt-1.5 text-xs text-ink-muted">
-              <CountLink ids={active.undisclosedIds} title={`No investment value disclosed — opened in ${year}, under construction or committed`}>
+              <CountLink ids={active.undisclosedIds} title={`No investment value disclosed — delivered in ${year}, under construction or committed`}>
                 {plural(active.undisclosedIds.length, 'further facility', 'further facilities')}
               </CountLink>{' '}
-              without a disclosed value. Figures are as published; some cover more than the logistics facility (see each project).
+              without a disclosed value.
             </p>
           </div>
         </Card>

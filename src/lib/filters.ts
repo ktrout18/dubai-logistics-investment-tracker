@@ -4,6 +4,7 @@
  */
 import {
   companyKey,
+  describeFacility,
   normaliseZone,
   yearOf,
   type GradeAStatus,
@@ -65,9 +66,7 @@ function haystack(p: Project): string {
     p.investor,
     p.owner,
     ...p.companies,
-    p.presentation?.descriptor,
-    p.presentation?.locationLabel,
-    ...(p.presentation?.partners ?? []),
+    describeFacility(p),
   ]
     .filter(Boolean)
     .join(' \u0001 ')

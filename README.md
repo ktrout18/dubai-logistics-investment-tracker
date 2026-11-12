@@ -52,18 +52,27 @@ seeded), `docs/REVIEW_GUIDE.md` (reviewing and correcting), `docs/ACCEPTANCE.md`
   never enter Dubai totals.
 * **Delivered** means the latest sourced status is completed or operational
   *and* the actual completion date is in the year. A forecast never counts.
-* **Two views.** The *briefing view* ("as reported") reproduces the owner's
-  November 2026 briefing: 13 facilities opened plus one completed, about
-  262,000 m² (261,600 m²) of floor space opened, 215,260 m² being built. The
-  *strict view* applies the rules above to each source's own wording, so its
-  floor-space figures are much lower (many sources give a size without a
-  basis). `docs/SEED_NOTES.md` §3 explains every difference.
+* **One source of truth.** The headline, figure cards, tables, project pages,
+  the briefing snapshot (and its print/PDF) and the CSV export are all built
+  from the same audited records with the same rules in `shared/`
+  (`computeMetrics`, `computeBriefing`, `shared/definitions.ts`). For 2026:
+  "In 2026, 11 logistics facilities opened in Dubai and 3 more completed
+  construction." Opened / operational and construction completed are always
+  counted separately; floor area is given per basis, never as one total. The
+  owner's November 2026 briefing PDF seeded the project list, but none of its
+  wording or totals is reproduced (`docs/CONSISTENCY_REPAIR.md`).
+* **Warehouse vs other infrastructure.** Warehouse-space figures include only
+  warehouse-type assets; container depots, terminals, MRO facilities, vehicle
+  hubs and yards are counted separately.
+* **Investment.** Only amounts covering the logistics facility itself are
+  summed (per currency, never converted); wider amounts are listed separately.
 
 ## Where the data comes from
 
-* The owner's November 2026 briefing PDF (26 rows plus 3 "not counted"
-  items), each row checked against public sources, plus further sourced
-  research. 31 projects in total.
+* The projects of the owner's November 2026 briefing PDF (26), the two
+  umbrella schemes they belong to and three further projects found while
+  seeding, each checked field by field against public sources (audit of
+  12 Nov 2026, `docs/AUDIT_2026-11.md`). 31 projects in total.
 * Every source carries a verification level:
   **direct** means the page text itself was read; **indexed** means the page
   was seen only in search-engine results (title and snippet), not read.

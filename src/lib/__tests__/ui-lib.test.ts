@@ -1,22 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { FIXTURE_PROJECTS } from '../../../shared/__fixtures__/projects.ts';
-import { computeMetrics, emptyAreaBreakdown } from '../../../shared/index.ts';
+import { computeMetrics, emptyAreaBreakdown, sumInvestments } from '../../../shared/index.ts';
 import { BUILDING_BASES, basisFigures, floorMeasure, sizeBandOf } from '../areas.ts';
 import { applyFilters, filtersToParams, parseFilters, type Filters } from '../filters.ts';
-import { formatApproxM2, formatArea, formatDate, formatDubaiDateTime, formatM2, formatMoney, formatOriginal, numberWord } from '../format.ts';
-import { derivePresentation, displayPresentation } from '../presentation.ts';
+import { formatArea, formatDate, formatDubaiDateTime, formatM2, formatMeasureM2, formatMoney, formatOriginal, numberWord } from '../format.ts';
 import { hrefFor, parseHash } from '../router.ts';
 
 describe('formatters', () => {
   it('formats square metres with grouping and no decimals', () => {
     expect(formatM2(49981.84)).toBe('49,982 m²');
     expect(formatM2(0)).toBe('0 m²');
-    expect(formatApproxM2(261_840)).toBe('262,000 m²');
-    expect(formatApproxM2(640)).toBe('640 m²');
+    expect(formatM2(10_405.14)).toBe('10,405 m²');
+    expect(formatM2(81_000)).toBe('81,000 m²');
+    expect(formatMeasureM2({ valueM2: 67_000, qualifier: 'over' })).toBe('over 67,000 m²');
   });
   it('always attaches the basis to an area', () => {
     expect(formatArea({ valueM2: 20000, basis: 'gla' })).toBe('20,000 m² GLA');
-    expect(formatArea({ valueM2: 100000, basis: 'site_land_area' })).toBe('100,000 m² Land / site');
+    expect(formatArea({ valueM2: 100000, basis: 'site_land_area' })).toBe('100,000 m² Site / land');
+    expect(formatArea({ valueM2: 57000, basis: 'unspecified' })).toBe('57,000 m² Basis not stated');
   });
   it('formats original units, money and dates by precision', () => {
     expect(formatOriginal(538000, 'sqft')).toBe('538,000 sq ft');
@@ -109,34 +110,25 @@ describe('URL state', () => {
   });
 });
 
-describe('presentation fallback', () => {
-  it('derives labels for projects without a presentation and never counts them', () => {
-    for (const p of FIXTURE_PROJECTS) {
-      const d = displayPresentation(p);
-      expect(d.derived).toBe(true);
-      expect(d.countedInPresentedTotal).toBe(false);
-      expect(d.descriptor.length).toBeGreaterThan(0);
-      if (d.presentedAreaKind && d.presentedAreaKind !== 'floor') expect(d.category).not.toBe('other_modern');
-    }
-    const yard = FIXTURE_PROJECTS.find((p) => p.id === 'epsilon-jafza-open-yard')!;
-    expect(derivePresentation(yard).presentedAreaKind).toBe('yard');
-  });
-});
-
 describe('disclosed investment by currency', () => {
-  it('sums per currency only and lists undisclosed ids', async () => {
-    const { activeFacilityIds, disclosedInvestmentByCurrency } = await import('../investment.ts');
+  it('sums facility-scope amounts per currency only and lists undisclosed ids', async () => {
+    const { activeFacilityIds } = await import('../investment.ts');
     const m = computeMetrics(FIXTURE_PROJECTS, 2026);
     const ids = activeFacilityIds(m);
     const byId = new Map(FIXTURE_PROJECTS.map((p) => [p.id, p]));
-    const r = disclosedInvestmentByCurrency(ids, byId);
-    for (const [cur, t] of Object.entries(r.byCurrency)) {
+    const r = sumInvestments(ids.map((id) => byId.get(id)!));
+    for (const [cur, t] of Object.entries(r.facilityByCurrency)) {
       const expected = t.projectIds.reduce((s, id) => s + (byId.get(id)!.investment!.currency === cur ? byId.get(id)!.investment!.amount! : NaN), 0);
       expect(t.total).toBe(expected);
     }
-    const covered = new Set([...Object.values(r.byCurrency).flatMap((t) => t.projectIds), ...r.undisclosedIds]);
+    const covered = new Set([
+      ...Object.values(r.facilityByCurrency).flatMap((t) => t.projectIds),
+      ...r.notSummed.map((x) => x.projectId),
+      ...r.undisclosedIds,
+    ]);
     expect([...covered].sort()).toEqual([...ids].sort());
-    // Umbrellas are never in scope.
+    // Umbrellas are never in scope; delivered other infrastructure is.
     expect(ids).not.toContain('zeta-logistics-park');
+    expect(ids).toContain('epsilon-jafza-open-yard');
   });
 });

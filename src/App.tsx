@@ -13,7 +13,7 @@ const SITE = 'Dubai Logistics Investment Tracker';
 
 const TITLES: Record<string, string> = {
   '/': SITE,
-  '/delivered': `Delivered and opened · ${SITE}`,
+  '/delivered': `Delivered (opened or construction completed) · ${SITE}`,
   '/pipeline': `Pipeline · ${SITE}`,
   '/regional': `Regional context · ${SITE}`,
   '/method': `Method and review · ${SITE}`,

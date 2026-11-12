@@ -1,6 +1,13 @@
 import {
   AREA_BASIS_LABELS,
+  DELIVERY_LABELS,
+  INVESTMENT_SCOPE_LABELS,
+  MAY_BE_EARLIER_NOTE,
   SECTOR_LABELS,
+  completionMayBeEarlier,
+  deliveryKindOf,
+  describeFacility,
+  investmentScopeOf,
   normaliseZone,
   periodEnd,
   statusRank,
@@ -8,8 +15,7 @@ import {
   type Project,
 } from '../../shared/index.ts';
 import { headlineMeasure } from '../lib/areas.ts';
-import { BASIS_SHORT, formatDate, formatM2, formatMoney } from '../lib/format.ts';
-import { displayPresentation } from '../lib/presentation.ts';
+import { BASIS_SHORT, formatDate, formatMeasureM2, formatMoney } from '../lib/format.ts';
 import { hrefFor } from '../lib/router.ts';
 import type { Column } from './ProjectTable.tsx';
 import { ExtLink, GradeBadge, StatusBadge } from './ui.tsx';
@@ -20,7 +26,7 @@ export function AreaCell({ p }: { p: Project }) {
   const others = p.areas.length - 1;
   return (
     <span>
-      <span className="num whitespace-nowrap font-medium">{formatM2(m.valueM2)}</span>{' '}
+      <span className="num whitespace-nowrap font-medium">{formatMeasureM2(m)}</span>{' '}
       <abbr title={AREA_BASIS_LABELS[m.basis]} className="block text-xs text-ink-muted no-underline">
         {BASIS_SHORT[m.basis]}
       </abbr>
@@ -59,25 +65,15 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     sort: (p) => p.name,
     className: 'min-w-[13rem]',
     cell: (p) => {
-      const pres = displayPresentation(p);
       return (
         <span className="block">
           <a href={hrefFor(`/project/${p.id}`)} className="font-medium text-ink decoration-line hover:text-accent-800">
             {p.name}
           </a>
           <span className="mt-0.5 block text-xs text-ink-soft">
-            {pres.descriptor}
+            {describeFacility(p)}
             {umbrellas.has(p.id) && ' · Umbrella (phases counted instead)'}
-            {p.phaseLabel && ` · ${p.phaseLabel}`}
           </span>
-          {p.presentation?.differsFromSources && (
-            <span
-              className="mt-1 inline-block rounded bg-amber-50 px-1 text-[11px] font-medium text-amber-900 ring-1 ring-inset ring-amber-200"
-              title={p.presentation.differsFromSources}
-            >
-              Briefing differs from sources
-            </span>
-          )}
         </span>
       );
     },
@@ -130,10 +126,27 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     mobile: true,
     cell: (p) =>
       p.actualCompletion ? (
-        <span className="num whitespace-nowrap">{formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)}</span>
+        <span>
+          <span className="num whitespace-nowrap">{formatDate(p.actualCompletion.date, p.actualCompletion.datePrecision)}</span>
+          {completionMayBeEarlier(p) && (
+            <span className="block text-xs text-ink-soft" title={MAY_BE_EARLIER_NOTE}>
+              date of report; may be earlier
+            </span>
+          )}
+        </span>
       ) : (
         <span className="text-ink-soft">—</span>
       ),
+  };
+  const delivery: Column = {
+    id: 'delivery',
+    header: 'Delivery',
+    sort: (p) => deliveryKindOf(p) ?? '',
+    mobile: true,
+    cell: (p) => {
+      const k = deliveryKindOf(p);
+      return k ? <span className="whitespace-nowrap">{DELIVERY_LABELS[k]}</span> : <span className="text-ink-soft">Not delivered</span>;
+    },
   };
   const status: Column = {
     id: 'status',
@@ -182,7 +195,12 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     mobile: true,
     cell: (p) =>
       p.investment?.disclosed && p.investment.amount && p.investment.currency ? (
-        <span className="num whitespace-nowrap">{formatMoney(p.investment.amount, p.investment.currency)}</span>
+        <span>
+          <span className="num whitespace-nowrap">{formatMoney(p.investment.amount, p.investment.currency)}</span>
+          {investmentScopeOf(p.investment) !== 'facility' && (
+            <span className="block text-xs text-ink-soft">{INVESTMENT_SCOPE_LABELS[investmentScopeOf(p.investment)]}</span>
+          )}
+        </span>
       ) : p.investment ? (
         <span className="text-ink-soft">Not disclosed</span>
       ) : (
@@ -202,5 +220,5 @@ export function makeColumns(umbrellas: ReadonlySet<string>) {
     ...completionEvidence,
     cell: (p) => <SourceLink url={p.latestMilestone.sourceUrl} />,
   };
-  return { facility, companies, sector, location, area, grade, completed, status, forecast, announced, investment, completionEvidence, milestoneEvidence };
+  return { facility, companies, sector, location, area, grade, completed, delivery, status, forecast, announced, investment, completionEvidence, milestoneEvidence };
 }

@@ -1,14 +1,21 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import {
+  ASSET_TYPE_LABELS,
   CHANGE_VERIFICATION_LABELS,
+  DELIVERY_DEFINITIONS,
+  DELIVERY_KINDS,
+  DELIVERY_LABELS,
+  ELIGIBILITY_RULES,
   NET_NEW_BASELINE_DATE,
+  NOT_DELIVERED_DEFINITION,
+  OTHER_INFRASTRUCTURE_ASSET_TYPES,
+  WAREHOUSE_ASSET_TYPES,
   REVIEW_KIND_LABELS,
   REVIEW_STATE_LABELS,
   RUN_STATUS_LABELS,
   SCAN_STATUS_LABELS,
   VERIFICATION_LABELS,
   VERIFICATION_LEVELS,
-  computePresentedTotals,
 } from '../../shared/index.ts';
 import { ExtLink, PageHeader } from '../components/ui.tsx';
 import { useData } from '../lib/data.tsx';
@@ -34,7 +41,6 @@ export function Method() {
   const open = data.pendingReview.items.filter((i) => i.state === 'open').sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   const changes = [...data.changelog.changes].sort((a, b) => b.appliedAt.localeCompare(a.appliedAt)).slice(0, 50);
   const meta = data.meta;
-  const presented = useMemo(() => computePresentedTotals(data.register.projects, new Date().getUTCFullYear()), [data.register.projects]);
 
   useEffect(() => {
     // Support in-page anchors like #/method#review
@@ -55,8 +61,10 @@ export function Method() {
           </h2>
           <ol className="mt-3 list-decimal space-y-3 pl-5 text-[15px] leading-relaxed">
             <li>
-              <strong>Measurement bases are never mixed.</strong> Gross floor area (GFA), gross leasable area (GLA) and mixed building area are shown
-              as separate figures. Land, open-yard and district areas are not floor space and appear only in their own labelled place.
+              <strong>Measurement bases are never mixed.</strong> Each facility has one floor figure, on the basis its source states: gross floor area
+              (GFA), gross leasable area (GLA), built-up area that includes offices or other uses, or an area whose basis the source does not state.
+              These are subtotalled separately and never added together. Land, open-yard and district areas are not floor space and appear only in
+              their own labelled place. A figure the source gives as &ldquo;over&rdquo; or &ldquo;nearly&rdquo; is shown with that word.
             </li>
             <li>
               <strong>Grade-A needs evidence.</strong> A facility is Grade-A <em>confirmed</em> only when a source states the grade or its specification
@@ -64,8 +72,10 @@ export function Method() {
               Everything else is reported as other modern space.
             </li>
             <li>
-              <strong>Delivered means evidenced.</strong> A facility counts as opened or completed in a year only when a source published at or after
-              completion confirms it. Forecast completion dates are always labelled as forecasts and never count as delivery.
+              <strong>Delivered means evidenced.</strong> A facility counts as delivered in a year only when a source dates its opening or completion in
+              that year. Opened and construction-completed facilities are always counted separately (definitions opposite). Forecast completion dates
+              are always labelled as forecasts and never count as delivery. Where a source gives only the month or quarter in which it reported an
+              opening, the project page says the event may have happened earlier.
             </li>
             <li>
               <strong>Phases, not umbrellas.</strong> When a park is built in phases, each phase is counted; the umbrella project is listed for context but
@@ -76,8 +86,9 @@ export function Method() {
               figures.
             </li>
             <li>
-              <strong>Money as published.</strong> Investment values are summed per currency and never converted, except AED values a source states
-              itself or USD at the official peg, which are labelled.
+              <strong>Money as published.</strong> Investment values are summed per currency and never converted or combined. Only amounts that cover
+              the logistics facility itself are summed; amounts that also cover land, offices, a headquarters or a wider complex are listed
+              separately with their scope. AED equivalents appear only where a source states them or from USD at the official peg, labelled.
             </li>
             <li>
               <strong>Net new</strong> means new supply completed after {formatDate(NET_NEW_BASELINE_DATE)}.
@@ -86,24 +97,35 @@ export function Method() {
         </section>
 
         <div className="space-y-5">
-          <section className="card p-5 sm:p-6" aria-labelledby="asreported">
-            <h2 id="asreported" className="text-lg font-semibold">
-              Floor space as reported
+          <section className="card p-5 sm:p-6" aria-labelledby="delivery-defs">
+            <h2 id="delivery-defs" className="text-lg font-semibold">
+              Delivery status
             </h2>
-            <p className="mt-3 text-[15px] leading-relaxed">
-              The headline sentence and the briefing snapshot follow the owner&apos;s briefing: they add up the area figure each source gives for a
-              facility, whatever its basis. That is a quick, readable total, not a like-for-like measure. The figure cards beneath the headline are the
-              strict figures, one per basis.
-            </p>
-            {presented.openings.rows.length > 0 && (
-              <p className="mt-3 text-sm text-ink-muted">
-                The briefing lists {presented.openings.openedCount} facilities as opened and {presented.openings.completedOnlyCount} as completed. Strictly, by
-                status, sources confirm only completion (not opening) for {presented.openings.statusCompletedOnlyCount} of them.
-              </p>
-            )}
+            <dl className="mt-3 space-y-3 text-[15px] leading-relaxed">
+              {DELIVERY_KINDS.map((k) => (
+                <div key={k}>
+                  <dt className="font-semibold">{DELIVERY_LABELS[k]}</dt>
+                  <dd>{DELIVERY_DEFINITIONS[k]}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-sm text-ink-muted">{NOT_DELIVERED_DEFINITION}</p>
             <p className="mt-3 text-sm text-ink-muted">
-              Many sources give an area without saying whether it is gross, leasable or plot area. Where that is a project&apos;s main figure, it is
-              shown as &ldquo;reported area, basis not stated&rdquo;, as its own figure, and never added to GFA, GLA or mixed building area.
+              The headline, the figure cards, the tables, the project pages, the briefing snapshot and the CSV export all use these two definitions.
+            </p>
+          </section>
+          <section className="card p-5 sm:p-6" aria-labelledby="eligibility">
+            <h2 id="eligibility" className="text-lg font-semibold">
+              What enters a total
+            </h2>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-relaxed">
+              {ELIGIBILITY_RULES.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+            <p className="mt-3 text-sm text-ink-muted">
+              Warehouse asset types: {WAREHOUSE_ASSET_TYPES.map((t) => ASSET_TYPE_LABELS[t]).join(', ')}. Other logistics
+              infrastructure: {OTHER_INFRASTRUCTURE_ASSET_TYPES.map((t) => ASSET_TYPE_LABELS[t]).join(', ')}.
             </p>
           </section>
           <section className="card p-5 sm:p-6" aria-labelledby="verified">

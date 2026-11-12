@@ -3,12 +3,12 @@
   "lastRunStatus": "never_run",
   "sourceScans": [],
   "coverageLimitations": [
-    "Seed note (11 Nov 2026): the register was seeded from the owner's November 2026 briefing PDF (26 rows plus its 3 'not counted' items) and checked against public sources; the briefing view reproduces the PDF's figures 'as reported', while strict metrics follow each source's own measurement basis and status. See docs/SEED_NOTES.md.",
+    "Seed note (11 Nov 2026): the register was seeded from the projects in the owner's November 2026 briefing PDF and checked against public sources. Since the consistency repair of 12 Nov 2026, every figure, label and date on the site, including the briefing snapshot, is derived from the audited records; the PDF's own wording and totals are not reproduced. See docs/SEED_NOTES.md and docs/CONSISTENCY_REPAIR.md.",
     "Evidence audit (12 Nov 2026): every record was re-checked against its sources and the reviewed evidence now takes precedence over the briefing PDF wherever they differ (docs/AUDIT_2026-11.md). Where a source gives only a release date, opening and completion dates are stored with month precision; the event day is not known.",
     "The register is not exhaustive: it lists only projects found in public sources and verified to the stated level. Further candidates are held in the pending-review list until an official source confirms them.",
     "Many sources were seen only through search-engine results ('indexed'), not read directly; each source shows its verification level. Pages on wam.ae need JavaScript and could not be read, tecomgroup.ae refused automated requests, and terralogix.ae was unreachable; DSV's own opening date (dsv.com) and Aldar's phase-2 area (2024 results presentation) were seen only in search results.",
-    "Investment values are undisclosed for most projects; where disclosed they are summed per currency and never converted except via the USD peg.",
-    "Area figures are reported on the basis the source gives (GFA, GLA, mixed building, land, yard, district). Many sources do not state the basis (a size given only as 'a 57,000 m² warehouse' is not assumed to be GFA); those figures are marked 'unspecified' and never enter floor-space totals, so strict warehouse floor-space figures are lower than headline totals.",
+    "Investment values are undisclosed for most projects. Where disclosed, only amounts for the logistics facility itself are summed, per currency and never converted; amounts that also cover land, offices, a headquarters or a wider complex are listed separately.",
+    "Area figures are reported on the basis the source gives (GFA, GLA, built-up incl. offices, land, yard, district). Many sources do not state the basis (a size given only as 'a 57,000 m² warehouse' is not assumed to be GFA); those figures are shown as their own 'basis not stated' subtotal and never added to GFA, GLA or built-up figures.",
     "Opening and completion dates are often given only as a release date, month, quarter or half-year; precision is recorded with each date.",
     "Private, unannounced and owner-occupier developments are frequently missing from public sources."
   ],

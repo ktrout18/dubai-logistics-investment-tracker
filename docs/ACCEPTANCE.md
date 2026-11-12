@@ -34,36 +34,46 @@ the production build (`dist/`), on the real register.
 
 ## 1. All PDF projects appear correctly — met
 
-* `shared/__tests__/seed.test.ts`: "contains every PDF row 1–26 exactly once",
-  "puts PDF rows in the right sections", "lists the three not-counted items
-  and nothing added after the PDF yet", "openings: 261,600 m² across ten
-  disclosed facilities", "openings: 13 opened and one completed only (Aldar
-  NIP phase 1)", "being built: 215,260 m² from rows 15–19; Emirates (row 20)
-  not counted".
-* `npm run validate` → `validate: 31 projects — 0 error(s), 5 warning(s), 0 notice(s)`
-  (the 5 warnings are expected; `docs/SEED_NOTES.md` §5).
-* Browser (real data): Overview headline reads "Dubai opened 13 logistics
-  facilities and completed one more in 2026, with about 262,000 m² of floor
-  space."; `#/snapshot` shows 261,600 m² and 215,260 m²; the Delivered table
-  renders 14 rows and the Pipeline table 10 rows, each with evidence links;
-  CSV and JSON exports of the full register each contain 31 projects.
-* Row-by-row mapping and every difference from the PDF: `docs/SEED_NOTES.md` §2.
+Meaning since the consistency repair (12 Nov 2026, `docs/CONSISTENCY_REPAIR.md`):
+every project of the owner's PDF appears in the register with **evidence-based
+values** (status, dates, areas and wording follow the audited sources,
+`docs/AUDIT_2026-11.md`). The PDF's own totals and labels (e.g. "13 opened and
+one completed", "about 262,000 m²", 261,600 m², 215,260 m²) are **deliberately
+not reproduced**: they mixed area bases and counted completions as openings.
+
+* `shared/__tests__/seed.test.ts`: "contains every project of the briefing PDF
+  (26 rows), with evidence-based values and no PDF labels" (all 26 ids of
+  `PDF_ROW_IDS` present with `provenance: seed_pdf`; no record carries a
+  `presentation` block); "the 2026 headline is derived and true" (11 opened /
+  operational, 3 construction completed, 10 warehouse facilities and 4 other
+  logistics infrastructure); "per-basis subtotals, never a cross-basis total";
+  "the same record shows the same thing everywhere" (DSV, NIP phase 2,
+  qualified figures, dates); "investment aggregates use facility-scope amounts
+  only".
+* `npm run validate` → `validate: 31 projects — 0 error(s), 7 warning(s), 0 notice(s)`.
+* Browser (real data, `vite preview`, 12 Nov 2026): the Overview headline reads
+  "In 2026, 11 logistics facilities opened in Dubai and 3 more completed
+  construction."; `#/snapshot` and its print/PDF output show the same sentence
+  and per-basis subtotals (26,013 m² GFA · 20,000 m² GLA · 10,405 m² built-up
+  (mixed use) · 204,174 m² basis not stated; being built 81,000 m² GLA ·
+  48,136 m² built-up · 101,231 m² basis not stated); the Delivered table
+  renders 14 rows with a Delivery column.
 * Screenshots: `docs/screenshots/real-overview-desktop.png`,
   `real-snapshot-desktop.png`, `real-delivered-desktop.png`,
-  `real-pipeline-desktop.png` (and `-mobile` variants).
+  `real-pipeline-desktop.png`, `real-detail-dsv-desktop.png`,
+  `real-detail-nip-phase-2-desktop.png`, `real-method-desktop.png` (and
+  `-mobile` variants).
 
 ## 2. dnata's commissioning included — met
 
-* `shared/__tests__/seed.test.ts`: "seed register: dnata (PDF row 2) › is one
-  project with the Dec 2024 announcement and the Nov 2026 commissioning
-  confirmation" and "keeps the strict status at construction_completed and the
-  PDF label "Apr to Sep"".
+* `shared/__tests__/seed.test.ts`: "seed register: dnata › is one project with
+  the Dec 2024 announcement and the Nov 2026 commissioning confirmation" and
+  "is construction completed (not opened), dated 2026 at year precision".
 * Browser (real data), `#/project/dnata-logistics-dubai-south-warehouse`:
-  shows "5 Dec 2024 · Announcement" and "5 Dec 2024 · Construction started"
-  (dnata media centre), and the Emirates Group H1 2026-27 results "published
+  shows the Dec 2024 announcement and groundbreaking (dnata media centre), and the Emirates Group H1 2026-27 results "published
   5 Nov 2026" quoting "commissioning its new AED 100 million … logistics
   facility in Dubai South", with links to dnata.com and the Dubai Media Office.
-* Screenshot: `docs/screenshots/real-detail-desktop.png`.
+* Counted under "Construction completed", never as opened (headline, cards, snapshot).
 
 ## 3. Grade-A capacity distinguished — met
 
@@ -72,8 +82,12 @@ the production build (`dist/`), on the real register.
   probable is never merged into confirmed".
 * Rule: Grade A is "confirmed" only with a quoted developer or official use of
   the words (`docs/DATA_MODEL.md` §5 rule 5, `docs/SEED_NOTES.md` §2). In the
-  seed, 3 delivered projects are Grade-A confirmed (rows 1, 3, 8); the site
-  shows Grade-A and other figures separately.
+  register, 3 delivered warehouse projects are Grade-A confirmed (NIP phase 1,
+  DSV, Emirates Snack Foods) and 1 probable (Palmon / Manrre); the site shows
+  Grade-A and other figures separately. Since the consistency repair, the
+  warehouse cards include only warehouse-type assets; depots, terminals, MRO
+  and vehicle hubs are counted separately as other logistics infrastructure
+  (`shared/definitions.ts`).
 
 ## 4. Land and yard never inflate warehouse floor space — met
 
