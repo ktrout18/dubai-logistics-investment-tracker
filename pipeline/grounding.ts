@@ -103,8 +103,9 @@ export function quoteHasDate(quote: string, date: string, precision: DatePrecisi
 }
 
 const UNIT_RE: Record<AreaUnit, RegExp> = {
-  sqm: /\b(sq\.?\s?m|sqm|square met(re|er)s?|m2|m²|sq\.? metres?)\b|m²/i,
-  sqft: /\b(sq\.?\s?ft|sqft|square f(ee|oo)t|sf)\b/i,
+  // "square-metre" / "square-foot" (hyphenated adjectives: "a 37,000-square-metre facility") count too.
+  sqm: /\b(sq\.?\s?m|sqm|square[\s-]met(re|er)s?|m2|m²|sq\.? metres?)\b|m²/i,
+  sqft: /\b(sq\.?\s?ft|sqft|square[\s-]f(ee|oo)t|sf)\b/i,
   hectare: /\b(hectares?|ha)\b/i,
   acre: /\bacres?\b/i,
 };
@@ -138,7 +139,7 @@ const FORECAST_RE = /\b(expected|scheduled|set to|will|due|slated|planned|plans?
 /** Narrower: wording that makes a reported opening/completion a future event. */
 const PLANNED_EVENT_RE = /\b(expected to|scheduled to|set to|slated to|due to (open|be)|planned|plans to|will (open|be (completed|operational|inaugurated|ready))|is to (open|be)|to be (completed|operational|opened|inaugurated)|upon completion)\b/i;
 
-const AREA_MENTION_RE = /\d[\d,.]*\s*(million\s+)?(sq\.?\s?ft|sqft|square f(ee|oo)t|sq\.?\s?m|sqm|square met(re|er)s?|m2|m²|hectares?|acres?)/i;
+const AREA_MENTION_RE = /\d[\d,.]*[\s-]*(million[\s-]+)?(sq\.?\s?ft|sqft|square[\s-]f(ee|oo)t|sq\.?\s?m|sqm|square[\s-]met(re|er)s?|m2|m²|hectares?|acres?)/i;
 
 export function emirateSupported(emirate: Emirate, quote: string): boolean {
   const q = normaliseText(quote);

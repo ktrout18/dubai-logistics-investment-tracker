@@ -7,6 +7,9 @@ import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { serializeDataFile } from '../../shared/index.ts';
+import { groundFact } from '../grounding.ts';
+import { issueTitle } from '../run.ts';
+import type { DocumentRecord } from '../types.ts';
 import { FakeExtractor, FakeIssues, acmeProject, article, betaProject, fact, makeDataDir, quietWeb, run } from './helpers.ts';
 
 const URL = 'https://gulfnews.com/business/delta-freight-warehouse-1.500977';
@@ -42,5 +45,48 @@ describe('issues on the first live run', () => {
     expect(report.held).toHaveLength(1); // single secondary source
     expect(issues.created).toHaveLength(20);
     expect(issues.created[0]!.key).toBe(report.held[0]!.reviewId);
+  });
+});
+
+describe('area units written as hyphenated adjectives', () => {
+  it('grounds "37,000-square-metre" as square metres (first live run held it as "unit sqm is not stated")', () => {
+    const text = 'Dubai, 8 November 2026: Omega Logistics will build a 37,000-square-metre cold store in Jafza, Dubai.';
+    const d: DocumentRecord = {
+      url: 'https://www.jafza.ae/news/x/', title: 'x', text, publishedDate: '2026-11-08', verification: 'direct', sourceId: 'jafza', sourceName: 'Jafza', publisher: 'Jafza', tier: 'primary', foundVia: 'test',
+    };
+    const f = fact({
+      projectName: 'Omega cold store', operator: 'Omega Logistics', partiesQuote: 'Omega Logistics will build', emirate: 'Dubai', emirateQuote: 'Jafza, Dubai', zone: 'Jafza',
+      eventType: 'announcement', eventQuote: 'Omega Logistics will build a 37,000-square-metre cold store',
+      areas: [{ value: 37000, unit: 'sqm', basis: 'unspecified', quote: 'a 37,000-square-metre cold store' }],
+    });
+    const g = groundFact(f, d, { knownUrls: new Set(['https://jafza.ae/news/x']), today: '2026-11-11' });
+    expect(g.failures).toEqual([]);
+    expect(g.grounded.areas[0]!.valueM2).toBe(37000);
+    // An unextracted "88,135-square-metre" mention is still noticed in the text.
+    const noArea = groundFact({ ...f, areas: [] }, d, { knownUrls: new Set(['https://jafza.ae/news/x']), today: '2026-11-11' });
+    expect(noArea.grounded.textHasUnextractedArea).toBe(true);
+  });
+  it('also accepts "square-foot"', () => {
+    const text = 'Dubai, 8 November 2026: Omega Logistics opened a 200,000-square-foot warehouse in Jafza, Dubai.';
+    const d: DocumentRecord = {
+      url: 'https://www.jafza.ae/news/y/', title: 'y', text, publishedDate: '2026-11-08', verification: 'direct', sourceId: 'jafza', sourceName: 'Jafza', publisher: 'Jafza', tier: 'primary', foundVia: 'test',
+    };
+    const f = fact({
+      projectName: 'Omega warehouse', operator: 'Omega Logistics', partiesQuote: 'Omega Logistics opened', emirate: 'Dubai', emirateQuote: 'Jafza, Dubai', zone: 'Jafza',
+      eventType: 'announcement', eventQuote: 'Omega Logistics opened a 200,000-square-foot warehouse',
+      areas: [{ value: 200000, unit: 'sqft', basis: 'warehouse_gfa', quote: 'a 200,000-square-foot warehouse' }],
+    });
+    const g = groundFact(f, d, { knownUrls: new Set(['https://jafza.ae/news/y']), today: '2026-11-11' });
+    expect(g.failures).toEqual([]);
+  });
+});
+
+describe('issue titles for hand-written review items', () => {
+  it('use the proposed name when there is no extracted claim', () => {
+    const base = { id: 'rev-20261111-68d32101', createdAt: '2026-11-11T12:00:00Z', kind: 'new_project' as const, evidence: [{ url: 'https://www.wam.ae/en/article/x' }], reasonHeld: 'x', state: 'open' as const };
+    expect(issueTitle({ ...base, proposed: { name: 'Iron Mountain warehousing and logistics facility (Unilever), EZDubai' } })).toBe(
+      'new_project — Iron Mountain warehousing and logistics facility (Unilever), EZDubai',
+    );
+    expect(issueTitle({ ...base, proposed: {} })).toBe('new_project — new announcement');
   });
 });

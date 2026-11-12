@@ -557,9 +557,12 @@ export async function runIngest(opts: RunOptions, deps: RunDeps): Promise<RunRep
   return finish(true);
 }
 
-function issueTitle(item: PendingReviewItem): string {
-  const fact = (item.proposed as { _fact?: { projectName?: string; eventType?: string } })._fact;
-  const what = fact?.projectName ? `${fact.projectName}${fact.eventType ? ` (${fact.eventType})` : ''}` : item.projectId ?? 'new announcement';
+export function issueTitle(item: PendingReviewItem): string {
+  const proposed = item.proposed as { _fact?: { projectName?: string; eventType?: string }; name?: unknown; project?: { name?: unknown } };
+  const fact = proposed._fact;
+  // Hand-written items carry a proposed name instead of an extracted claim.
+  const named = typeof proposed.name === 'string' ? proposed.name : typeof proposed.project?.name === 'string' ? proposed.project.name : undefined;
+  const what = fact?.projectName ? `${fact.projectName}${fact.eventType ? ` (${fact.eventType})` : ''}` : item.projectId ?? named ?? 'new announcement';
   return `${item.kind} — ${what}`.slice(0, 200);
 }
 
