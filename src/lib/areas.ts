@@ -53,7 +53,7 @@ export const SIZE_BANDS = [
   { id: '10k-50k', label: '10,000–50,000 m²', min: 10_000, max: 50_000 },
   { id: '50k-100k', label: '50,000–100,000 m²', min: 50_000, max: 100_000 },
   { id: 'gte100k', label: '100,000 m² and over', min: 100_000, max: Infinity },
-  { id: 'undisclosed', label: 'Floor area not disclosed', min: NaN, max: NaN },
+  { id: 'undisclosed', label: 'Area not disclosed', min: NaN, max: NaN },
 ] as const;
 export type SizeBandId = (typeof SIZE_BANDS)[number]['id'];
 

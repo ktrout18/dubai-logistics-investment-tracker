@@ -16,7 +16,7 @@ export function listHref(ids: readonly string[], title: string): string {
 export function BasisFigures({
   floorSpace,
   context,
-  emptyText = 'No floor area disclosed',
+  emptyText = 'No area disclosed',
 }: {
   floorSpace: FloorSpace;
   context: string;

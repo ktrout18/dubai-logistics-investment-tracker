@@ -110,7 +110,7 @@ export function FilterBar({ pool, fields, years = [], defaultYear, statuses, all
         {has('grade') && sel('grade', 'Grade-A classification', GRADE_A_STATUSES.map((g) => [g, GRADE_A_LABELS[g]]))}
         {has('status') && statuses && sel('status', 'Status', statuses.map((s) => [s, PROJECT_STATUS_LABELS[s]]))}
         {has('company') && sel('company', 'Company', companies.map((c) => [c, c]))}
-        {has('size') && sel('size', 'Development size (floor area)', SIZE_BANDS.map((b) => [b.id, b.label]), 'Any size')}
+        {has('size') && sel('size', 'Development size (area)', SIZE_BANDS.map((b) => [b.id, b.label]), 'Any size')}
       </div>
       <button
         type="button"
