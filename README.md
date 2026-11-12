@@ -7,9 +7,11 @@ construction milestones and openings in Dubai, with a small public website.
 
 Status: proof of concept. The register and website are live. The automated
 update pipeline is built and tested offline. Its GitHub workflow has run in
-zero-spend mode and **twice with paid search and extraction as dry runs**
-(12 Nov 2026, nothing written). No live run that writes and commits data has
-been made yet, and the twice-daily schedule is **off**. See
+zero-spend mode, twice with paid search and extraction as dry runs, and
+**once as a live run** (12 Nov 2026): it held 14 claims for review, published
+none, committed the review queue and run metadata, and redeployed the site.
+No pipeline-made change to the register has been published yet, and the
+twice-daily schedule is **off**. See
 [Current limitations](#current-limitations).
 
 ## How it fits together
@@ -150,13 +152,13 @@ git-ignored.
 
 ## API costs
 
-**Measured on two dry runs** on GitHub (12 Nov 2026), by the run reports'
-estimates at list prices: **$1.12** and **$1.11** per run. The second run's
-split: web searches $0.38 (38 billed; the cap of 40 was reached), Claude
-Haiku 5.5 $0.08 (38 search calls), Claude Opus 5.5 $0.65 (16 extractions,
-about $0.04 each). Two runs are two data points (`docs/PIPELINE.md` §5 and
-§7). At that rate the schedule (two runs a day) would cost about $2.2 a day,
-about $67 a month.
+**Measured on three paid runs** on GitHub (12 Nov 2026), by the run reports'
+estimates at list prices: **$1.12**, **$1.11** (dry runs) and **$1.10** (the
+live run), $3.34 in all. The live run's split: web searches $0.40 (40
+billed; the cap was reached), Claude Haiku 5.5 $0.08 (40 search calls),
+Claude Opus 5.5 $0.62 (15 extractions, about $0.04 each). See
+`docs/PIPELINE.md` §5 and §7. At that rate the schedule (two runs a day)
+would cost about $2.2 a day, about $67 a month.
 
 Estimates at list prices made before those runs (details and assumptions in
 `docs/PIPELINE.md` §7):
@@ -186,18 +188,22 @@ Both are explained step by step in [`docs/REVIEW_GUIDE.md`](docs/REVIEW_GUIDE.md
 
 ## Current limitations
 
-* **No live run has written data yet.** Search and extraction have run
-  against the Anthropic API twice, as dry runs on GitHub (12 Nov 2026). Run
-  1: 22 of 33 sources scanned, 16 documents extracted, 1 change would have
-  been published (wrongly) and 5 held. Run 2, after fixes: 31 of 33 sources
-  scanned, 16 extracted, 0 published, 5 held. The defects both runs exposed
-  are fixed with tests (`docs/PIPELINE.md` §5).
+* **No pipeline-made change to the register yet.** Three paid runs on
+  GitHub (12 Nov 2026). Dry run 1: 22 of 33 sources scanned, 16 documents
+  extracted, 1 change would have been published (wrongly) and 5 held. Dry run
+  2, after fixes: 31 of 33 scanned, 16 extracted, 0 published, 5 held. Live
+  run: all 32 enabled sources scanned, 15 extracted, 0 published, 14 held and
+  committed to `data/pending-review.json` with a GitHub issue each; the site
+  was redeployed from that commit. The defects the runs exposed are fixed
+  with tests (`docs/PIPELINE.md` §5).
+* **Most held items are noise.** Of the live run's 14 holds, 10 are outside
+  Dubai or not a facility and 4 duplicate register projects or are too vague;
+  each still opens an issue.
 * **Search finds little that can be analysed.** On run 2 none of the
   documents found through site search reached extraction: most had no
   publication date, were old, or their pages refused the runner. All
-  extracted documents came from directly fetched sources. Committing data and
-  redeploying from a pipeline run has not happened yet (see
-  `docs/ACCEPTANCE.md`, criterion 10).
+  extracted documents came from directly fetched sources (the same on the
+  live run).
 * **The schedule is off** by the owner's choice until `SCHEDULE_ENABLED` is set.
 * **Some sources block or defeat automated access**, so the pipeline relies on
   fallbacks (sitemaps, feeds, search) for them:

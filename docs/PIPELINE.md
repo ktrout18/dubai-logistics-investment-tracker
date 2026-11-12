@@ -7,11 +7,12 @@ the change (with a ChangeRecord) or queues it for human review. It never
 invents data, never deletes verified data, and never reports "nothing new"
 when a scan failed.
 
-> **Status (proof of concept).** The paid path has run **twice, both dry
-> runs**, on GitHub Actions (12 Nov 2026: Anthropic search and extraction,
-> nothing written or committed; measured figures in §5 and §7). No live run that
-> writes and commits data has been made yet. All tests use fakes. The
-> scheduled workflow does nothing until the repository variable
+> **Status (proof of concept).** The paid path has run three times on GitHub
+> Actions on 12 Nov 2026: two dry runs, then the **first live run**, which
+> held 14 claims, published none, committed the review queue and run
+> metadata, and redeployed the site (§5, measured costs in §7). No
+> pipeline-made change to the register has been published yet. All tests use
+> fakes. The scheduled workflow does nothing until the repository variable
 > `SCHEDULE_ENABLED` is set to `true`.
 
 Contracts: `docs/DATA_MODEL.md` (schemas, validation, ids, transitions,
@@ -291,7 +292,9 @@ by hand without a recorded claim cover their whole page. (Before this, a
 round-up naming eight projects yielded one held item and seven dropped
 claims.) When `GITHUB_TOKEN` and `GITHUB_REPOSITORY` are set, a
 GitHub issue labelled `pending-review` is opened for each held item. The
-review id is in the title, so an existing issue is reused. Without a token
+review id is in the title, so an existing issue is reused. At most 20 issues
+are opened per run: this run's new items first, then older open items
+without an issue (such as the hand-written seed items). Without a token
 the run logs `issues: skipped (no GITHUB_TOKEN …)`.
 
 Non-Dubai findings (Fujairah, Sharjah …) are stored with their emirate, so
@@ -531,6 +534,52 @@ on commit `a81a714`, **success** (about 17 minutes).
   undated corporate pages). The searches (about $0.46 with Haiku) bought
   little analysable material on this run.
 
+#### Run 3: the first live run (not a dry run)
+
+Run
+https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43181920655
+on commit `2572951`, `dry_run: false`, **success**, including the commit
+step and the deploy job.
+
+* `Run run-20261112T081952Z: SUCCESS.` / `32 source(s) scanned (8 via a
+  fallback method); 168 new document(s); 15 extracted; 17 candidate
+  fact(s).` / `0 change(s) published; 14 held for review; searches used
+  40/40; estimated cost $1.1027.` PCFC was scanned through site search (the
+  `max_uses_exceeded` fix); Reuters is disabled.
+* Cost: web searches 40 billed, $0.40; `claude-haiku-5-5` 40 calls, 612,099
+  input / 41,606 output tokens, $0.0820; `claude-opus-5-5` 15 calls, 89,342
+  input / 13,165 output tokens, $0.6207.
+* Written and committed as `902cca6`: `data/pending-review.json` (14 new
+  items, and issue URLs on 6 seed items), `data/meta.json` (source scans,
+  last run) and the first `data/pipeline-state.json` (168 processed URLs).
+  The register and changelog were not changed. The deploy job built and
+  published that commit.
+* Held, with the reason the pipeline gave and the reviewer's verdict:
+  * Two claims from the Emirates Group half-year results (dnata's AU$32m
+    cargo facility at Western Sydney International, a planned AED 37m
+    investment in Alat, Azerbaijan): outside the UAE. Noise; reject.
+  * Emirates' engineering/MRO groundbreaking (same release; identity
+    ambiguous, date not grounded): already in the register as
+    `emirates-engineering-complex-dubai-south`. Reject as a duplicate.
+  * From the Khaleej Times/JLL round-up: DP World's Jafza Grade A
+    groundbreaking (already `dp-world-lintara-jafza-dg-logistics-centre`),
+    the Terralogix park in Warsan (already in the register; JLL calls it
+    "upcoming"), unnamed multi-unit warehouses in Dubai Investments Park (no
+    developer), Kezad–JD.com, Axione at the Abu Dhabi Food Hub and Kezad
+    KLP7 (Abu Dhabi), the AD Ports–Etihad Rail corridor (not a facility).
+    None is a new Dubai fact.
+  * Floward's Al Ain fulfilment centre, from Khaleej Times and from Gulf
+    News (Abu Dhabi; one story, two items).
+  * DP World's Al Rugaylat and Dibba terminals (UAE east coast, not Dubai;
+    "in July" not grounded to a year).
+* After the run: hyphenated units ("37,000-square-metre") are now grounded
+  (one Axione hold cited "unit sqm is not stated"), and issues for
+  hand-written items carry the item's name.
+* **Noise:** 10 of the 14 holds are outside Dubai or not a facility, and the
+  other 4 duplicate register projects or are too vague. Nothing was wrongly
+  published, but each hold opens an issue, so a reviewer gets about a dozen
+  issues per run that mostly need a one-line rejection.
+
 ---
 
 ## 6. Configuration
@@ -567,14 +616,15 @@ read/write tokens per model at the list prices above, plus searches at
 $0.01 each. A model without a configured price is listed under
 `unpricedModels` rather than guessed.
 
-**Measured (two dry runs, 12 Nov 2026, §5):**
+**Measured (three runs, 12 Nov 2026, §5):**
 
 | Run | Searches (billed) | Haiku 5.5 | Opus 5.5 | Total |
 |---|---|---|---|---|
 | 1 (43158953250) | 40 ($0.40) | not split in the log | not split in the log (Haiku + Opus ≈ $0.72) | **$1.1238** |
 | 2 (43165141664) | 38 ($0.38) | 38 calls, 606,864 in / 35,338 out, $0.0784 | 16 extractions, 94,773 in / 13,643 out, $0.6520 | **$1.1103** |
+| 3, live (43181920655) | 40 ($0.40) | 40 calls, 612,099 in / 41,606 out, $0.0820 | 15 extractions, 89,342 in / 13,165 out, $0.6207 | **$1.1027** |
 
-Both runs used the full search cap of 40 and 16 extractions. Opus 5.5 cost
+All three runs used the full search cap of 40 and 15–16 extractions. Opus 5.5 cost
 about $0.041 per extraction (about 5,900 input and 850 output tokens each),
 half the $0.08 assumed below. Haiku 5.5 read about 16,000 input tokens per
 search call (search results), more than the 6,000 assumed.

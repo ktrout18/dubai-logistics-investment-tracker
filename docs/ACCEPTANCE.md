@@ -2,7 +2,7 @@
 
 The owner's ten acceptance criteria, with the status of each and the exact
 evidence. Checked on 11 November 2026; criteria 8–10 updated on 12 November
-2026 after the two paid dry runs.
+2026 after two paid dry runs and the first live (non-dry) run.
 
 Status values: **met** (shown on real data or on GitHub), **met offline only**
 (proven by automated tests with fakes, not yet on a live run), **not yet
@@ -27,8 +27,8 @@ the production build (`dist/`), on the real register.
 | 6 | A repeated article makes no duplicate | met offline only |
 | 7 | MoU → signed agreement updates the existing project | met offline only |
 | 8 | A blocked source triggers fallback research | met (live dry run: PCFC 403 → site search; WAM, Dubai Trade, DHL, DSV via site search) |
-| 9 | Unverified claims are held for review | met offline; seen in two live dry runs (5 held each, nothing written because they were dry runs) |
-| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | not yet demonstrated end to end: workflow and deploy proven on GitHub in zero-spend mode; paid search and extraction proven in two dry runs ($1.12, $1.11); no run has yet committed data and redeployed; schedule off by the owner's choice |
+| 9 | Unverified claims are held for review | met (live run 43181920655: 14 claims held in `pending-review.json`, a GitHub issue for each, register unchanged) |
+| 10 | The scheduled workflow actually runs and the deployed site reflects validated changes | partly met: a manually started live run (43181920655) validated, committed (`902cca6`) and redeployed the site from that commit; it changed run metadata and the review queue, not the register (nothing was published); no **scheduled** run yet (schedule off by the owner's choice) |
 
 ---
 
@@ -147,7 +147,7 @@ not reproduced**: they mixed area bases and counted completions as openings.
   Dubai Trade, DHL and DSV (no article links in the listing HTML) also fell
   back to site search (8, 6, 7 and 8 documents).
 
-## 9. Unverified claims are held — met offline; seen in a live dry run
+## 9. Unverified claims are held — met
 
 * `pipeline/__tests__/acceptance.test.ts` "e. claims that must be held for
   review": a single secondary source, a quote not found in the page, a
@@ -166,8 +166,14 @@ not reproduced**: they mixed area bases and counted completions as openings.
   `pending-review.json` and no issue was opened. The same run would have
   **published** one claim that should have been held (dnata "opened", see
   §10); `pipeline/__tests__/live-trial.test.ts` now covers that case.
+* **Live run** (43181920655, not a dry run): `0 change(s) published; 14 held
+  for review`. The 14 items were written to `data/pending-review.json` in the
+  bot commit `902cca6`, each with its evidence, quote and reasons, and a
+  GitHub issue labelled `pending-review` was opened for each (#1–#14). The
+  register and changelog are byte-identical. Every hold was right not to
+  publish (§10 lists them).
 
-## 10. The scheduled workflow runs and the site reflects validated changes — not yet demonstrated end to end
+## 10. The scheduled workflow runs and the site reflects validated changes — partly met
 
 What **is** shown:
 
@@ -262,21 +268,57 @@ What **is** shown:
     publication date; rechecks keeping back searches for rechecks already
     run. Reuters disabled in `data/sources.json`.
 
+* **First live (non-dry) run.** Manual dispatch on 12 Nov 2026 with
+  `dry_run: false`, `search_provider: anthropic`, `extract: true` (other
+  inputs at their defaults) on commit `2572951`:
+  https://github.com/ktrout18/dubai-logistics-investment-tracker/actions/runs/43181920655
+  → **success** (ingest, `deploy / build`, `deploy / deploy` all green;
+  08:18–08:40 UTC).
+  * CLI: `mode: LIVE (writes data/); search: anthropic; extraction: claude-opus-5-5; Anthropic API calls possible: yes`.
+  * `Run run-20261112T081952Z: SUCCESS.` / `32 source(s) scanned (8 via a
+    fallback method); 168 new document(s); 15 extracted; 17 candidate
+    fact(s).` / `0 change(s) published; 14 held for review; searches used
+    40/40; estimated cost $1.1027.` Every enabled source was scanned (PCFC
+    via site search again; Reuters disabled).
+  * **Measured cost split:** web searches 40 billed, $0.40;
+    `claude-haiku-5-5` 40 calls, 612,099 input / 41,606 output tokens,
+    $0.0820; `claude-opus-5-5` 15 calls, 89,342 input / 13,165 output
+    tokens, $0.6207.
+  * `Files written: pendingReview, meta, state`; `npm run validate` passed
+    on the runner; the commit step made `902cca6 data: automated ingest
+    2026-11-12T08:38Z` (`data/meta.json`, `data/pending-review.json`, new
+    `data/pipeline-state.json`); `data/register.json` and
+    `data/changelog.json` unchanged.
+  * The deploy job built from that commit (the build log shows
+    `902cca668b…` checked out, `validate: 31 projects — 0 error(s)`,
+    `sync-data: copied 5 file(s)`) and reported success. The site shows the
+    last successful run (`meta.lastSuccessfulRun` = 12 Nov 2026 08:19 UTC)
+    and the open review count (28, was 14), both computed from the
+    committed data. The derived headline and totals did not change
+    (`computeBriefing`: "In 2026, 11 logistics facilities opened in Dubai
+    and 3 more completed construction."), because nothing was published.
+  * 20 issues opened (#1–#20): the 14 new holds first, then 6 of the 14
+    seed review items (cap of 20 per run; the other 8 get theirs on the
+    next run). No issue repeats a seed item or another issue's review item;
+    #10 and #11 are the same Floward Al Ain story from two papers (two
+    evidence URLs), and three holds (#3 DP World Jafza, #4 Terralogix, #12
+    Emirates engineering) are projects the register already has.
+  * Defects found and fixed after the run (`1d763a9`):
+    "37,000-square-metre" was not recognised as a square-metre unit;
+    issues for seed items were titled "new announcement" (the four affected
+    issues were retitled). Before the run (`2572951`): the seed build now
+    refuses to overwrite data once the pipeline has written records, and
+    new holds get issues before older items.
+
 What is **not** shown yet:
 
 * **No scheduled run has happened**: the schedule (`30 4 * * *`,
   `30 12 * * *` UTC) is wired but off until the owner sets the repository
   variable `SCHEDULE_ENABLED` to `true`.
-* **No live run has written data.** The paid path has run only in dry
-  runs, so no automated data commit has yet gone through validation →
-  commit → deploy, and the site has not yet shown a pipeline-made change.
-  The fixes made after the second dry run (claim-level dedupe, matching,
-  search error handling, the wider date rule) have been tested only
-  offline. Next step, with the owner's
-  go-ahead: a manual run with `dry_run` unticked (about $1.1, judging by the
-  two measured runs). Expect it to write mostly held items (and one
-  `pending-review` GitHub issue each) plus the first
-  `data/pipeline-state.json`.
+* **No pipeline-made change to the register** has been published,
+  committed and deployed: the live run published nothing, so the path
+  "publish → ChangeRecord → validated commit → site totals change" is proven
+  only offline (criterion 5). Criteria 5–7 remain "met offline only".
 * The deployed site could not be opened from the build container (its
   network blocks github.io); the browser checks in §1–2 were made on the same
   build served locally.
